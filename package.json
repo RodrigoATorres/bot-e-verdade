@@ -1,0 +1,16 @@
+{
+  "name": "bot-e-verdade",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@open-wa/wa-automate": "^1.8.57",
+    "md5": "^2.2.1",
+    "mongoose": "^5.9.9"
+  }
+}
