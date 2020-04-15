@@ -6,7 +6,7 @@ const path = require('path');
 const mime = require('mime-types');
 const fs = require('fs');
 
-const Message = require('../models/message.js');
+const Message = require('../../models/message.js');
 
 exports.check_message = async (message,client) => {
     var media_md5 = null;
