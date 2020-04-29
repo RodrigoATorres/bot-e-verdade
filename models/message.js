@@ -33,7 +33,15 @@ const messageSchema = new Schema({
     replymessage:{
         type: String
     },
+    
+    reportUsers:{
+        type: [String]
+    },
 
+    announced:{
+        type: Boolean
+    },
+    
     similarMessages:[{
         type:Schema.Types.ObjectId,
         ref:'Messages',

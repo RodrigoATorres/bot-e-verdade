@@ -29,25 +29,30 @@ exports.check_message = async (message,client) => {
 
     if (doc){
         if (doc.replymessage){
-            client.sendText(message.sender.id, doc.replymessage);
+            await client.sendText(message.sender.id, doc.replymessage, message);
         }
-
+        else if(!message.isGroupMsg) {
+            await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteudo. Retornaremos em breve.');
+        }
         doc.forwardingScores.push(message.forwardingScore);
+        doc.reportUsers.push(message.sender.id);
         doc.update( { $inc: {timesReceived:1}});
         doc.save();
     }
     else{
-        Message.create({
-            text: msg_text,
-            mediaMd5: media_md5,
-            mediaMime: message.mimetype,
-            timesReceived: 1,
-            forwardingScores:[message.forwardingScore],
-        })
-
+        if (!message.isGroupMsg){
+            Message.create({
+                text: msg_text,
+                mediaMd5: media_md5,
+                mediaMime: message.mimetype,
+                timesReceived: 1,
+                reportUsers:[message.sender.id],
+                forwardingScores:[message.forwardingScore],
+            })
+            await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteudo. Retornaremos em breve.');
+        }
     }
             
-        
     if (message.mimetype) {   
         var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
         console.log('we are here2', filename);
@@ -58,5 +63,25 @@ exports.check_message = async (message,client) => {
             console.log('The file was saved!');
           });
     }
+    
+    await wa.sendSeen(message.chatId);
+}
+
+exports.check_reports = async (client) => {
+    
+    const docs = await Message.find({
+          replymessage: { $exists: true },
+          announced: false
+        });
+    
+    for (const doc of docs){
+        for (const index in doc.reportUsers){
+            await client.sendText(doc.reportUsers[i], 'Oi! Chegamos a conclusao do conteudo enviado: ' + doc.replymessage);
+        }
+        doc.announced = true;
+        await doc.save();
+        
+    }
 
 }
+
