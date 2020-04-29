@@ -29,7 +29,7 @@ exports.check_message = async (message,client) => {
 
     if (doc){
         if (doc.replymessage){
-            await client.sendText(message.sender.id, doc.replymessage, message);
+            await client.reply(message.sender.id, doc.replymessage, message);
         }
         else if(!message.isGroupMsg) {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteudo. Retornaremos em breve.');
