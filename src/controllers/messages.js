@@ -64,7 +64,7 @@ exports.check_message = async (message,client) => {
           });
     }
     
-    #await wa.sendSeen(message.chatId);
+    //await wa.sendSeen(message.chatId);
 }
 
 exports.check_reports = async (client) => {
