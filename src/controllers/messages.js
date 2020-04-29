@@ -78,7 +78,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('entrei');
         for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[i], 'Oi! Chegamos a conclusao do conteudo enviado: ' + doc.replymessage);
+            await client.sendText(doc.reportUsers[index], 'Oi! Chegamos a conclusao do conteudo enviado: ' + doc.replymessage);
         }
         doc.announced = true;
         await doc.save();
