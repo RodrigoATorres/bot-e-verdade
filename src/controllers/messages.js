@@ -64,17 +64,19 @@ exports.check_message = async (message,client) => {
           });
     }
     
-    await wa.sendSeen(message.chatId);
+    #await wa.sendSeen(message.chatId);
 }
 
 exports.check_reports = async (client) => {
     
+    console.log('passei aqui ferao');
     const docs = await Message.find({
           replymessage: { $exists: true },
           announced: false
         });
     
     for (const doc of docs){
+        console.log('entrei');
         for (const index in doc.reportUsers){
             await client.sendText(doc.reportUsers[i], 'Oi! Chegamos a conclusao do conteudo enviado: ' + doc.replymessage);
         }
