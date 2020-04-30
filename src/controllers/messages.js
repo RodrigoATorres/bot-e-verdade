@@ -38,7 +38,7 @@ exports.check_message = async (message,client) => {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
         }
         if(!doc.reportUsers.includes(message.sender.id)){
-            doc.reportUsers.push(message.sender.id);]
+            doc.reportUsers.push(message.sender.id);
         }
         doc.forwardingScores.push(message.forwardingScore);
         doc.update( { $inc: {timesReceived:1}});
@@ -53,6 +53,7 @@ exports.check_message = async (message,client) => {
                 timesReceived: 1,
                 reportUsers:[message.sender.id],
                 forwardingScores:[message.forwardingScore],
+                medialink: mediaLink,
             })
             await client.sendText(message.sender.id, 'É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!');
         }
