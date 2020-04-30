@@ -15,7 +15,7 @@ exports.check_message = async (message,client) => {
     var mediaLink = null;
     
     if (message.mimetype) {
-        mediaLink = 'http://s1.tuts.host/wamedia/' + `${message.t}.${mime.extension(message.mimetype)}`;
+        mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
         mediaData = await wa.decryptMedia(message);
         media_md5 = md5(mediaData);
     }
@@ -61,6 +61,7 @@ exports.check_message = async (message,client) => {
             
     if (message.mimetype) {   
         var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
+        console.log(.);
         fs.writeFile(path.join('Media',filename), mediaData, function(err) {
             console.log(path.join('Media',filename));
             if (err) {
@@ -91,5 +92,11 @@ exports.check_reports = async (client) => {
         
     }
 
+}
+
+exports.intro = async (message, client) => {
+    await client.sendSeen(message.chatId);
+    await client.sendText(message.sender.id, 'Olá, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!');
+        
 }
 
