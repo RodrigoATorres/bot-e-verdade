@@ -29,8 +29,8 @@ function start(client) {
         messageControler.check_reports(client);
     }
     else{
-        await client.sendText(message.sender.id, 'Olá! Eu recebo mensagens encaminhadas e digo se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!');
-        await messageControler.check_reports(client);
+        client.sendText(message.sender.id, 'Olá! Eu recebo mensagens encaminhadas e digo se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!');
+        messageControler.check_reports(client);
     }
   });
 }
