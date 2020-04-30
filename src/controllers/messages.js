@@ -14,6 +14,7 @@ exports.check_message = async (message,client) => {
     var mediaData;
 
     if (message.mimetype) {
+        const filename = `${message.t}.${mime.extension(message.mimetype)}`;
         mediaData = await wa.decryptMedia(message);
         media_md5 = md5(mediaData);
     }
@@ -29,13 +30,16 @@ exports.check_message = async (message,client) => {
 
     if (doc){
         if (doc.replymessage){
-            await client.reply(message.sender.id, doc.replymessage, message);
+            var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
+            await client.reply(destinatary, doc.replymessage, message);
         }
         else if(!message.isGroupMsg) {
-            await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteudo. Retornaremos em breve.');
+            await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
+        }
+        if(!doc.reportUsers.includes(message.sender.id)){
+            doc.reportUsers.push(message.sender.id);]
         }
         doc.forwardingScores.push(message.forwardingScore);
-        doc.reportUsers.push(message.sender.id);
         doc.update( { $inc: {timesReceived:1}});
         doc.save();
     }
@@ -49,14 +53,14 @@ exports.check_message = async (message,client) => {
                 reportUsers:[message.sender.id],
                 forwardingScores:[message.forwardingScore],
             })
-            await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteudo. Retornaremos em breve.');
+            await client.sendText(message.sender.id, 'É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!');
         }
     }
             
     if (message.mimetype) {   
         var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
-        console.log('we are here2', filename);
         fs.writeFile(path.join('Media',filename), mediaData, function(err) {
+            console.log(path.join('Media',filename));
             if (err) {
               return console.log(err);
             }
