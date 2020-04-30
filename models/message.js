@@ -42,6 +42,10 @@ const messageSchema = new Schema({
         type: Boolean
     },
     
+    medialink:{
+        type: String
+    },
+    
     similarMessages:[{
         type:Schema.Types.ObjectId,
         ref:'Messages',

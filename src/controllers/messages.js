@@ -12,9 +12,10 @@ exports.check_message = async (message,client) => {
     var media_md5 = null;
     var msg_text = null;
     var mediaData;
-
+    var mediaLink = null;
+    
     if (message.mimetype) {
-        const filename = `${message.t}.${mime.extension(message.mimetype)}`;
+        mediaLink = 'http://s1.tuts.host/wamedia/' + `${message.t}.${mime.extension(message.mimetype)}`;
         mediaData = await wa.decryptMedia(message);
         media_md5 = md5(mediaData);
     }
