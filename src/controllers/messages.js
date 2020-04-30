@@ -61,7 +61,6 @@ exports.check_message = async (message,client) => {
             
     if (message.mimetype) {   
         var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
-        console.log(.);
         fs.writeFile(path.join('Media',filename), mediaData, function(err) {
             console.log(path.join('Media',filename));
             if (err) {
