@@ -23,4 +23,4 @@ const curatorsSchema = new Schema({
     }]
 })
 
-module.exports = mongoose.model('Curators', messageSchema);
+module.exports = mongoose.model('Curators', curatorsSchema);
