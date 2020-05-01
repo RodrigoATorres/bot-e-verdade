@@ -15,7 +15,7 @@ const curatorsSchema = new Schema({
     underreview:{
         type:Schema.Types.ObjectId,
         ref:'Messages'
-    }
+    },
 
     messagessolved:[{
         type:Schema.Types.ObjectId,
