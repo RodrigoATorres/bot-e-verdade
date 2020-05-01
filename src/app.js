@@ -1,6 +1,7 @@
 // import { create, Whatsapp } from '@open-wa/wa-automate';
 const wa = require('@open-wa/wa-automate');
 const messageControler = require('./controllers/messages')
+const curatorControler = require('./controllers/curators')
 const mongoose = require('mongoose');
 const DB_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
 const DB_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
@@ -33,6 +34,9 @@ function start(client) {
             messageControler.intro(message,client);
         }
         messageControler.check_reports(client);
+        if(message.body.charAt(0) == '#'){
+            curatorControler.execute_command(message, client);
+        }
     }
   });
 }
