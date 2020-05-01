@@ -31,12 +31,15 @@ function start(client) {
     }
     else{
         if(!message.isGroupMsg) {
-            messageControler.intro(message,client);
+            if(message.body.charAt(0) == '#'){
+                curatorControler.execute_command(message, client);
+            }
+            else{
+                messageControler.intro(message,client);
+            }
         }
         messageControler.check_reports(client);
-        if(message.body.charAt(0) == '#'){
-            curatorControler.execute_command(message, client);
-        }
+        
     }
   });
 }

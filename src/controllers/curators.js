@@ -28,8 +28,8 @@ exports.execute_command = async (message,client) => {
                 cura.save();
             }
         }
-        else if(message.body == '#resposta'){
-            var replyText = message.body.slice(0,9);
+        else if(message.body.slice(0,9) == '#resposta'){
+            var replyText = message.body.slice(10);
             if(replyText.length > 3){
                 
                 cura.underreview.replytext = replyText;
