@@ -23,7 +23,7 @@ mongoose
   
 function start(client) {
     client.onMessage(message => {
-    console.log(message);
+    //console.log(message);
     if (message.isForwarded){
         console.log('here')
         messageControler.check_message(message,client);
