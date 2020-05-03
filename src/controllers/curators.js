@@ -31,17 +31,19 @@ exports.execute_command = async (message,client) => {
         else if(message.body.slice(0,9) == '#resposta'){
             var replyText = message.body.slice(10);
             if(replyText.length > 3){
+                cura.populate('underreview');
                 var doc = await Message.findOne(
                     {_id: cura.underreview._id
                     }
                 )
                 if(doc){
-                    doc.replytext = replyText;
+                    doc.replymessage = replyText;
                     doc.announced = false;
                     doc.save();
                     cura.messagessolved.push(cura.underreview);
                     cura.underreview = null;
                     cura.save();
+                    await client.sendText(message.sender.id, 'Mensagem salva. Obrigado pela ajuda!');
                 }
             }
         }
