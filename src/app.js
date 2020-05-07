@@ -22,12 +22,13 @@ mongoose
 
   
 function start(client) {
+    
+    var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 60000);
+
     client.onMessage(message => {
     //console.log(message);
     if (message.isForwarded){
-        console.log('here')
         messageControler.check_message(message,client);
-        messageControler.check_reports(client);
     }
     else{
         if(!message.isGroupMsg) {
@@ -43,9 +44,7 @@ function start(client) {
             else{
                 messageControler.intro(message,client);
             }
-        }
-        messageControler.check_reports(client);
-        
+        }       
     }
   });
 }
