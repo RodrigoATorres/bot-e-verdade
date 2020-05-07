@@ -22,9 +22,9 @@ exports.execute_command = async (message,client) => {
     }
 
     async function sendGuidelines(){
-        await client.sendText(message.sender.id, msg_helper.genGuidelines);
+        await client.sendText(message.sender.id, msg_helper.genGuidelines());
     }
-    
+
     async function sendForReview(){
         var doc = await Message.findOne(
             {replymessage: null,

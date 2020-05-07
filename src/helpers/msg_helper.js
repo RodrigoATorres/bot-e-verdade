@@ -59,8 +59,8 @@ exports.genReply = (veracity, replyText) => {
 
 exports.genGuidelines = () => {
         return ['Diretrizes para avaliação de mensagens no "É Verdade"',
-                ['*1-Blabla:* Explicação do blabla',
-                ['*2-blalbalba:*  Explicação do blablabla']]
-                ].join('\n')
+                '*1-Blabla:* Explicação do blabla',
+                '*2-blalbalba:*  Explicação do blablabla'
+                ].join('\n\n')
 
 }
