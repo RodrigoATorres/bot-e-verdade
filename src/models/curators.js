@@ -20,6 +20,11 @@ const curatorsSchema = new Schema({
     messagessolved:[{
         type:Schema.Types.ObjectId,
         ref:'Messages',
+    }],
+
+    messagesBlackList:[{
+        type:Schema.Types.ObjectId,
+        ref:'Messages',
     }]
 })
 

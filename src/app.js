@@ -32,7 +32,13 @@ function start(client) {
     else{
         if(!message.isGroupMsg) {
             if(message.body.charAt(0) == '#'){
-                curatorControler.execute_command(message, client);
+                curatorControler.execute_command(message, client)
+                .then()
+                .catch( err => {
+                  client.sendText(message.sender.id, `Não foi possível processar menssagem:\n${err}`);
+                  client.sendSeen(message.chatId);
+                }
+                )
             }
             else{
                 messageControler.intro(message,client);
