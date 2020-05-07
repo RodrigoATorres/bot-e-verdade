@@ -16,6 +16,15 @@ exports.execute_command = async (message,client) => {
             }
         )
     if(cura){
+        if (message.body == '#ajuda'){
+            await client.sendText(message.sender.id,
+                ['Obrigado por colaborar com o É VERDADE.',
+                'Esses são os comandos que você pode utilizar:',
+                '   *#manda*',
+                '   *#status*'].join('\n')
+            );
+        }
+
         if(message.body == '#manda'){
             var doc = await Message.findOne(
                 {replymessage: null
