@@ -11,15 +11,20 @@ const Curators = require('../models/curators');
 
 exports.execute_command = async (message,client) => {
     
-    async function getHelp(){
+    async function sendHelp(){
         await client.sendText(message.sender.id,
             ['Obrigado por colaborar com o É VERDADE.',
             'Esses são os comandos que você pode utilizar:',
             '   *#manda*',
+            '   *#diretizes*',
             '   *#status*'].join('\n')
         );
     }
 
+    async function sendGuidelines(){
+        await client.sendText(message.sender.id, msg_helper.genGuidelines);
+    }
+    
     async function sendForReview(){
         var doc = await Message.findOne(
             {replymessage: null,
@@ -85,8 +90,9 @@ exports.execute_command = async (message,client) => {
             }
         )
     if(cura){
-        if(message.body == '#ajuda'){await getHelp()};
+        if(message.body == '#ajuda'){await sendHelp()};
         if(message.body == '#manda'){await sendForReview()};
+        if(message.body == '#diretrizes'){await sendGuidelines()};
         if(message.body.slice(0,9) == '#resposta'){await getAnswer()};
     }
     await client.sendSeen(message.chatId);
