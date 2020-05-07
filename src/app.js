@@ -1,8 +1,10 @@
 // import { create, Whatsapp } from '@open-wa/wa-automate';
 const wa = require('@open-wa/wa-automate');
+var CronJob = require('cron').CronJob;
+const mongoose = require('mongoose');
 const messageControler = require('./controllers/messages')
 const curatorControler = require('./controllers/curators')
-const mongoose = require('mongoose');
+
 const DB_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
 const DB_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
 const DB_ADDRES = process.env.MONGO_INITDB_DB_ADDRES || 'localhost:27017';
@@ -20,10 +22,12 @@ mongoose
   })
   .catch(err => console.log(err));
 
-  
 function start(client) {
     
     var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 60000);
+
+    var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
+    sendStatusJob.start();
 
     client.onMessage(message => {
     //console.log(message);

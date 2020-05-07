@@ -9,14 +9,21 @@ const fs = require('fs');
 const Message = require('../models/message');
 const Curators = require('../models/curators');
 
-async function getStatus(message,client){
+exports.sendStatusAll = async (client) => {
+    var all_cura = await Curators.find({}).select('curatorid -_id');
+    for (cura of all_cura){
+        getStatus(cura['curatorid'], client)
+    }
+}
+
+async function getStatus(receiver_id,client){
     total_msgs = await Message.countDocuments({});
     noreply_msgs = await Message.countDocuments({replymessage: null})
 
     var start = new Date() - 7;
     week_total_mesgs = await Message.countDocuments({createdAt: { '$gte': start}});
 
-    await client.sendText(message.sender.id, ['--------------------------------------------',
+    await client.sendText(receiver_id, ['--------------------------------------------',
                                               '-------------- *É Verdade* --------------',
                                               '--------------------------------------------',
                                               'Olá, muito obrigado pela sua ajuda!',
@@ -113,7 +120,7 @@ exports.execute_command = async (message,client) => {
         if(message.body == '#ajuda'){await sendHelp()};
         if(message.body == '#manda'){await sendForReview()};
         if(message.body == '#diretrizes'){await sendGuidelines()};
-        if(message.body == '#status'){await getStatus(message,client)};
+        if(message.body == '#status'){await getStatus(message.sender.id,client)};
         if(message.body.slice(0,9) == '#resposta'){await getAnswer()};
     }
     await client.sendSeen(message.chatId);

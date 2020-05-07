@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@open-wa/wa-automate": "*",
+    "cron": "^1.8.2",
     "md5": "^2.2.1",
     "mongoose": "^5.9.9"
   },
