@@ -9,6 +9,26 @@ const fs = require('fs');
 const Message = require('../models/message');
 const Curators = require('../models/curators');
 
+async function getStatus(message,client){
+    total_msgs = await Message.countDocuments({});
+    noreply_msgs = await Message.countDocuments({replymessage: null})
+
+    var start = new Date() - 7;
+    week_total_mesgs = await Message.countDocuments({createdAt: { '$gte': start}});
+
+    await client.sendText(message.sender.id, ['--------------------------------------------',
+                                              '-------------- *É Verdade* --------------',
+                                              '--------------------------------------------',
+                                              'Olá, muito obrigado pela sua ajuda!',
+                                              `Recebemos até hoje um total de *${total_msgs} mensagens!*`,
+                                              `E já *revisamos ${total_msgs - noreply_msgs}*!`,
+                                              `Nos últimos *7 dias* recebemos *${week_total_mesgs}*!`,
+                                              '',
+                                              `Ainda *precisamos da sua ajuda* para revisar as *${noreply_msgs} mensagens* que faltam!!!`].join('\n'));
+}
+
+exports.getStatus = getStatus
+
 exports.execute_command = async (message,client) => {
     
     async function sendHelp(){
@@ -93,6 +113,7 @@ exports.execute_command = async (message,client) => {
         if(message.body == '#ajuda'){await sendHelp()};
         if(message.body == '#manda'){await sendForReview()};
         if(message.body == '#diretrizes'){await sendGuidelines()};
+        if(message.body == '#status'){await getStatus(message,client)};
         if(message.body.slice(0,9) == '#resposta'){await getAnswer()};
     }
     await client.sendSeen(message.chatId);
