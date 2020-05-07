@@ -6,8 +6,8 @@ const path = require('path');
 const mime = require('mime-types');
 const fs = require('fs');
 
-const Message = require('../models/message.js.js');
-const Curators = require('../models/curators.js.js');
+const Message = require('../models/message');
+const Curators = require('../models/curators');
 
 exports.execute_command = async (message,client) => {
     
