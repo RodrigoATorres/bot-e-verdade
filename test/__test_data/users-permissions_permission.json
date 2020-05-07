@@ -1,0 +1,3402 @@
+[
+    {
+        "_id": {
+            "$oid": "5eaadae584218f128ef8d6a2"
+        },
+        "type": "content-manager",
+        "controller": "components",
+        "action": "findcomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.984Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae584218f128ef8d6a3"
+        },
+        "type": "content-manager",
+        "controller": "components",
+        "action": "findcomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.041Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae584218f128ef8d6a4"
+        },
+        "type": "content-manager",
+        "controller": "components",
+        "action": "listcomponents",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.087Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae584218f128ef8d6a5"
+        },
+        "type": "content-manager",
+        "controller": "components",
+        "action": "listcomponents",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.134Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae584218f128ef8d6a6"
+        },
+        "type": "content-manager",
+        "controller": "components",
+        "action": "updatecomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.669Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae584218f128ef8d6a7"
+        },
+        "type": "content-manager",
+        "controller": "components",
+        "action": "updatecomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.934Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6a8"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "checkuidavailability",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.943Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6a9"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "checkuidavailability",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.136Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6aa"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.089Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ab"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.749Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ac"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.170Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.986Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ad"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.002Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ae"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "delete",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.103Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6af"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "delete",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.953Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b0"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "deletemany",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.699Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b1"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "deletemany",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.684Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b2"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.043Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b3"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.970Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b4"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.013Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b5"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.927Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b6"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "generateuid",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.760Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b7"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "generateuid",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.773Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b8"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.022Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6b9"
+        },
+        "type": "content-manager",
+        "controller": "contentmanager",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.053Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ba"
+        },
+        "type": "content-manager",
+        "controller": "contenttypes",
+        "action": "findcontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.656Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6bb"
+        },
+        "type": "content-manager",
+        "controller": "contenttypes",
+        "action": "findcontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.708Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6bc"
+        },
+        "type": "content-manager",
+        "controller": "contenttypes",
+        "action": "listcontenttypes",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.732Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6bd"
+        },
+        "type": "content-manager",
+        "controller": "contenttypes",
+        "action": "listcontenttypes",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.064Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6be"
+        },
+        "type": "content-manager",
+        "controller": "contenttypes",
+        "action": "updatecontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.788Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6bf"
+        },
+        "type": "content-manager",
+        "controller": "contenttypes",
+        "action": "updatecontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.171Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.671Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c0"
+        },
+        "type": "content-type-builder",
+        "controller": "componentcategories",
+        "action": "deletecategory",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.935Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c1"
+        },
+        "type": "content-type-builder",
+        "controller": "componentcategories",
+        "action": "deletecategory",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.945Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c2"
+        },
+        "type": "content-type-builder",
+        "controller": "componentcategories",
+        "action": "editcategory",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.137Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c3"
+        },
+        "type": "content-type-builder",
+        "controller": "componentcategories",
+        "action": "editcategory",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.093Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c4"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "createcomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.752Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c5"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "createcomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.992Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c6"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "deletecomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.004Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c7"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "deletecomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.104Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c8"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "getcomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.961Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6c9"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "getcomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.702Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ca"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "getcomponents",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.686Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6cb"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "getcomponents",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.045Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6cc"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "updatecomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.973Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6cd"
+        },
+        "type": "content-type-builder",
+        "controller": "components",
+        "action": "updatecomponent",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.014Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ce"
+        },
+        "type": "content-type-builder",
+        "controller": "connections",
+        "action": "getconnections",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.930Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6cf"
+        },
+        "type": "content-type-builder",
+        "controller": "connections",
+        "action": "getconnections",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.762Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d0"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "createcontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.776Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d1"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "createcontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.172Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.025Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d2"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "deletecontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.173Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.055Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d3"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "deletecontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.173Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.663Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d6"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "getcontenttypes",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.173Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.067Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d8"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "updatecontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.675Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d4"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "getcontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.173Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.711Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d5"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "getcontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.173Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.736Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d9"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "updatecontenttype",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.937Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6d7"
+        },
+        "type": "content-type-builder",
+        "controller": "contenttypes",
+        "action": "getcontenttypes",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.173Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.793Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6dd"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "getsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.754Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6de"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "send",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.994Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6db"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "getenvironments",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.139Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e2"
+        },
+        "type": "upload",
+        "controller": "proxy",
+        "action": "uploadproxy",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.705Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e0"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "updatesettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.106Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6da"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "getenvironments",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.946Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e5"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.976Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6df"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "send",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.006Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ea"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.027Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e4"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.046Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e3"
+        },
+        "type": "upload",
+        "controller": "proxy",
+        "action": "uploadproxy",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.688Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e7"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "destroy",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.932Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e9"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.778Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ef"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "search",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.069Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ec"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "getsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.666Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e8"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.765Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f4"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "callback",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.143Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ee"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "search",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.739Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f1"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "updatesettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.681Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ed"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "getsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.714Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f9"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "connect",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.110Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f6"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "changepassword",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.757Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f3"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "upload",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.948Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f8"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "connect",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.008Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f2"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "upload",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.938Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6fe"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "register",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.979Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6fb"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "emailconfirmation",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.344Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6fd"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "forgotpassword",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.048Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d703"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.029Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6dc"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "getsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.096Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d700"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "sendemailconfirmation",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.149Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d702"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.780Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f7"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "changepassword",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.995Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d708"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.071Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d705"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "destroy",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.121Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d707"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "destroyall",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.742Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d70a"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.346Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6fc"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "forgotpassword",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.692Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d70d"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "me",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.146Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d70c"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "me",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.949Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d70f"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.032Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d712"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "deleteprovider",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.116Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d701"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "sendemailconfirmation",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.767Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d706"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "destroyall",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.717Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d717"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getadvancedsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.981Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d714"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "deleterole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.075Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e1"
+        },
+        "type": "email",
+        "controller": "email",
+        "action": "updatesettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.174Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.962Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d70b"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.939Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d719"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getemailtemplate",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.151Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d71c"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getpolicies",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.031Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d711"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "createrole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.010Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6e6"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "destroy",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.016Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d710"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "createrole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.997Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d721"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getrole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.072Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d71e"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getproviders",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.124Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6eb"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.179Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.057Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d715"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "deleterole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.694Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d716"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getadvancedsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.050Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d723"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getroles",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.348Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f0"
+        },
+        "type": "upload",
+        "controller": "upload",
+        "action": "updatesettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.797Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d726"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "index",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.147Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d71b"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getpermissions",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.786Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d71a"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getpermissions",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.769Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d72b"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "searchusers",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.118Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6f5"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "callback",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.097Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d728"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "init",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.034Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d71f"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getproviders",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.720Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d720"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getrole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.746Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d730"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updateproviders",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.983Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6fa"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "emailconfirmation",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.180Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.964Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d724"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getroutes",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.942Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d72d"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updateadvancedsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.077Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d6ff"
+        },
+        "type": "users-permissions",
+        "controller": "auth",
+        "action": "register",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.017Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d725"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getroutes",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.952Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d729"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "init",
+        "enabled": true,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.999Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d732"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updaterole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.152Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d72a"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "searchusers",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.012Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d704"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "destroy",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.059Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d72f"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updateemailtemplate",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.052Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d72e"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updateemailtemplate",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.697Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d709"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.799Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d733"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updaterole",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.771Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d70e"
+        },
+        "type": "users-permissions",
+        "controller": "user",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.181Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.099Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d713"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "deleteprovider",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.966Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d718"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getemailtemplate",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.182Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.019Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d71d"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getpolicies",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.061Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d722"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "getroles",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.801Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d727"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "index",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.101Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d72c"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updateadvancedsettings",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.191Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:22.968Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaadae684218f128ef8d731"
+        },
+        "type": "users-permissions",
+        "controller": "userspermissions",
+        "action": "updateproviders",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T14:04:22.192Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T14:04:23.020Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f3"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.664Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f4"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.674Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f5"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.657Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f6"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.676Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f7"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "delete",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.667Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f8"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "delete",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.643Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547f9"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.519Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.669Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547fa"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.520Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.661Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547fb"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.520Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.646Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547fc"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.520Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.672Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547fd"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.520Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.637Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eab1e508796a2282d0547fe"
+        },
+        "type": "application",
+        "controller": "mensagens",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-04-30T18:52:00.520Z"
+        },
+        "updatedAt": {
+            "$date": "2020-04-30T18:52:00.659Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab7314b"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.921Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.019Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab7314c"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "count",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.020Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab7314d"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.022Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab7314e"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "create",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.017Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab7314f"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "delete",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.004Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73150"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "delete",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:45.970Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73151"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:45.967Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73152"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "find",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.007Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73153"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.024Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73154"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "findone",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:46.014Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73155"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:45.965Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a0"
+        }
+    },
+    {
+        "_id": {
+            "$oid": "5eaf6c85c8161c373ab73156"
+        },
+        "type": "application",
+        "controller": "curators",
+        "action": "update",
+        "enabled": false,
+        "policy": "",
+        "createdAt": {
+            "$date": "2020-05-04T01:14:45.922Z"
+        },
+        "updatedAt": {
+            "$date": "2020-05-04T01:14:45.960Z"
+        },
+        "__v": 0,
+        "role": {
+            "$oid": "5eaadae584218f128ef8d6a1"
+        }
+    }
+]

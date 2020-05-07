@@ -50,6 +50,10 @@ const messageSchema = new Schema({
         type:Schema.Types.ObjectId,
         ref:'Messages',
     }],
-})
+},
+{
+    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+}
+)
 
 module.exports = mongoose.model('Messages', messageSchema);
