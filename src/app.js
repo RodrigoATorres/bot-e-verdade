@@ -7,13 +7,13 @@ const DB_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
 const DB_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
 const DB_ADDRES = process.env.MONGO_INITDB_DB_ADDRES || 'localhost:27017';
 const DB_NAME = process.env.DB_NAME;
+const MONGO_URL = process.env.MONGO_URL || `mongodb://${DB_USERNAME}:${DB_ROOT_PASSWORD}@${DB_ADDRES}/${DB_NAME}?authSource=admin`;
 
-
-console.log(    `mongodb://${DB_USERNAME}:${DB_ROOT_PASSWORD}@${DB_ADDRES}/${DB_NAME}?authSource=admin`);
+console.log(MONGO_URL);
 
 mongoose
   .connect(
-    `mongodb://${DB_USERNAME}:${DB_ROOT_PASSWORD}@${DB_ADDRES}/${DB_NAME}?authSource=admin`
+    MONGO_URL
   )
   .then(result => {
     wa.create().then(client => start(client));
@@ -43,3 +43,5 @@ function start(client) {
     }
   });
 }
+
+module.exports = start;

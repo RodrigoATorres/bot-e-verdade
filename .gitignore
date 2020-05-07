@@ -116,3 +116,4 @@ dist
 
 session.data.json
 db/
+package-lock.json

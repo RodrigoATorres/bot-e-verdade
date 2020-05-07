@@ -4,13 +4,24 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/app.js",
+    "start-local": "node ./src/app_local.js"
   },
   "author": "",
   "license": "ISC",
+  "config": {
+    "mongodbMemoryServer": {
+      "version": "latest"
+    }
+  },
   "dependencies": {
     "@open-wa/wa-automate": "*",
     "md5": "^2.2.1",
     "mongoose": "^5.9.9"
+  },
+  "devDependencies": {
+    "json2mongo": "^2.0.0",
+    "mongo-unit": "^2.0.1"
   }
 }
