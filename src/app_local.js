@@ -7,7 +7,6 @@ const mongoose = require('mongoose');
 
 var test_data = {}
 files = glob.sync('./test/__test_data/*.json')
-console.log(files)
 for (let file of files){
     test_data[path.parse(file).name] = JSON.parse(fs.readFileSync(file))
 }

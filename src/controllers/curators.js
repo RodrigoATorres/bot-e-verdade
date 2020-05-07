@@ -1,7 +1,7 @@
 const wa = require('@open-wa/wa-automate');
 const hash = md5 = require('md5');
 const path = require('path');
-
+const msg_helper = require('../helpers/msg_helper')
 
 const mime = require('mime-types');
 const fs = require('fs');
@@ -33,7 +33,7 @@ exports.execute_command = async (message,client) => {
                                                       ].join(''));
             await client.sendText(message.sender.id, 'Quando terminar de revisar, por favor me mande a seguinte mensagem, preenchendo os campos indicados:');
             await client.sendText(message.sender.id, ['#resposta',
-                                                      '#status:<verdadeiro,falso,indeterminado,antigo,empartes,pular>',
+                                                      '#status:<verdadeiro,falso,indeterminado,semcontexto,empartes,pular>',
                                                       '#textoresposta:',
                                                       '<sua resposta>'].join('\n'));
             cura.underreview = doc;
@@ -74,7 +74,9 @@ exports.execute_command = async (message,client) => {
         doc.save();
         cura.messagessolved.push(cura.underreview);
         cura.save();
-        await client.sendText(message.sender.id, 'Mensagem salva. Se quiser alterar algo, basta reenviar a mensagem.\nObrigado pela ajuda!');
+        await client.sendText(message.sender.id, 'Mensagem salva. Essa será a resposta que demais usuários vão receber:');
+        await client.sendText(message.sender.id, msg_helper.genReply(doc.veracity,doc.replymessage));
+        await client.sendText(message.sender.id, 'Se quiser alterar algo, basta reenviar a mensagem.\nObrigado pela ajuda!');
 
     }
 

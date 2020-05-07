@@ -1,7 +1,7 @@
 const wa = require('@open-wa/wa-automate');
 const hash = md5 = require('md5');
 const path = require('path');
-
+const msg_helper = require('../helpers/msg_helper')
 
 const mime = require('mime-types');
 const fs = require('fs');
@@ -32,7 +32,9 @@ exports.check_message = async (message,client) => {
     if (doc){
         if (doc.replymessage){
             var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            await client.reply(destinatary, doc.replymessage, message);
+            await client.reply(destinatary,
+                               msg_helper.genReply(doc.veracity,doc.replymessage),
+                               message);
         }
         else if(!message.isGroupMsg) {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
