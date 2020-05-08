@@ -14,20 +14,21 @@ exports.check_message = async (message,client) => {
     var mediaData;
     var mediaLink = null;
     
+    var doc = null
     if (message.mimetype) {
-        mediaData = await wa.decryptMedia(message);
-        media_md5 = md5(mediaData);
-        mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
+        doc = await Message.findOne( {mediaKeys: message.mediaKey } )
+
+        if (!doc && !message.isGroupMsg){
+            mediaData = await wa.decryptMedia(message);       
+            media_md5 = md5(mediaData);
+            mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
+            doc = await Message.findOne({mediaMd5: media_md5})
+        }
     }
     else{
         msg_text = message.body;
+        doc = await Message.findOne({text: msg_text})
     }
-
-    var doc = await Message.findOne(
-            {mediaMd5: media_md5,
-            text: msg_text,
-            }
-        )
 
     if (doc){
         if (doc.replymessage){
@@ -57,18 +58,18 @@ exports.check_message = async (message,client) => {
                 medialink: mediaLink,
             })
             await client.sendText(message.sender.id, 'É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!');
-        }
-    }
-            
-    if (message.mimetype) {   
-        var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
-        fs.writeFile(path.join('Media',filename), mediaData, function(err) {
-            console.log(path.join('Media',filename));
-            if (err) {
-              return console.log(err);
+
+            if (message.mimetype) {   
+                var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
+                fs.writeFile(path.join('Media',filename), mediaData, function(err) {
+                    console.log(path.join('Media',filename));
+                    if (err) {
+                      return console.log(err);
+                    }
+                    console.log('The file was saved!');
+                  });
             }
-            console.log('The file was saved!');
-          });
+        }
     }
     
     await client.sendSeen(message.chatId);

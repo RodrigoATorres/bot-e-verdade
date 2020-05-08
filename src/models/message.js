@@ -8,6 +8,10 @@ const messageSchema = new Schema({
         type: String,
     },
 
+    mediaKeys:{
+        type: [String]
+    },
+
     mediaMd5:{
         type: String
     },
