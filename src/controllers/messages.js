@@ -32,9 +32,8 @@ exports.check_message = async (message,client) => {
     if (doc){
         if (doc.replymessage){
             var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            await client.reply(destinatary,
-                               msg_helper.genReply(doc.veracity,doc.replymessage),
-                               message);
+            await client.sendText(destinatary,
+                               msg_helper.genReply(doc.veracity,doc.replymessage));
         }
         else if(!message.isGroupMsg) {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
@@ -86,7 +85,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('entrei');
         for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[index], 'Oi! Chegamos a conclusao do conteudo enviado: ' + doc.replymessage);
+            await client.sendText(doc.reportUsers[index], msg_helper.genReply(doc.veracity,doc.replymessage));
         }
         doc.announced = true;
         await doc.save();
