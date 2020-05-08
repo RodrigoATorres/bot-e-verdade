@@ -19,10 +19,12 @@ exports.check_message = async (message,client) => {
         doc = await Message.findOne( {mediaKeys: message.mediaKey } )
 
         if (!doc && !message.isGroupMsg){
+            console.log('to aqui')
             mediaData = await wa.decryptMedia(message);       
             media_md5 = md5(mediaData);
             mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
             doc = await Message.findOne({mediaMd5: media_md5})
+            if (doc){doc.mediaKeys.push(message.mediaKey)};
         }
     }
     else{
