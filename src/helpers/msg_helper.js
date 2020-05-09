@@ -52,9 +52,11 @@ exports.genReply = (veracity, replyText) => {
                         '',
                         'Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!',
                         'É um prazer ajudar!😉'
-                        ].join('\n')  
-    return replyText;
+                        ].join('\n')
+        default:
+                return replyText;
     }
+    return replyText;
 }
 
 exports.genGuidelines = () => {

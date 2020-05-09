@@ -14,27 +14,29 @@ exports.check_message = async (message,client) => {
     var mediaData;
     var mediaLink = null;
     
+    var doc = null
     if (message.mimetype) {
-        mediaData = await wa.decryptMedia(message);
-        media_md5 = md5(mediaData);
-        mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
+        doc = await Message.findOne( {mediaKeys: message.mediaKey } )
+
+        if (!doc && !message.isGroupMsg){
+            console.log('to aqui')
+            mediaData = await wa.decryptMedia(message);       
+            media_md5 = md5(mediaData);
+            mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
+            doc = await Message.findOne({mediaMd5: media_md5})
+            if (doc){doc.mediaKeys.push(message.mediaKey)};
+        }
     }
     else{
         msg_text = message.body;
+        doc = await Message.findOne({text: msg_text})
     }
-
-    var doc = await Message.findOne(
-            {mediaMd5: media_md5,
-            text: msg_text,
-            }
-        )
 
     if (doc){
         if (doc.replymessage){
             var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            await client.reply(destinatary,
-                               msg_helper.genReply(doc.veracity,doc.replymessage),
-                               message);
+            await client.sendText(destinatary,
+                               msg_helper.genReply(doc.veracity,doc.replymessage));
         }
         else if(!message.isGroupMsg) {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
@@ -58,18 +60,18 @@ exports.check_message = async (message,client) => {
                 medialink: mediaLink,
             })
             await client.sendText(message.sender.id, 'É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!');
-        }
-    }
-            
-    if (message.mimetype) {   
-        var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
-        fs.writeFile(path.join('Media',filename), mediaData, function(err) {
-            console.log(path.join('Media',filename));
-            if (err) {
-              return console.log(err);
+
+            if (message.mimetype) {   
+                var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
+                fs.writeFile(path.join('Media',filename), mediaData, function(err) {
+                    console.log(path.join('Media',filename));
+                    if (err) {
+                      return console.log(err);
+                    }
+                    console.log('The file was saved!');
+                  });
             }
-            console.log('The file was saved!');
-          });
+        }
     }
     
     await client.sendSeen(message.chatId);
@@ -86,7 +88,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('entrei');
         for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[index], 'Oi! Chegamos a conclusao do conteudo enviado: ' + doc.replymessage);
+            await client.sendText(doc.reportUsers[index], msg_helper.genReply(doc.veracity,doc.replymessage));
         }
         doc.announced = true;
         await doc.save();
