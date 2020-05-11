@@ -92,8 +92,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('entrei');
         for (const index in doc.reportUsers){
-            console.log(doc.reportUsers)
-            await client.reply(doc.reportUsers[index]['userId'], 'msg_helper.genReply(doc.veracity,doc.replymessage)', doc.reportUsers[index]['msgId']);
+            await client.reply(doc.reportUsers[index]['userId'], msg_helper.genReply(doc.veracity,doc.replymessage), doc.reportUsers[index]['msgId']);
         }
         doc.announced = true;
         await doc.save();
