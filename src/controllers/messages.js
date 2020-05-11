@@ -35,14 +35,17 @@ exports.check_message = async (message,client) => {
     if (doc){
         if (doc.replymessage){
             var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            await client.sendText(destinatary,
-                               msg_helper.genReply(doc.veracity,doc.replymessage));
+            await client.reply(destinatary,
+                               msg_helper.genReply(doc.veracity,doc.replymessage),
+                               message);
         }
         else if(!message.isGroupMsg) {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
         }
-        if(!doc.reportUsers.includes(message.sender.id)){
-            doc.reportUsers.push(message.sender.id);
+
+        if(!doc.reportUsers.find(elmt => elmt['userId'] === message.sender.id)){
+            doc.reportUsers.push({userId: message.sender.id,
+                                  msgId: message.id});
         }
         doc.forwardingScores.push(message.forwardingScore);
         doc.update( { $inc: {timesReceived:1}});
@@ -55,7 +58,8 @@ exports.check_message = async (message,client) => {
                 mediaMd5: media_md5,
                 mediaMime: message.mimetype,
                 timesReceived: 1,
-                reportUsers:[message.sender.id],
+                reportUsers:{userId: message.sender.id,
+                             msgId: message.id},
                 forwardingScores:[message.forwardingScore],
                 medialink: mediaLink,
             })
@@ -88,7 +92,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('entrei');
         for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[index], msg_helper.genReply(doc.veracity,doc.replymessage));
+            await client.reply(doc.reportUsers[index]['userId'], msg_helper.genReply(doc.veracity,doc.replymessage), doc.reportUsers[index]['msgId']);
         }
         doc.announced = true;
         await doc.save();

@@ -39,7 +39,8 @@ const messageSchema = new Schema({
     },
     
     reportUsers:{
-        type: [String]
+        type: [{userId: String,
+                msgId: String}]
     },
 
     announced:{
