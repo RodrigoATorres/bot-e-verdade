@@ -46,7 +46,10 @@ function start(client) {
                 )
             }
             else{
-                messageControler.intro(message,client);
+                
+                if (client.getAllMessagesInChat(message.chatId, true, false).length < 3){
+                    messageControler.intro(message,client);
+                }
             }
         }       
     }
