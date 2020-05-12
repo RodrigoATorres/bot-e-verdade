@@ -14,10 +14,12 @@ fs.writeFileSync('./test/test_data.json', JSON.stringify(test_data));
 
 mongoUnit.start()
 .then(testMongoUrl => {
+    process.env.NODE_ENV = 'test'
     process.env.MONGO_URL = testMongoUrl
     const testData = require("../test/test_data.json");
     mongoUnit.load(json2mongo(testData))
 })
 .then(()=>{
     var start = require('./app.js')
+    start();
 })
