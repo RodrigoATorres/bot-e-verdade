@@ -52,7 +52,7 @@ function start(done = function() { return; }) {
                     else{
                         messageControler.intro(message,client);
                     }
-                }       
+                }   
             }
           });
         done();
