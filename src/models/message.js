@@ -8,8 +8,8 @@ const messageSchema = new Schema({
         type: String,
     },
 
-    mediaKeys:{
-        type: [String]
+    mediaKey:{
+        type: String
     },
 
     mediaMd5:{
@@ -49,7 +49,11 @@ const messageSchema = new Schema({
     medialink:{
         type: String
     },
-
+    
+    parent:{
+        type:Schema.Types.ObjectId,
+        ref:'Messages',
+    }
 },
 {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
