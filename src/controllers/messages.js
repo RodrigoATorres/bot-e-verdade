@@ -8,40 +8,53 @@ const fs = require('fs');
 
 const Message = require('../models/message');
 
-exports.check_message = async (message,client) => {
-    var media_md5 = null;
-    var msg_text = null;
-    var mediaData;
-    var mediaLink = null;
-    
-    var doc = null
+async function searchMsg(message){
+    var doc = null;
+    var mediaData = {};
+
     if (message.mimetype) {
         doc = await Message.findOne( {mediaKeys: message.mediaKey } )
 
         if (!doc && !message.isGroupMsg){
-            console.log('to aqui')
-            mediaData = await wa.decryptMedia(message);       
-            media_md5 = md5(mediaData);
-            mediaLink = 'http://s1.tuts.host/wamedia/' + `${media_md5}.${mime.extension(message.mimetype)}`;
+            mediaData['content'] = await wa.decryptMedia(message);       
+            mediaData['media_md5'] = md5(mediaData['content'] );
             doc = await Message.findOne({mediaMd5: media_md5})
             if (doc){doc.mediaKeys.push(message.mediaKey)};
         }
     }
     else{
-        msg_text = message.body;
+        var msg_text = message.body;
         doc = await Message.findOne({text: msg_text})
     }
+
+    return doc, mediaData
+}
+
+async function sendReplyMsg(doc, message, client){
 
     if (doc){
         if (doc.replymessage){
             var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            await client.sendText(destinatary,
-                               msg_helper.genReply(doc.veracity,doc.replymessage));
+            await client.sendText(destinatary, msg_helper.genReply(doc.veracity,doc.replymessage));
         }
         else if(!message.isGroupMsg) {
             await client.sendText(message.sender.id, 'Ainda estamos analisando esse conteúdo. Retornaremos em breve.');
         }
-        if(!doc.reportUsers.includes(message.sender.id)){
+    }
+    else{
+        if (!message.isGroupMsg){
+            await client.sendText(message.sender.id, 'É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!');
+        }
+
+    }
+
+}
+
+
+async function updateMsgsDatabase(doc, message, mediaData){
+
+    if (doc){
+        if(!doc.replymessage && !doc.reportUsers.includes(message.sender.id)){
             doc.reportUsers.push(message.sender.id);
         }
         doc.forwardingScores.push(message.forwardingScore);
@@ -51,19 +64,18 @@ exports.check_message = async (message,client) => {
     else{
         if (!message.isGroupMsg){
             Message.create({
-                text: msg_text,
-                mediaMd5: media_md5,
+                text:  message.body,
+                mediaMd5: mediaData['media_md5'],
                 mediaMime: message.mimetype,
                 timesReceived: 1,
                 reportUsers:[message.sender.id],
                 forwardingScores:[message.forwardingScore],
-                medialink: mediaLink,
+                medialink: 'http://s1.tuts.host/wamedia/' + `${mediaData['media_md5']}.${mime.extension(message.mimetype)}`,
             })
-            await client.sendText(message.sender.id, 'É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!');
 
             if (message.mimetype) {   
-                var filename = `${media_md5}.${mime.extension(message.mimetype)}`;
-                fs.writeFile(path.join('Media',filename), mediaData, function(err) {
+                var filename = `${mediaData['media_md5']}.${mime.extension(message.mimetype)}`;
+                fs.writeFile(path.join('Media',filename), mediaData['content'], function(err) {
                     console.log(path.join('Media',filename));
                     if (err) {
                       return console.log(err);
@@ -73,7 +85,13 @@ exports.check_message = async (message,client) => {
             }
         }
     }
-    
+
+}
+
+exports.check_message = async (message,client) => {  
+    var doc, mediaData = await searchMsg(message);
+    sendReplyMsg(doc, message, client);
+    updateMsgsDatabase(doc,message,mediaData);    
     await client.sendSeen(message.chatId);
 }
 
