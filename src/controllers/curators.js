@@ -75,7 +75,7 @@ exports.execute_command = async (message,client) => {
 
     async function getAnswer(){
         var status = message.body.match(/#status:([a-z]+)/)[1];
-        if (!['verdadeiro','falso','indeterminado','antigo','empartes','pular'].includes(status)){
+        if (!['verdadeiro','falso','indeterminado','antigo','empartes',"verdadecomressalvas","naoaplica",'pular'].includes(status)){
             throw new Error(`Opção de status "${status}" não existente!`)
         }
 
