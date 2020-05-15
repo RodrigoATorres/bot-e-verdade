@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "env NODE_ENV=test mocha",
     "start": "node ./src/app.js",
     "start-local": "node ./src/app_local.js"
   },
@@ -18,11 +18,15 @@
   "dependencies": {
     "@open-wa/wa-automate": "*",
     "cron": "^1.8.2",
+    "dotenv": "^8.2.0",
     "md5": "^2.2.1",
     "mongoose": "^5.9.9"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
+    "deasync": "^0.1.20",
     "json2mongo": "^2.0.0",
+    "mocha": "^7.1.2",
     "mongo-unit": "^2.0.1"
   }
 }

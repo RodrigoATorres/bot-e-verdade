@@ -120,4 +120,3 @@ exports.intro = async (message, client) => {
     await client.sendText(message.sender.id, 'Olá, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!');
         
 }
-
