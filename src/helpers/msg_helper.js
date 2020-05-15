@@ -53,6 +53,26 @@ exports.genReply = (veracity, replyText) => {
                         'Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!',
                         'É um prazer ajudar!😉'
                         ].join('\n')
+                        
+        case 'verdadecomressalvas':
+                return ['Olá! Chegamos à conclusão que a mensagem é:',
+                '*‼️VERDADEIRA, PORÉM COM RESSALVAS‼️*',
+                replyText,
+                '',
+                'Portanto, tenha cuidado ao compartilhar essa mensagem!',
+                'Se for compartilhar, explique o contexto.',
+                '',
+                'Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!',
+                'É um prazer ajudar!wink'
+                ].join('\n')
+                
+        case 'naoaplica':
+                return ['Olá! Essa mensagem não apresenta conteúdo cuja veracidade necessita ser checada.',
+                '',
+                'Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!',
+                'É um prazer ajudar!wink'
+                ].join('\n')
+
         default:
                 return replyText;
     }
