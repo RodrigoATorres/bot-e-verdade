@@ -65,7 +65,7 @@ exports.execute_command = async (message,client) => {
                                                       ].join(''));
             await client.sendText(message.sender.id, 'Quando terminar de revisar, por favor me mande a seguinte mensagem, preenchendo os campos indicados:');
             await client.sendText(message.sender.id, ['#resposta',
-                                                      '#status:<verdadeiro,falso,indeterminado,semcontexto,empartes,pular>',
+                                                      '#status:<verdadeiro,falso,indeterminado,semcontexto,empartes,verdadecomressalvas,naoaplica,pular>',
                                                       '#textoresposta:',
                                                       '<sua resposta>'].join('\n'));
             cura.underreview = doc;
