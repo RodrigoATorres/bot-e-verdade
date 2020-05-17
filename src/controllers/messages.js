@@ -10,6 +10,15 @@ const Message = require('../models/message');
 
 const msgsTexts = require('../msgsTexts.json');
 
+const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+
+
+function urlify(text) {
+    return text.match(urlRegex, function(url) {
+        return url;
+    });
+}
+
 async function searchMsg(message){
     var doc = null;
     var mediaData = {};
@@ -26,7 +35,14 @@ async function searchMsg(message){
     }
     else{
         var msg_text = message.body;
-        doc = await Message.findOne({text: msg_text})
+        var urls = urlify(msg_text);
+        if (urls){
+            doc = await Message.findOne({all_url: urls[0]}); // evitei um loop com consulta na DB pois se a mensagem for igual, o url[0] tbm será... mas deixei model  como array para futuro
+            mediaData['urls'] = urls;
+        }
+        else{
+            doc = await Message.findOne({text: msg_text})
+        }
     }
     return [doc, mediaData]
 }
@@ -74,6 +90,7 @@ async function updateMsgsDatabase(doc, message, mediaData){
                               msgId: message.id}],
                 forwardingScores:[message.forwardingScore],
                 medialink: 'http://s1.tuts.host/wamedia/' + `${mediaData['media_md5']}.${mime.extension(message.mimetype)}`,
+                all_url: mediaData['urls'],
             })
 
             if (message.mimetype) {   

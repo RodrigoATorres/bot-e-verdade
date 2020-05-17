@@ -54,6 +54,10 @@ const messageSchema = new Schema({
     parent:{
         type:Schema.Types.ObjectId,
         ref:'Messages',
+    },
+    
+    all_url:{
+        type: [String]
     }
 },
 {
