@@ -8,6 +8,7 @@ const fs = require('fs');
 
 const messageControler = require('./controllers/messages')
 const curatorControler = require('./controllers/curators')
+const senderControler = require('./controllers/senders')
 
 const DB_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
 const DB_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
@@ -54,7 +55,9 @@ function start(done = function() { return; }) {
                         )
                     }
                     else{
-                        messageControler.intro(message,client);
+                        if(senderControler.isNew(message.sender.id)){
+                            messageControler.intro(message,client);
+                        }
                     }
                 }
             }
