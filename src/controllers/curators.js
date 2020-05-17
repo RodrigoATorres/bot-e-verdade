@@ -49,14 +49,14 @@ exports.execute_command = async (message,client) => {
         )
         if(doc){
             await client.sendText(message.sender.id, [
-                                                        msgsTexts.curators.ASK_REVIEW_MSG_1.join('\n'),
-                                                        doc.medialink ? ASK_REVIEW_MSG_1_MEDIA.join('\n').format(doc.medialink) : '',
-                                                        doc.text ? ASK_REVIEW_MSG_1_TEXT.join('\n').format(doc.text) : ''
+                                                        msgsTexts.curator.ASK_REVIEW_MSG_1.join('\n'),
+                                                        doc.medialink ? msgsTexts.curator.ASK_REVIEW_MSG_1_MEDIA.join('\n').format(doc.medialink) : '',
+                                                        doc.text ? msgsTexts.curator.ASK_REVIEW_MSG_1_TEXT.join('\n').format(doc.text) : ''
                                                         ].join('')
             );
-            await client.sendText(message.sender.id, msgsTexts.curators.ASK_REVIEW_MSG_2.join('\n'));
+            await client.sendText(message.sender.id, msgsTexts.curator.ASK_REVIEW_MSG_2.join('\n'));
             await client.sendText(message.sender.id, 
-                                   msgsTexts.curators.ASK_REVIEW_MSG_3.join('\n').format(Object.keys(msgsTexts.replies).join(', ')));
+                                   msgsTexts.curator.ASK_REVIEW_MSG_3.join('\n').format(Object.keys(msgsTexts.replies).join(', ')));
             cura.underreview = doc;
             cura.save();
         }
@@ -78,7 +78,7 @@ exports.execute_command = async (message,client) => {
     async function getAnswer(){
         var status = message.body.match(/#status:([a-z]+)/)[1];
         if (!Object.keys(msgsTexts.replies).includes(status)){
-            throw new Error(msgsTexts.curators.NOT_A_STATUS_OPTION.join('\n').format(status))
+            throw new Error(msgsTexts.curator.NOT_A_STATUS_OPTION.join('\n').format(status))
         }
 
         cura.populate('underreview');
@@ -88,12 +88,12 @@ exports.execute_command = async (message,client) => {
         )
         
         if (!doc){
-            throw new Error(msgsTexts.curators.NO_MSG_BEING_REVIEWD.join('\n'))
+            throw new Error(msgsTexts.curator.NO_MSG_BEING_REVIEWD.join('\n'))
         }
 
         var replyText = message.body.match(/#textoresposta:([\S\s]+)/)[1]
         if(replyText.length <4){
-            throw new Error(msgsTexts.curators.SHORT_ANSWER.join('\n'))
+            throw new Error(msgsTexts.curator.SHORT_ANSWER.join('\n'))
         }
 
         doc.replymessage = replyText;
@@ -102,9 +102,9 @@ exports.execute_command = async (message,client) => {
         doc.save();
         cura.messagessolved.push(cura.underreview);
         cura.save();
-        await client.sendText(message.sender.id, msgsTexts.curators.ANSWER_ACCEPTED_1.join('\n'));
+        await client.sendText(message.sender.id, msgsTexts.curator.ANSWER_ACCEPTED_1.join('\n'));
         await client.sendText(message.sender.id, msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
-        await client.sendText(message.sender.id, msgsTexts.curators.ANSWER_ACCEPTED_3.join('\n'));
+        await client.sendText(message.sender.id, msgsTexts.curator.ANSWER_ACCEPTED_3.join('\n'));
 
     }
 
@@ -113,7 +113,7 @@ exports.execute_command = async (message,client) => {
             }
         )
     if(cura){
-        var command = message.body.match(/(^|\B)#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})(\b|\r)/)[2]
+        var command = message.body.match(/^#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})/)[1].toLowerCase()
 
         if (command){
             switch (command){
@@ -133,10 +133,10 @@ exports.execute_command = async (message,client) => {
                     await getAnswer()
                     break;
                 case msgsTexts.commands.SKIP_CMD:
-                    await skipReview;
+                    await skipReview();
                     break;
                 default:
-                    throw new Error(msgsTexts.curators.INVALID_COMMAND.join('\n').format(command))
+                    throw new Error(msgsTexts.curator.INVALID_COMMAND.join('\n').format(command))
             }
         }
     }
