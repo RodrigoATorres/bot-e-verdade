@@ -31,7 +31,7 @@ function start(done = function() { return; }) {
         .then(client => {
           
           if (process.env.NODE_ENV !== 'test'){
-            var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 60000);
+            var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 150000);
             var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
             sendStatusJob.start();
           }
