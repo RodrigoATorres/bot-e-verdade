@@ -131,7 +131,25 @@
             "",
             "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
+            ],
+        "verdadecomressalvas":[
+            "Olá! Chegamos à conclusão que a mensagem é:",
+            "*‼️VERDADEIRA, PORÉM COM RESSALVAS‼️*",
+            "{0}",
+            "",
+            "Portanto, tenha cuidado ao compartilhar essa mensagem!",
+            "Se for compartilhar, explique o contexto.",
+            "",
+            "Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"
+            ],
+        "naoaplica":[
+            "Olá! Essa mensagem não apresenta conteúdo cuja veracidade necessita ser checada.",
+            "",
+            "Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"
             ]
+
     },
     "commands":{
         "HELP_CMD":"ajuda",
