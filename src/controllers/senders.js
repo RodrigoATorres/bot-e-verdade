@@ -11,11 +11,12 @@ const Senders = require('../models/senders');
 
 const msgsTexts = require('../msgsTexts.json');
 
-async function isNew(senderId){
+exports.isNew = async function (senderId){
     var doc = await Message.findOne(
         {senderid: senderId
         }
     )
+    console.log(doc);
     if (doc){
         return false;
     }

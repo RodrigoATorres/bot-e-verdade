@@ -16,4 +16,4 @@ const sendersSchema = new Schema({
     
 })
 
-module.exports = mongoose.model('Curators', curatorsSchema);
+module.exports = mongoose.model('Sender', sendersSchema);

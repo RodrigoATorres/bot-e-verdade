@@ -38,7 +38,7 @@ function start(done = function() { return; }) {
           }
       
           client.onMessage(message => {
-            // console.log(message);
+            //console.log(message);
             if (message.isForwarded){
                 messageControler.check_message(message,client);
                 fs.writeFile(`./Received_msgs/${message.id}.json`, JSON.stringify(message), (err) => { if (err) throw err; });
@@ -55,7 +55,10 @@ function start(done = function() { return; }) {
                         )
                     }
                     else{
-                        if(senderControler.isNew(message.sender.id)){
+                        var isNew = true;
+                        //isNew = senderControler.isNew(message.sender.id);
+                        console.log(isNew);
+                        if(isNew == true){
                             messageControler.intro(message,client);
                         }
                     }
