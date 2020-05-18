@@ -126,7 +126,7 @@ exports.execute_command = async (message,client) => {
 
 
     async function getAnswer(){
-        var status = message.body.match(/#status:\s*([a-z]+)/)[1];
+        var status = message.body.match(/#status:\s*([a-z]+)/)[1].toLowerCase();
         if (!Object.keys(msgsTexts.replies).includes(status)){
             throw new Error(msgsTexts.curator.NOT_A_STATUS_OPTION.join('\n').format(status))
         }
@@ -148,7 +148,7 @@ exports.execute_command = async (message,client) => {
 
         doc.replymessage = replyText;
         doc.announced = false;
-        doc.veracity = status.toLowerCase();
+        doc.veracity = status;
         doc.save();
         cura.messagessolved.push(cura.underreview);
         cura.underreview_exp_at = null;
