@@ -37,12 +37,11 @@ async function searchMsg(message){
         var msg_text = message.body;
         var urls = urlify(msg_text);
         if (urls){
-            doc = await Message.findOne({all_url: urls[0]}); // evitei um loop com consulta na DB pois se a mensagem for igual, o url[0] tbm será... mas deixei model  como array para futuro
+            //doc = await Message.findOne({all_url: urls}); // evitei um loop com consulta na DB pois se a mensagem for igual, o url[0] tbm será... mas deixei model  como array para futuro
             mediaData['urls'] = urls;
         }
-        else{
-            doc = await Message.findOne({text: msg_text})
-        }
+        doc = await Message.findOne({text: msg_text});
+        
     }
     return [doc, mediaData]
 }
