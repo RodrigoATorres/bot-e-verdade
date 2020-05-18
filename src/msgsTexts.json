@@ -1,0 +1,147 @@
+{
+    "user":{
+        "INTRO_MSG": [
+            "Olá, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!"
+        ],
+        "NEW_MSG": [
+            "É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!"
+        ],
+        "UPROCESSED_MSG":[
+            "Ainda estamos analisando esse conteúdo. Retornaremos em breve."
+        ]
+    },
+    "curator":{
+        "STATUS_MSG":[
+            "--------------------------------------------",
+            "-------------- *É Verdade* --------------",
+            "--------------------------------------------",
+            "Olá, muito obrigado pela sua ajuda!",
+            "Recebemos até hoje um total de *{0} mensagens!*",
+            "E já *revisamos {1}*!",
+            "Nos últimos *7 dias* recebemos *{2}*!",
+            "",
+            "Ainda *precisamos da sua ajuda* para revisar as *${3} mensagens* que faltam!!!"
+        ],
+        "HELP_MSG":[
+            "Obrigado por colaborar com o É VERDADE.",
+            "Esses são os comandos que você pode utilizar:",
+            "   *#manda*",
+            "   *#diretizes*",
+            "   *#status*"
+        ],
+        "EXPIRING_ALERT_MSG":[
+            "Você tem 2 minutos para enviar a resposta da sua mensagem, caso contrário ela será novamente disponibilizada para outros curadores",
+            "Caso precise de mais tempo, me envie a mensagem \"#renovar\""
+        ],
+        "ASK_REVIEW_MSG_1":
+        [
+            "Olá, estamos precisando que você revise a mensagem"
+        ],
+        "ASK_REVIEW_MSG_1_MEDIA":[
+            "com a seguinte mídia:",
+            "{0}",
+            ""
+        ],
+        "ASK_REVIEW_MSG_1_TEXT":[
+            "com o seguinte texto:",
+            "{0}",
+            ""
+        ],
+        "ASK_REVIEW_MSG_2":[
+            "Quando terminar de revisar, por favor me mande a seguinte mensagem, preenchendo os campos indicados:"
+        ],
+        "ASK_REVIEW_MSG_3":[
+            "#resposta",
+            "#status:{0}",
+            "#textoresposta:",
+            "<sua resposta>"
+        ],
+        "NO_MSG_BEING_REVIEWD":[
+            "Você não tem nenhuma mensagem sendo revisada"
+        ],
+        "NOT_A_STATUS_OPTION":[
+            "Opção de status \"{0}\" não existente!"
+        ],
+        "SHORT_ANSWER":[
+            "Resposta muito curta ou inexistente!"
+        ],
+        "INVALID_COMMAND":[
+            "Commando \"{0}\" inválido!"
+        ]
+        ,
+        "ANSWER_ACCEPTED_1":[
+            "Mensagem salva. Essa será a resposta que demais usuários vão receber:"
+        ],
+        "ANSWER_ACCEPTED_3":[
+            "Se quiser alterar algo, basta reenviar a mensagem.",
+            "Obrigado pela ajuda!"
+        ]
+    },
+
+    "replies":{
+        "verdadeiro":[
+            "Olá! Chegamos à conclusão que a mensagem é:",
+            "         ✅✅*VERDADEIRA!*✅✅",
+            "{0}",
+            "",
+            "Pode compartilhar à vontade!",
+            "",
+            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"
+            ],
+        "falso":[
+            "Olá! Chegamos à conclusão que a mensagem é:",
+            "           ❌❌*FALSA!*❌❌",
+            "{0}",
+            "",
+            "*Por favor, não compartilhe essa mensagem!*",
+            "Avise quem te enviou também, para evitar que ela se espalhe mais!",
+            "",
+            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"
+            ],
+        "indeterminado":[
+            "Olá! Não pudemos determinar a veracidade da mensagem.",
+            "{0}",
+            "",
+            "*Por favor, tenha cuidado ao compartilhar essa mensagem!*",
+            "Na dúvida, é melhor não espalhar.",
+            "",
+            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"
+            ],
+        "semcontexto":[
+            "Olá! Chegamos à conclusão que a mensagem está:",
+            "           ‼️*FORA DE CONTEXTO!*‼️",
+            "{0}",
+            "",
+            "*Por favor, tenha cuidado ao compartilhar essa mensagem!*",
+            "Se for compartilhar, explique o contexto.",
+            "",
+            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"            
+        ],
+        "empartes":[
+            "Olá! Chegamos à conclusão que a mensagem é:",
+            "        ‼️*FALSA EM PARTES*‼️",
+            "{0}",
+            "",
+            "*Por favor, tenha cuidado ao compartilhar essa mensagem!*",
+            "Se for compartilhar, explique o contexto.",
+            "",
+            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
+            "É um prazer ajudar!😉"
+            ]
+    },
+    "commands":{
+        "HELP_CMD":"ajuda",
+        "SEND_CMD":"manda",
+        "GUIDELINES_CMD":"diretrizes",
+        "STATUS_CMD":"status",
+        "ANSWER_CMD":"resposta",
+        "SKIP_CMD":"pular",
+        "RENEW_EXP_CMD":"renovar"
+    }
+
+
+}

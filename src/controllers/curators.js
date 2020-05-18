@@ -9,6 +9,42 @@ const fs = require('fs');
 const Message = require('../models/message');
 const Curators = require('../models/curators');
 
+const msgsTexts = require('../msgsTexts.json');
+
+exports.resetReviewers = async(client) => {
+    var now = new Date();
+    var tmp_cura = await Curators.find({})
+    var alert_cura = await Curators.find({underreview_exp_at: { '$lte': new Date(now.getTime() + 120 * 1000)}, underreview_exp_alert: false})
+    var exp_cura = await Curators.find({underreview_exp_at: { '$lte': now}})
+
+    for (cura of tmp_cura){
+        console.log(now, cura.underreview_exp_at, cura.underreview)
+    }
+
+    for (cura of alert_cura){
+        console.log('alert')
+        client.sendText(cura['curatorid'],msgsTexts.curator.EXPIRING_ALERT_MSG.join('\n'));
+        cura.underreview_exp_alert = true;
+        await cura.save()
+    }
+
+    for (cura of exp_cura){
+        console.log('exp')
+        cura.populate('underreview');
+        var doc = await Message.findOne(
+            {_id: cura.underreview._id
+            }
+        )
+        cura.underreview = null;
+        cura.underreview_exp_at = null;
+        cura.underreview_exp_alert = false;
+        await cura.save()
+        doc.reviewer = null;
+        await doc.save()
+    }
+}
+
+
 exports.sendStatusAll = async (client) => {
     var all_cura = await Curators.find({}).select('curatorid -_id');
     for (cura of all_cura){
@@ -23,15 +59,7 @@ async function getStatus(receiver_id,client){
     var start = new Date() - 7;
     week_total_mesgs = await Message.countDocuments({createdAt: { '$gte': start}});
 
-    await client.sendText(receiver_id, ['--------------------------------------------',
-                                              '-------------- *É Verdade* --------------',
-                                              '--------------------------------------------',
-                                              'Olá, muito obrigado pela sua ajuda!',
-                                              `Recebemos até hoje um total de *${total_msgs} mensagens!*`,
-                                              `E já *revisamos ${total_msgs - noreply_msgs}*!`,
-                                              `Nos últimos *7 dias* recebemos *${week_total_mesgs}*!`,
-                                              '',
-                                              `Ainda *precisamos da sua ajuda* para revisar as *${noreply_msgs} mensagens* que faltam!!!`].join('\n'));
+    await client.sendText(receiver_id, msgsTexts.curator.STATUS_MSG.join('\n').format(total_msgs, total_msgs - noreply_msgs,week_total_mesgs,noreply_msgs));
 }
 
 exports.getStatus = getStatus
@@ -39,12 +67,7 @@ exports.getStatus = getStatus
 exports.execute_command = async (message,client) => {
     
     async function sendHelp(){
-        await client.sendText(message.sender.id,
-            ['Obrigado por colaborar com o É VERDADE.',
-            'Esses são os comandos que você pode utilizar:',
-            '   *#manda*',
-            '   *#diretizes*',
-            '   *#status*'].join('\n')
+        await client.sendText(message.sender.id,msgsTexts.curator.HELP_MSG.join('\n')
         );
     }
 
@@ -52,31 +75,60 @@ exports.execute_command = async (message,client) => {
         await client.sendText(message.sender.id, msg_helper.genGuidelines());
     }
 
+    async function renewReviewExp(){
+        now = new Date()
+        cura.underreview_exp_at =   new Date(now.getTime() + 600 * 1000);
+        cura.underreview_exp_alert = false;
+        await cura.save();
+    }
+
     async function sendForReview(){
         var doc = await Message.findOne(
             {replymessage: null,
+             reviewer: null,
              _id: {"$nin": cura.messagesBlackList}
             }
         )
         if(doc){
-            await client.sendText(message.sender.id, ['Olá, estamos precisando que você revise a mensagem',
-                                                      doc.medialink ? `com a seguinte mídia:\n${doc.medialink}\n` : '',
-                                                      doc.text ? `com o seguinte texto:\n${doc.text}` : ''
-                                                      ].join(''));
-            await client.sendText(message.sender.id, 'Quando terminar de revisar, por favor me mande a seguinte mensagem, preenchendo os campos indicados:');
-            await client.sendText(message.sender.id, ['#resposta',
-                                                      '#status:<verdadeiro,falso,indeterminado,semcontexto,empartes,verdadecomressalvas,naoaplica,pular>',
-                                                      '#textoresposta:',
-                                                      '<sua resposta>'].join('\n'));
+            await client.sendText(message.sender.id, [
+                                                        msgsTexts.curator.ASK_REVIEW_MSG_1.join('\n'),
+                                                        doc.medialink ? msgsTexts.curator.ASK_REVIEW_MSG_1_MEDIA.join('\n').format(doc.medialink) : '',
+                                                        doc.text ? msgsTexts.curator.ASK_REVIEW_MSG_1_TEXT.join('\n').format(doc.text) : ''
+                                                        ].join('')
+            );
+            await client.sendText(message.sender.id, msgsTexts.curator.ASK_REVIEW_MSG_2.join('\n'));
+            await client.sendText(message.sender.id, 
+                                   msgsTexts.curator.ASK_REVIEW_MSG_3.join('\n').format(Object.keys(msgsTexts.replies).join(', ')));
             cura.underreview = doc;
+            var now = new Date();
+            cura.underreview_exp_at =   new Date(now.getTime() + 600 * 1000);
+            cura.underreview_exp_alert = false;
             cura.save();
+            doc.reviewer = cura;
+            doc.save()
         }
     }
 
+    async function skipReview(){
+        cura.populate('underreview');
+        var doc = await Message.findOne(
+            {_id: cura.underreview._id
+            }
+        )
+        cura.messagesBlackList.push(doc);
+        await cura.save()
+        doc.reviewer = null;
+        await doc.save()
+        await sendForReview();
+        return
+
+    }
+
+
     async function getAnswer(){
         var status = message.body.match(/#status:([a-z]+)/)[1];
-        if (!['verdadeiro','falso','indeterminado','antigo','empartes',"verdadecomressalvas","naoaplica",'pular'].includes(status)){
-            throw new Error(`Opção de status "${status}" não existente!`)
+        if (!Object.keys(msgsTexts.replies).includes(status)){
+            throw new Error(msgsTexts.curator.NOT_A_STATUS_OPTION.join('\n').format(status))
         }
 
         cura.populate('underreview');
@@ -86,18 +138,12 @@ exports.execute_command = async (message,client) => {
         )
         
         if (!doc){
-            throw new Error('Você não tem nenhuma mensagem sendo revisada"')
-        }
-
-        if (status === 'pular'){
-            cura.messagesBlackList.push(doc);
-            await sendForReview();
-            return
+            throw new Error(msgsTexts.curator.NO_MSG_BEING_REVIEWD.join('\n'))
         }
 
         var replyText = message.body.match(/#textoresposta:([\S\s]+)/)[1]
         if(replyText.length <4){
-            throw new Error('Resposta muito curta ou inexistente!')
+            throw new Error(msgsTexts.curator.SHORT_ANSWER.join('\n'))
         }
 
         doc.replymessage = replyText;
@@ -105,10 +151,13 @@ exports.execute_command = async (message,client) => {
         doc.veracity = status;
         doc.save();
         cura.messagessolved.push(cura.underreview);
+        cura.underreview_exp_at = null;
+        cura.underreview_exp_alert = true;
+        await cura.save()
         cura.save();
-        await client.sendText(message.sender.id, 'Mensagem salva. Essa será a resposta que demais usuários vão receber:');
-        await client.sendText(message.sender.id, msg_helper.genReply(doc.veracity,doc.replymessage));
-        await client.sendText(message.sender.id, 'Se quiser alterar algo, basta reenviar a mensagem.\nObrigado pela ajuda!');
+        await client.sendText(message.sender.id, msgsTexts.curator.ANSWER_ACCEPTED_1.join('\n'));
+        await client.sendText(message.sender.id, msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
+        await client.sendText(message.sender.id, msgsTexts.curator.ANSWER_ACCEPTED_3.join('\n'));
 
     }
 
@@ -117,11 +166,35 @@ exports.execute_command = async (message,client) => {
             }
         )
     if(cura){
-        if(message.body == '#ajuda'){await sendHelp()};
-        if(message.body == '#manda'){await sendForReview()};
-        if(message.body == '#diretrizes'){await sendGuidelines()};
-        if(message.body == '#status'){await getStatus(message.sender.id,client)};
-        if(message.body.slice(0,9) == '#resposta'){await getAnswer()};
+        var command = message.body.match(/^#(?![0-9_]+\b)([a-zA-Z0-9_]{1,30})/)[1].toLowerCase()
+
+        if (command){
+            switch (command){
+                case msgsTexts.commands.HELP_CMD:
+                    await sendHelp();
+                    break;
+                case msgsTexts.commands.SEND_CMD:
+                        await sendForReview()
+                        break;
+                case msgsTexts.commands.GUIDELINES_CMD:
+                        await sendGuidelines()
+                        break;
+                case msgsTexts.commands.STATUS_CMD:
+                        await getStatus(message.sender.id,client);
+                        break;
+                case msgsTexts.commands.ANSWER_CMD:
+                    await getAnswer()
+                    break;
+                case msgsTexts.commands.SKIP_CMD:
+                    await skipReview();
+                    break;
+                case msgsTexts.commands.RENEW_EXP_CMD:
+                    await renewReviewExp();
+                    break;
+                default:
+                    throw new Error(msgsTexts.curator.INVALID_COMMAND.join('\n').format(command))
+            }
+        }
     }
     await client.sendSeen(message.chatId);
 }

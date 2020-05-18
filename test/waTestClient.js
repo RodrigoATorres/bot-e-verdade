@@ -7,6 +7,7 @@ var client;
 wa.create({sessionId:'testing'}).then(res =>{
     client = res;
     done = true;
+    client.onMessage(message => console.log(message.id))
 })
 
 require('deasync').loopWhile(function(){return !done;});

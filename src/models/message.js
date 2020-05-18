@@ -8,8 +8,8 @@ const messageSchema = new Schema({
         type: String,
     },
 
-    mediaKeys:{
-        type: [String]
+    mediaKey:{
+        type: String
     },
 
     mediaMd5:{
@@ -37,7 +37,12 @@ const messageSchema = new Schema({
     replymessage:{
         type: String
     },
-    
+
+    reviewer:{
+    type:Schema.Types.ObjectId,
+    ref:'Curators',
+    },
+
     reportUsers:{
         type: [{userId: String,
                 msgId: String}]
@@ -51,10 +56,10 @@ const messageSchema = new Schema({
         type: String
     },
     
-    similarMessages:[{
+    parent:{
         type:Schema.Types.ObjectId,
         ref:'Messages',
-    }],
+    }
 },
 {
     timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }

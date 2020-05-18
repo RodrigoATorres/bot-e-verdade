@@ -1,5 +1,6 @@
 // import { create, Whatsapp } from '@open-wa/wa-automate';
 require('dotenv').config()
+require('./helpers/general')
 const wa = require('@open-wa/wa-automate');
 var CronJob = require('cron').CronJob;
 const mongoose = require('mongoose');
@@ -28,9 +29,10 @@ function start(done = function() { return; }) {
     .then(result => {
         wa.create()
         .then(client => {
-          var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 60000);
-          
+
+          var intervalCheckReviewers = setInterval(function(){curatorControler.resetReviewers(client)}, 120000);
           if (process.env.NODE_ENV !== 'test'){
+            var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 150000);
             var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
             sendStatusJob.start();
           }
