@@ -11,6 +11,40 @@ const Curators = require('../models/curators');
 
 const msgsTexts = require('../msgsTexts.json');
 
+exports.resetReviewers = async(client) => {
+    var now = new Date();
+    var tmp_cura = await Curators.find({})
+    var alert_cura = await Curators.find({underreview_exp_at: { '$lte': new Date(now.getTime() + 120 * 1000)}, underreview_exp_alert: false})
+    var exp_cura = await Curators.find({underreview_exp_at: { '$lte': now}})
+
+    for (cura of tmp_cura){
+        console.log(now, cura.underreview_exp_at, cura.underreview)
+    }
+
+    for (cura of alert_cura){
+        console.log('alert')
+        client.sendText(cura['curatorid'],msgsTexts.curator.EXPIRING_ALERT_MSG.join('\n'));
+        cura.underreview_exp_alert = true;
+        await cura.save()
+    }
+
+    for (cura of exp_cura){
+        console.log('exp')
+        cura.populate('underreview');
+        var doc = await Message.findOne(
+            {_id: cura.underreview._id
+            }
+        )
+        cura.underreview = null;
+        cura.underreview_exp_at = null;
+        cura.underreview_exp_alert = false;
+        await cura.save()
+        doc.reviewer = null;
+        await doc.save()
+    }
+}
+
+
 exports.sendStatusAll = async (client) => {
     var all_cura = await Curators.find({}).select('curatorid -_id');
     for (cura of all_cura){
@@ -41,9 +75,17 @@ exports.execute_command = async (message,client) => {
         await client.sendText(message.sender.id, msg_helper.genGuidelines());
     }
 
+    async function renewReviewExp(){
+        now = new Date()
+        cura.underreview_exp_at =   new Date(now.getTime() + 600 * 1000);
+        cura.underreview_exp_alert = false;
+        await cura.save();
+    }
+
     async function sendForReview(){
         var doc = await Message.findOne(
             {replymessage: null,
+             reviewer: null,
              _id: {"$nin": cura.messagesBlackList}
             }
         )
@@ -58,7 +100,12 @@ exports.execute_command = async (message,client) => {
             await client.sendText(message.sender.id, 
                                    msgsTexts.curator.ASK_REVIEW_MSG_3.join('\n').format(Object.keys(msgsTexts.replies).join(', ')));
             cura.underreview = doc;
+            var now = new Date();
+            cura.underreview_exp_at =   new Date(now.getTime() + 600 * 1000);
+            cura.underreview_exp_alert = false;
             cura.save();
+            doc.reviewer = cura;
+            doc.save()
         }
     }
 
@@ -69,6 +116,9 @@ exports.execute_command = async (message,client) => {
             }
         )
         cura.messagesBlackList.push(doc);
+        await cura.save()
+        doc.reviewer = null;
+        await doc.save()
         await sendForReview();
         return
 
@@ -101,6 +151,9 @@ exports.execute_command = async (message,client) => {
         doc.veracity = status;
         doc.save();
         cura.messagessolved.push(cura.underreview);
+        cura.underreview_exp_at = null;
+        cura.underreview_exp_alert = true;
+        await cura.save()
         cura.save();
         await client.sendText(message.sender.id, msgsTexts.curator.ANSWER_ACCEPTED_1.join('\n'));
         await client.sendText(message.sender.id, msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
@@ -134,6 +187,9 @@ exports.execute_command = async (message,client) => {
                     break;
                 case msgsTexts.commands.SKIP_CMD:
                     await skipReview();
+                    break;
+                case msgsTexts.commands.RENEW_EXP_CMD:
+                    await renewReviewExp();
                     break;
                 default:
                     throw new Error(msgsTexts.curator.INVALID_COMMAND.join('\n').format(command))

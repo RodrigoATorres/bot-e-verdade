@@ -37,7 +37,12 @@ const messageSchema = new Schema({
     replymessage:{
         type: String
     },
-    
+
+    reviewer:{
+    type:Schema.Types.ObjectId,
+    ref:'Curators',
+    },
+
     reportUsers:{
         type: [{userId: String,
                 msgId: String}]

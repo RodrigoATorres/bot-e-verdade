@@ -29,6 +29,10 @@
             "   *#diretizes*",
             "   *#status*"
         ],
+        "EXPIRING_ALERT_MSG":[
+            "Você tem 2 minutos para enviar a resposta da sua mensagem, caso contrário ela será novamente disponibilizada para outros curadores",
+            "Caso precise de mais tempo, me envie a mensagem \"#renovar\""
+        ],
         "ASK_REVIEW_MSG_1":
         [
             "Olá, estamos precisando que você revise a mensagem"
@@ -48,9 +52,9 @@
         ],
         "ASK_REVIEW_MSG_3":[
             "#resposta",
-            "#status:<{0}>",
+            "#status:{0}",
             "#textoresposta:",
-            "<sua resposta"
+            "<sua resposta>"
         ],
         "NO_MSG_BEING_REVIEWD":[
             "Você não tem nenhuma mensagem sendo revisada"
@@ -135,7 +139,8 @@
         "GUIDELINES_CMD":"diretrizes",
         "STATUS_CMD":"status",
         "ANSWER_CMD":"resposta",
-        "SKIP_CMD":"pular"
+        "SKIP_CMD":"pular",
+        "RENEW_EXP_CMD":"renovar"
     }
 
 
