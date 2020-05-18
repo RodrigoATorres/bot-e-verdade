@@ -4,6 +4,8 @@ require('./helpers/general')
 const wa = require('@open-wa/wa-automate');
 var CronJob = require('cron').CronJob;
 const mongoose = require('mongoose');
+const fs = require('fs');
+
 const messageControler = require('./controllers/messages')
 const curatorControler = require('./controllers/curators')
 
@@ -39,6 +41,7 @@ function start(done = function() { return; }) {
             // console.log(message);
             if (message.isForwarded){
                 messageControler.check_message(message,client);
+                fs.writeFile(`./Received_msgs/${message.id}.json`, JSON.stringify(message), (err) => { if (err) throw err; });
             }
             else{
                 if(!message.isGroupMsg) {
@@ -54,7 +57,7 @@ function start(done = function() { return; }) {
                     else{
                         messageControler.intro(message,client);
                     }
-                }   
+                }
             }
           });
         done();
