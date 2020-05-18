@@ -56,7 +56,7 @@ async function getStatus(receiver_id,client){
     total_msgs = await Message.countDocuments({});
     noreply_msgs = await Message.countDocuments({replymessage: null})
 
-    var start = new Date() - 7;
+    var start = new Date(Date.now() - (24*60*60 * 1000)*7)
     week_total_mesgs = await Message.countDocuments({createdAt: { '$gte': start}});
 
     await client.sendText(receiver_id, msgsTexts.curator.STATUS_MSG.join('\n').format(total_msgs, total_msgs - noreply_msgs,week_total_mesgs,noreply_msgs));

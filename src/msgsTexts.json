@@ -20,7 +20,7 @@
             "E já *revisamos {1}*!",
             "Nos últimos *7 dias* recebemos *{2}*!",
             "",
-            "Ainda *precisamos da sua ajuda* para revisar as *${3} mensagens* que faltam!!!"
+            "Ainda *precisamos da sua ajuda* para revisar as *{3} mensagens* que faltam!!!"
         ],
         "HELP_MSG":[
             "Obrigado por colaborar com o É VERDADE.",

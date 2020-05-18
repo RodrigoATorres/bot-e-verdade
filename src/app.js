@@ -8,6 +8,7 @@ const fs = require('fs');
 
 const messageControler = require('./controllers/messages')
 const curatorControler = require('./controllers/curators')
+const senderControler = require('./controllers/senders')
 
 const DB_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
 const DB_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
@@ -38,7 +39,7 @@ function start(done = function() { return; }) {
           }
       
           client.onMessage(message => {
-            // console.log(message);
+            //console.log(message);
             if (message.isForwarded){
                 messageControler.check_message(message,client);
                 fs.writeFile(`./Received_msgs/${message.id}.json`, JSON.stringify(message), (err) => { if (err) throw err; });
@@ -55,7 +56,12 @@ function start(done = function() { return; }) {
                         )
                     }
                     else{
-                        messageControler.intro(message,client);
+                        var isNew = true;
+                        //isNew = senderControler.isNew(message.sender.id);
+                        console.log(isNew);
+                        if(isNew == true){
+                            messageControler.intro(message,client);
+                        }
                     }
                 }
             }
