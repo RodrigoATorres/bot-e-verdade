@@ -48,7 +48,7 @@
         ],
         "ASK_REVIEW_MSG_3":[
             "#resposta",
-            "#status:<{0}>",
+            "#status:{0}",
             "#textoresposta:",
             "<sua resposta"
         ],
