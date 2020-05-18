@@ -17,6 +17,15 @@ const curatorsSchema = new Schema({
         ref:'Messages'
     },
 
+    underreview_exp_at:{
+        type : Date
+    },
+
+    underreview_exp_alert:{
+        type : Boolean,
+        default: false
+    },
+
     messagessolved:[{
         type:Schema.Types.ObjectId,
         ref:'Messages',

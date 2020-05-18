@@ -27,7 +27,8 @@ function start(done = function() { return; }) {
     .then(result => {
         wa.create()
         .then(client => {
-          
+
+          var intervalCheckReviewers = setInterval(function(){curatorControler.resetReviewers(client)}, 5000);
           if (process.env.NODE_ENV !== 'test'){
             var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 60000);
             var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
