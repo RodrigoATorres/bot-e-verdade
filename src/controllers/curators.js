@@ -126,7 +126,7 @@ exports.execute_command = async (message,client) => {
 
 
     async function getAnswer(){
-        var status = message.body.match(/#status:([a-z]+)/)[1];
+        var status = message.body.match(/#status:\s*([a-zA-Z]+)/)[1].toLowerCase();
         if (!Object.keys(msgsTexts.replies).includes(status)){
             throw new Error(msgsTexts.curator.NOT_A_STATUS_OPTION.join('\n').format(status))
         }
