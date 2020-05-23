@@ -141,7 +141,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('ANNOUNCING REPLIES');
         for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[index], msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
+            await client.sendText(doc.reportUsers[index]['userId'], msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
         }
         doc.announced = true;
         await doc.save();
