@@ -37,9 +37,15 @@ function start(done = function() { return; }) {
             var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
             sendStatusJob.start();
           }
-      
+
+          client.onAddedToGroup( (chat) =>{
+            client.sendText(chat.id,'');
+            client.sendContact(chat.id,process.env.BOT_WA_ID)
+          }
+          );
+
           client.onMessage(message => {
-            //console.log(message);
+        
             if (message.isForwarded){
                 messageControler.check_message(message,client);
                 fs.writeFile(`./Received_msgs/${message.id}.json`, JSON.stringify(message), (err) => { if (err) throw err; });

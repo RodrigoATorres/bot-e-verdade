@@ -10,6 +10,12 @@
             "Ainda estamos analisando esse conteúdo. Retornaremos em breve."
         ]
     },
+    "group":{
+        "INTRO_MSG":[
+            "Olá, sou o Robô do é verdade.",
+            "Se você quiser saber se você ou alguma outra pessoa do grupro enviou uma menssagem que não é verdadeira"
+        ]
+    },
     "curator":{
         "STATUS_MSG":[
             "--------------------------------------------",
@@ -22,6 +28,9 @@
             "",
             "Ainda *precisamos da sua ajuda* para revisar as *{3} mensagens* que faltam!!!"
         ],
+        "GUIDELINES":[
+            "TODO"
+        ],
         "HELP_MSG":[
             "Obrigado por colaborar com o É VERDADE.",
             "Esses são os comandos que você pode utilizar:",
@@ -31,7 +40,7 @@
         ],
         "SEND_MSG_ID":[
             "",
-            "Essa mensagem est� registrada no seguinte id:{0}"
+            "Essa mensagem est� registrada no seguinte id:{0}"
         ],
         "EXPIRING_ALERT_MSG":[
             "Você tem 2 minutos para enviar a resposta da sua mensagem, caso contrário ela será novamente disponibilizada para outros curadores",

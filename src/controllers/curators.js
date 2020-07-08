@@ -1,7 +1,6 @@
 const wa = require('@open-wa/wa-automate');
 const hash = md5 = require('md5');
 const path = require('path');
-const msg_helper = require('../helpers/msg_helper')
 
 const mime = require('mime-types');
 const fs = require('fs');
@@ -72,7 +71,7 @@ exports.execute_command = async (message,client) => {
     }
 
     async function sendGuidelines(){
-        await client.sendText(message.sender.id, msg_helper.genGuidelines());
+        await client.sendText(message.sender.id, msgsTexts.curator.GUIDELINES.join('\n'));
     }
 
     async function renewReviewExp(){

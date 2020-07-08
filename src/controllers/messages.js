@@ -1,7 +1,7 @@
 const wa = require('@open-wa/wa-automate');
 const hash = md5 = require('md5');
 const path = require('path');
-const msg_helper = require('../helpers/msg_helper')
+const discourse = require('../helpers/discourse');
 
 const mime = require('mime-types');
 const fs = require('fs');
@@ -93,8 +93,10 @@ async function updateMsgsDatabase(doc, message, mediaData){
     }
     else{
         if (!message.isGroupMsg){
-                var register = await Message.create({
-                text:  message.body,
+            discourse.addMessage(message, mediaData);
+
+            var register = await Message.create({
+                text: (message.mimetype) ? "" : message.body,
                 mediaMd5: mediaData['media_md5'],
                 mediaMime: message.mimetype,
                 timesReceived: 1,
@@ -105,7 +107,7 @@ async function updateMsgsDatabase(doc, message, mediaData){
                 all_url: mediaData['urls'],
             })
 
-            if (message.mimetype) {   
+            if (message.mimetype) {
                 var filename = `${mediaData['media_md5']}.${mime.extension(message.mimetype)}`;
                 fs.writeFile(path.join('Media',filename), mediaData['content'], function(err) {
                     console.log(path.join('Media',filename));
