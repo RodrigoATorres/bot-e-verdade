@@ -1,159 +1,127 @@
-const wa = require('@open-wa/wa-automate');
-const hash = md5 = require('md5');
-const path = require('path');
-const discourse = require('../helpers/discourse');
-
-const mime = require('mime-types');
-const fs = require('fs');
-
+const mongoose = require('mongoose');
 const Message = require('../models/message');
-const Curators = require('../models/curators');
+const Sender = require('../models/sender');
+const MessageGroup = require('../models/messageGroup');
+
+const gcController = require('./gcProcessing');
 
 const msgsTexts = require('../msgsTexts.json');
 
-const urlRegex =/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
+    if (messageGroup.replyMessage){
+        groupInfo.groupParticipants.forEach( async(participant) => {
+            partDoc = await Sender.findOne({senderId: participant});
+            if (partDoc && partDoc.senderId === groupInfo.senderId){
+                await client.sendText(
+                    parDoc.senderId,
+                    msgsTexts.user.PRE_GRP_REPLY_AUTHOR.join('\n').format(partDoc.name, groupInfo.groupName))
+                await client.sendText(
+                    parDoc.senderId,
+                    messageGroup.replyMessage
+                )
+            }
+            else if (partDoc){
+                await client.sendText(
+                    parDoc.senderId,
+                    msgsTexts.user.PRE_GRP_REPLY.join('\n').format(partDoc.name, groupInfo.groupName)
+                );
+                await client.sendText(
+                    parDoc.senderId,
+                    messageGroup.replyMessage
+                );
+            }
+        })
+        return true;
+    }
+    return false;
+}
 
+exports.replyPrivateMessage = async (messageGroup, client, senderInfo) =>{
+    if (messageGroup.replyMessage){
+        await client.sendText(
+            senderInfo.senderId,
+            messageGroup.replyMessage
+        )
+        return true;
+    }
+    return false;
+}
 
-function urlify(text) {
-    return text.match(urlRegex, function(url) {
-        return url;
+exports.publishReply = async ( messageGroup, client ) =>{
+    messageGroup.reportUsers.forEach( (senderInfo) => {
+        this.replyPrivateMessage(messageGroup, client, senderInfo)
+    });
+    messageGroup.reportGroups.forEach( ( groupInfo ) => {
+        this.replyPrivateMessage(messageGroup, client, groupInfo)
     });
 }
 
-async function searchMsg(message){
-    var doc = null;
-    var mediaData = {};
+exports.getMessagesTags = async (messageIds) => {
+    docs = await Message.find(
+        {
+            '_id': { $in: 
+                messageIds
+            }
+        },
+        ['textTags','mediaMd5s']
+    )
+    .populate({ path: 'mediaMd5s', select: 'mediaTags' })
+    .exec(); 
 
-    if (message.mimetype) {
-        doc = await Message.findOne( {mediaKeys: message.mediaKey } )
-
-        if (!doc && !message.isGroupMsg){
-            mediaData['content'] = await wa.decryptMedia(message);       
-            mediaData['media_md5'] = md5(mediaData['content'] );
-            doc = await Message.findOne({mediaMd5: mediaData['media_md5']})
-            // if (doc){doc.mediaKeys.push(message.mediaKey)};
-        }
-    }
-    else{
-        var msg_text = message.body;
-        var urls = urlify(msg_text);
-        if (urls){
-            //doc = await Message.findOne({all_url: urls}); // evitei um loop com consulta na DB pois se a mensagem for igual, o url[0] tbm será... mas deixei model  como array para futuro
-            mediaData['urls'] = urls;
-        }
-        doc = await Message.findOne({text: msg_text});
-        
-    }
-    return [doc, mediaData]
-}
-
-async function sendReplyMsg(doc, message, client, add_text = null){
-    if (doc){
-        if (doc.replymessage){
-
-            var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            var response_txt = msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage)
-            if (add_text){response_txt += add_text}
-            await client.sendText(destinatary, response_txt);
-        }
-        else if(!message.isGroupMsg) {
-            var response_txt = msgsTexts.user.UPROCESSED_MSG.join('\n');
-            if (add_text){response_txt += add_text}
-            await client.sendText(message.sender.id, );
-        }
-    }
-    else{
-        if (!message.isGroupMsg){
-            response_txt = msgsTexts.user.NEW_MSG.join('\n')
-            if (add_text){response_txt += add_text}
-            await client.sendText(message.sender.id, response_txt);
-        }
-
-    }
-
-}
-
-
-async function updateMsgsDatabase(doc, message, mediaData){
-
-    var cura = await Curators.findOne(
-        {curatorid: message.sender.id
-        }
+    tagList = docs.reduce(
+        (prev, doc) =>{
+            return prev.concat( 
+                doc.mediaMd5s ? 
+                doc.mediaMd5s.map( elm => elm.mediaTags) : 
+                doc.textTags
+            );
+        },
+        []
     )
 
-    if (doc){
-        if(!doc.replymessage && !doc.reportUsers.includes(message.sender.id)){
-            doc.reportUsers.push({userId: message.sender.id,
-                                  msgId: message.id});
-        }
-        doc.forwardingScores.push(message.forwardingScore);
-        doc.update( { $inc: {timesReceived:1}});
-        doc.save();
-        var register = doc;
-    }
-    else{
-        if (!message.isGroupMsg){
-            discourse.addMessage(message, mediaData);
-
-            var register = await Message.create({
-                text: (message.mimetype) ? "" : message.body,
-                mediaMd5: mediaData['media_md5'],
-                mediaMime: message.mimetype,
-                timesReceived: 1,
-                reportUsers:[{userId: message.sender.id,
-                              msgId: message.id}],
-                forwardingScores:[message.forwardingScore],
-                medialink: 'http://s1.tuts.host/wamedia/' + `${mediaData['media_md5']}.${mime.extension(message.mimetype)}`,
-                all_url: mediaData['urls'],
-            })
-
-            if (message.mimetype) {
-                var filename = `${mediaData['media_md5']}.${mime.extension(message.mimetype)}`;
-                fs.writeFile(path.join('Media',filename), mediaData['content'], function(err) {
-                    console.log(path.join('Media',filename));
-                    if (err) {
-                      return console.log(err);
-                    }
-                    console.log('The file was saved!');
-                  });
-            }
-        }
-    }
-
-    return cura? register.id : null;
-
+    return gcController.mergeTagLists(tagList);
 }
 
-exports.check_message = async (message,client) => {  
-    var [doc, mediaData] = await searchMsg(message);
-    var register_id = await updateMsgsDatabase(doc,message,mediaData);
-    var add_text = register_id ? msgsTexts.curator.SEND_MSG_ID.join('\n').format(register_id) : null
-    sendReplyMsg(doc, message, client, add_text);   
-    await client.sendSeen(message.chatId);
-}
 
-exports.check_reports = async (client) => {
-    
-    console.log('RUNNNING CHECK REPORTS');
-    const docs = await Message.find({
-          replymessage: { $exists: true },
-          announced: false
-        });
-    
-    for (const doc of docs){
-        console.log('ANNOUNCING REPLIES');
-        for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[index]['userId'], msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
-        }
-        doc.announced = true;
-        await doc.save();
-        
+exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
+
+    let msgGroup = await MessageGroup.findOne({messages:{$elemMatch:{$all:messageIds}}});
+    if (msgGroup){
+        return [msgGroup, false];
     }
-
+    else if (createIfNull){
+        msgGroup = await MessageGroup.create( { 
+            messages: messageIds,
+            tags: await this.getMessagesTags(messageIds)
+        } );
+        return [msgGroup, true];
+    }
 }
 
-exports.intro = async (message, client) => {
-    await client.sendSeen(message.chatId);
-    await client.sendText(message.sender.id, msgsTexts.user.INTRO_MSG.join('\n') );
-        
+exports.matchMessages = async(messageDocs, createIfNull) => {
+    let msgIds = [];
+
+    for (doc of messageDocs){
+        let msgMatch = await Message.findOne({ textMd5s: doc.textMd5, mediaMd5s: doc.mediaMd5 }).select(['forwardingScores']);
+        if (msgMatch){
+            msgIds.push(msgMatch._id);
+            msgMatch.forwardingScores.push(doc.forwardingScore);
+            msgMatch.save()
+        }
+        else if (createIfNull){
+            let newDoc = await Message.create({
+                texts: doc.text ? [doc.text]: null,
+                textMd5s: doc.text ? [doc.textMd5]: null,
+                textTags: doc.text ? [await gcController.getTextTags(doc.text)]: null,
+                mediaMd5s: doc.mediaMd5 ? [doc.mediaMd5]: null,
+                mediaExtensions: doc.mediaExtension ? [doc.mediaExtension] : null,
+                forwardingScores: [doc.forwardingScore],
+            });
+            msgIds.push(newDoc._id);
+        }
+        else{
+            msgIds.push(null);
+        }
+    }
+    return msgIds;
 }

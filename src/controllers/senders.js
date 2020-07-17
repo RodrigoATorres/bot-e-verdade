@@ -1,30 +1,39 @@
-const wa = require('@open-wa/wa-automate');
-const hash = md5 = require('md5');
-const path = require('path');
-
-const mime = require('mime-types');
-const fs = require('fs');
-
-const Message = require('../models/message');
-const Curators = require('../models/curators');
-const Senders = require('../models/senders');
-
+const Senders = require('../models/sender');
 const msgsTexts = require('../msgsTexts.json');
 
-exports.isNew = async function (senderId){
-    var doc = await Message.findOne(
-        {senderid: senderId
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }   
+
+sendIntroduction = async (sender, client) =>{
+    await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
+}
+
+exports.registerSender = async function (message, client){
+
+    let sender = await Senders.findOne(
+        {senderid: message.sender.id
         }
     )
-    console.log(doc);
-    if (doc){
-        return false;
+    try{
+        if (!sender && !message.isGroupMsg){
+            sender = await Senders.create({
+                senderId:  message.sender.id,
+                name: message.sender.shortName
+            });
+            sendIntroduction(sender, client);
+        }
     }
-    else{
-        Senders.create({
-            senderid:  senderId,
-            banned: false,
-        });
-        return true;
+    catch{
+        await sleep(100);
+        sender = await Senders.findOne(
+            {
+                senderid: message.sender.id
+            }
+        )
     }
+    message.bot.sender = sender;
+
 }

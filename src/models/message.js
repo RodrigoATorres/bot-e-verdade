@@ -4,70 +4,39 @@ const Schema = mongoose.Schema;
 
 const messageSchema = new Schema({
 
-    text:{
+    texts:[{
         type: String,
-    },
+    }],
 
-    mediaKey:{
+    textMd5s:[{
+        type: String,
+    }],
+
+    textTags:[
+        [{
+            name:String,
+            tagType:String,
+            salience:Number
+        }]
+    ],
+
+    mediaMd5s:[{
+        type: String,
+        ref: 'Media' 
+    }],
+
+    mediaExtensions:[{
         type: String
-    },
-
-    mediaMd5:{
-        type: String
-    },
-
-    mediaMime:{
-        type: String
-    },
-
-    timesReceived:{
-        type: Number,
-        required: true
-    },
+    }],
 
     forwardingScores: {
         type: [Number],
         required: true
     },
-
-    veracity: {
-        type: String,
-    },
-
-    replymessage:{
-        type: String
-    },
-
-    reviewer:{
-    type:Schema.Types.ObjectId,
-    ref:'Curators',
-    },
-
-    reportUsers:{
-        type: [{userId: String,
-                msgId: String}]
-    },
-
-    announced:{
-        type: Boolean
-    },
-    
-    medialink:{
-        type: String
-    },
-    
-    parent:{
-        type:Schema.Types.ObjectId,
-        ref:'Messages',
-    },
-    
-    all_url:{
-        type: [String]
-    }
 },
 {
-    timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' }
+timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }
 }
 )
 
-module.exports = mongoose.model('Messages', messageSchema);
+module.exports = mongoose.model('Message', messageSchema);

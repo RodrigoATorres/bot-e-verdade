@@ -16,6 +16,9 @@
     }
   },
   "dependencies": {
+    "@google-cloud/language": "^4.1.0",
+    "@google-cloud/speech": "^4.1.1",
+    "@google-cloud/vision": "^2.1.1",
     "@open-wa/wa-automate": "^1.9.91",
     "cron": "^1.8.2",
     "discourse-js": "^2.0.1",
@@ -33,6 +36,7 @@
     "deasync": "^0.1.20",
     "json2mongo": "^2.0.0",
     "mocha": "^7.1.2",
-    "mongo-unit": "^2.0.1"
+    "mongo-unit": "^2.0.1",
+    "uuid": "^8.2.0"
   }
 }

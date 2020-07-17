@@ -5,10 +5,13 @@ const wa = require('@open-wa/wa-automate');
 var CronJob = require('cron').CronJob;
 const mongoose = require('mongoose');
 const fs = require('fs');
+const msgsTexts = require('./msgsTexts.json');
 
-const messageControler = require('./controllers/messages')
-const curatorControler = require('./controllers/curators')
-const senderControler = require('./controllers/senders')
+const messageBufferController =  require('./controllers/messageBuffers');
+const senderControler = require('./controllers/senders');
+const discourseController = require('./controllers/discourse');
+// const messageControler = require('./controllers/messages')
+// const curatorControler = require('./controllers/curators')
 
 const DB_USERNAME = process.env.MONGO_INITDB_ROOT_USERNAME;
 const DB_ROOT_PASSWORD = process.env.MONGO_INITDB_ROOT_PASSWORD;
@@ -30,8 +33,9 @@ function start(done = function() { return; }) {
     .then(result => {
         wa.create()
         .then(client => {
-
-          var intervalCheckReviewers = setInterval(function(){curatorControler.resetReviewers(client)}, 120000);
+          var intervalProcessBuffer = setInterval(function(){messageBufferController.processBuffer(client)}, 1000);
+          var intervalProcessBuffer = setInterval(function(){discourseController.processNewReplyTopics(client)}, 5000);
+          // var intervalCheckReviewers = setInterval(function(){curatorControler.resetReviewers(client)}, 120000);
           if (process.env.NODE_ENV !== 'test'){
             var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 150000);
             var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
@@ -39,38 +43,36 @@ function start(done = function() { return; }) {
           }
 
           client.onAddedToGroup( (chat) =>{
-            client.sendText(chat.id,'');
+            client.sendText(chat.id, msgsTexts.group.INTRO_MSG.join('\n'));
             client.sendContact(chat.id,process.env.BOT_WA_ID)
           }
           );
 
           client.onMessage(message => {
-        
+
+            if (message.isGroupMsg && !message.isForwarded){
+              return;
+            }
+
+            message.bot = {};
+            senderControler.registerSender(message, client);
+
             if (message.isForwarded){
-                messageControler.check_message(message,client);
+                messageBufferController.addMessage(message,client);
                 fs.writeFile(`./Received_msgs/${message.id}.json`, JSON.stringify(message), (err) => { if (err) throw err; });
+                return;
             }
-            else{
-                if(!message.isGroupMsg) {
-                    if(message.body.charAt(0) == '#'){
-                        curatorControler.execute_command(message, client)
-                        .then()
-                        .catch( err => {
-                          client.sendText(message.sender.id, `Não foi possível processar menssagem:\n${err}`);
-                          client.sendSeen(message.chatId);
-                        }
-                        )
-                    }
-                    else{
-                        var isNew = true;
-                        //isNew = senderControler.isNew(message.sender.id);
-                        console.log(isNew);
-                        if(isNew == true){
-                            messageControler.intro(message,client);
-                        }
-                    }
-                }
+            
+            if(message.body.charAt(0) == '#' && message.bot.sender.isCurator){
+                // curatorControler.execute_command(message, client)
+                // .then()
+                // .catch( err => {
+                //   client.sendText(message.sender.id, `Não foi possível processar menssagem:\n${err}`);
+                //   client.sendSeen(message.chatId);
+                // }
+                // )
             }
+
           });
         done();
       });
