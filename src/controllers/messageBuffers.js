@@ -19,7 +19,7 @@ function sleep(ms) {
 }
 
 getMediaLink = (md5, mimetype) =>{
-    return 'http://s1.tuts.host/wamedia/' + `${md5}.${mime.extension(mimetype)}`;
+    return `${process.env.MEDIA_FOLDER_URL}/${md5}.${mime.extension(mimetype)}`;
 }
 
 saveImage = async( content, md5, mimetype ) =>{
