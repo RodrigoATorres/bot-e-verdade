@@ -96,6 +96,7 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
         } );
         return [msgGroup, true];
     }
+    return [null, null];
 }
 
 exports.matchMessages = async(messageDocs, createIfNull) => {
