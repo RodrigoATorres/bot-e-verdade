@@ -117,6 +117,7 @@ dist
 session.data.json
 testing.data.json
 db/
+data/
 package-lock.json
 Media/**
 temp_testing/**
