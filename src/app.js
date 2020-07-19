@@ -31,7 +31,7 @@ function start(done = function() { return; }) {
       MONGO_URL
     )
     .then(result => {
-        wa.create()
+        wa.create({sessionDataPath: 'SessionData'})
         .then(client => {
           var intervalProcessBuffer = setInterval(function(){messageBufferController.processBuffer(client)}, 1000);
           var intervalProcessBuffer = setInterval(function(){discourseController.processNewReplyTopics(client)}, 5000);

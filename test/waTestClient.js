@@ -4,7 +4,7 @@ const wa = require('@open-wa/wa-automate');
 var done = false;
 var client;
 
-wa.create({sessionId:'testing'}).then(res =>{
+wa.create({sessionDataPath: 'SessionData', sessionId:'testing'}).then(res =>{
     client = res;
     done = true;
     client.onMessage(message => console.log(message.id))

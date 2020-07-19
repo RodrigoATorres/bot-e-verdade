@@ -114,8 +114,7 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-session.data.json
-testing.data.json
+SessionData/
 db/
 data/
 package-lock.json
