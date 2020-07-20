@@ -74,12 +74,12 @@ getMd5 = async( message, downloadMedia = false, processMedia = false) => {
 processGroup = async (group, client) =>{
     let docs = await MessageBuffer.find({
         chatId: group._id.chatId,
-        sentBy: group._id.sentBy,
+        senderId: group._id.senderId,
         warningSent: group._id.warningSent,
     });
 
-    let msgIds = await messagesController.matchMessages(docs, group.isGroupMsg);
-    let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, group.isGroupMsg);
+    let msgIds = await messagesController.matchMessages(docs, !group.isGroupMsg);
+    let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, !group.isGroupMsg);
 
     if (group.isGroupMsg){
         await messagesController.replyGroupMessage(
@@ -101,9 +101,10 @@ processGroup = async (group, client) =>{
         await messagesController.replyPrivateMessage(
             grpObj,
             client,
-            {senderId:docs[0].senderId ,msgId:docs[0].messageId}
+            {senderId:docs[0].senderId ,msgId:docs[0].messageId},
+            isNew
         );
-        grpObj.reportUsers.push({senderId:docs[0].sentBy ,msgId:docs[0].messageId});
+        grpObj.reportUsers.push({senderId:docs[0].senderId ,msgId:docs[0].messageId});
     }
     await grpObj.save()
 
@@ -118,7 +119,7 @@ exports.processBuffer = async (client) => {
     groups = await MessageBuffer.aggregate(
         [
             {$group:{
-                _id:{chatId:'$chatId',sentBy:'$sentBy', warningSent:'$warningSent'},
+                _id:{chatId:'$chatId',senderId:'$senderId', warningSent:'$warningSent'},
                 count: {$sum:1},
                 last:{ $max: '$createdAt'},
                 isGroupMsg: {$first: '$isGroupMsg'},
@@ -138,7 +139,7 @@ exports.processBuffer = async (client) => {
                 processGroup(group, client);
             }
             else if (group.count >1 && !group._id.warningSent){
-                client.sendText(group._id.sentBy, msgsTexts.user.GROUP_MSG_WARNING.join('\n').format(group.count))
+                client.sendText(group._id.senderId, msgsTexts.user.GROUP_MSG_WARNING.join('\n').format(group.count))
                 await MessageBuffer.updateMany(
                     {warningSent: false},
                     {"$set": {warningSent: true}},
@@ -164,7 +165,7 @@ exports.addMessage = async (message,client) => {
         mediaMd5,
         mediaExtension,
         forwardingScore: message.forwardingScore,
-        sentBy: message.sender.id,
+        senderId: message.sender.id,
         chatId: message.chatId,
         isGroupMsg: message.isGroupMsg,
         groupParticipants,
