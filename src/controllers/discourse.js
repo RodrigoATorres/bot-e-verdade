@@ -97,7 +97,7 @@ exports.addMessage = async (messageGroup) => {
             body.push(`>${message.texts[0].replace(/(\r\n?|\n|\t)/g,'\n>')}\n`);
         }
         else{
-            body.push(`<div align="center"><img src=${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]}'></div>`)
+            body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
         }
     });
 

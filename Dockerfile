@@ -6,6 +6,7 @@ COPY . .
 #Install Cron
 RUN apt-get update
 RUN apt-get -y install cron
+RUN apt-get -y install ffmpeg
 
 
 # Add crontab file in the cron directory

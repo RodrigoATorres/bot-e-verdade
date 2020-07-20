@@ -36,7 +36,7 @@ exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
     return false;
 }
 
-exports.replyPrivateMessage = async (messageGroup, client, senderInfo) =>{
+exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>{
     if (messageGroup.replyMessage){
         await client.sendText(
             senderInfo.senderId,
@@ -44,7 +44,22 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo) =>{
         )
         return true;
     }
-    return false;
+    else {
+        if (isNew){
+            console.log(senderInfo.senderId)
+            await client.sendText(
+                senderInfo.senderId,
+                msgsTexts.user.NEW_MSG.join('\n')
+                )
+        } else{
+            await client.sendText(
+                senderInfo.senderId,
+                msgsTexts.user.UPROCESSED_MSG.join('\n')
+            )
+        }
+
+        return false;
+    }
 }
 
 exports.publishReply = async ( messageGroup, client ) =>{
@@ -96,6 +111,7 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
         } );
         return [msgGroup, true];
     }
+    return [null, null];
 }
 
 exports.matchMessages = async(messageDocs, createIfNull) => {

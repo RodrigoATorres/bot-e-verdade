@@ -24,7 +24,7 @@ const messageBufferSchema = new Schema({
         type: Number,
     },
 
-    sentBy:{
+    senderId:{
         type: String
     },
 

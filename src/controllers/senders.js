@@ -21,7 +21,7 @@ exports.registerSender = async function (message, client){
         if (!sender && !message.isGroupMsg){
             sender = await Senders.create({
                 senderId:  message.sender.id,
-                name: message.sender.shortName
+                name: message.sender.pushname
             });
             sendIntroduction(sender, client);
         }
