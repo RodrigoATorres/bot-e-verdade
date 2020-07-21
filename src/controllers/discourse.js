@@ -5,6 +5,8 @@ const userApiKey = process.env.DISCOURSE_API_KEY;
 const apiUsername = process.env.DISCOURSE_API_USERNAME;
 const baseUrl = process.env.DISCOURSE_API_URL;
 
+const logger = require('../helpers/logger');
+
 const Message = require('../models/message');
 const MessageGroup = require('../models/messageGroup');
 
@@ -97,7 +99,16 @@ exports.addMessage = async (messageGroup) => {
             body.push(`>${message.texts[0].replace(/(\r\n?|\n|\t)/g,'\n>')}\n`);
         }
         else{
-            body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+            switch (message.mediaExtensions[0]){
+                case 'mp4':
+                    body.push(`<div>\n\n![|video](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    break;
+                case 'oga':
+                    body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    break;
+                default:
+                    body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+            }
         }
     });
 
@@ -105,11 +116,15 @@ exports.addMessage = async (messageGroup) => {
         [
             "Baseado na sua pesquisa, essa publicação parece:\n",
             "[poll name=veracity results=on_vote public=true chartType=bar]",
-            "* Verdade",
-            "* Mentira",
-            "* Marromenos",
-            "* Será?",
-            "* Duplicada",
+            "* 1-Verdadeiro",
+            "* 2-Falso",
+            "* 3-Indeterminado (sem fonte)",
+            "* 4-Fora de contexto",
+            "* 5-Falsa em partes",
+            '* 6-Verdade com Ressalvas',
+            "* 7-Não se aplica",
+            "* 8-Conteúdo impróprio (banir usuário)",
+            "* 9-Duplicada",
             "[/poll]"
         ].join('\n')
     );
@@ -137,6 +152,7 @@ exports.addMessage = async (messageGroup) => {
             raw: body.join('\n')
         }
     )
+    logger.info(`New topic added to discourse ${json}`)
     messageGroup.discourseId = json.topic_id;
     await messageGroup.save();
 }
