@@ -6,9 +6,9 @@ const speechclient = new speech.SpeechClient();
 const visionClient = new vision.ImageAnnotatorClient();
 const languageClient = new language.LanguageServiceClient();
 const { exec } = require("child_process");
-
 const fs = require('fs');
-const ffmpeg = require('fluent-ffmpeg');
+
+const logger = require('../helpers/logger')
 
 const REMOVE_TYPES = ['NUMBER'];
 const TYPES_HIERARCHY = ['WORK_OF_ART','EVENT','LOCATION','ORGANIZATION','PERSON']
@@ -53,8 +53,8 @@ exports.mergeTagLists = (tagLists) => {
   )
   return tagsObj2Array(tags).sort( 
     (a,b) => {
-      a_type_idx = TYPES_HIERARCHY.indexOf(a.tagType);
-      b_type_idx = TYPES_HIERARCHY.indexOf(b.tagType);
+      let a_type_idx = TYPES_HIERARCHY.indexOf(a.tagType);
+      let b_type_idx = TYPES_HIERARCHY.indexOf(b.tagType);
       return (a_type_idx === b_type_idx) ? (b.salience - a.salience) : (b_type_idx - a_type_idx);
     }
   );
@@ -119,32 +119,43 @@ exports.getAudioText = async (fileName) =>{
 }
 
 exports.extractVideoAudio = async (filein, fileout) => {
-  await exec(`ffmpeg -i ${filein} -c:a libopus -b:a 32K -ar 16k -ac 1 ${fileout} -y`, { shell: true })
+  await exec(`ffmpeg -i ${filein} -ss 00:00:00 -to 00:00:20 -c:a libopus -b:a 32K -ar 16k -ac 1 ${fileout} -y`, { shell: true })
+}
+
+exports.trimAudio = async (filein, fileout) =>{
+  await exec(`ffmpeg -i ${filein} -ss 00:00:00 -to 00:00:20 -c copy ${fileout} -y`);
 }
 
 exports.getMediaInfo = async (md5, mimetype) =>{
+  let text = null, tags =null;
+
   if (mimetype === 'image/jpeg'){
     text = await this.getImageText( `./Media/${md5}.${mime.extension(mimetype)}` );
     tags = await this.getTextTags(text);
   }
   else  if (mimetype === 'video/mp4'){
-    console.log('uai')
     await this.extractVideoAudio(
       `./Media/${md5}.${mime.extension(mimetype)}`,
       `./Media/${md5}.oga`
     );
-    console.log('so')
-    await sleep(10000);
+    await sleep(1000);
     text = await this.getAudioText(`./Media/${md5}.oga`);
     tags = await this.getTextTags(text);
   }
   else if (mimetype === "audio/ogg; codecs=opus"){
-    text = await this.getAudioText(`./Media/${md5}.${mime.extension(mimetype)}`);
+    await this.trimAudio(
+      `./Media/${md5}.${mime.extension(mimetype)}`,
+      `./Media/${md5}_trim.${mime.extension(mimetype)}`
+    );
+    await sleep(1000);
+    text = await this.getAudioText(`./Media/${md5}_trim.${mime.extension(mimetype)}`);
     tags = await this.getTextTags(text);
   }
   else{
-    [text, tags] = [null, null];
+    logger.error(`Could not extrat text and tags from "${md5}.${mime.extension(mimetype)}"`)
+    return [null, null];
   }
-  console.log(text,tags)
+
+  logger.info(`Text and tags extracted from "${md5}.${mime.extension(mimetype)}"`)
   return [text, tags];
 }

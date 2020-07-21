@@ -1,14 +1,17 @@
-const mime = require('mime-types');
 const fetch = require('node-fetch');
 
 const userApiKey = process.env.DISCOURSE_API_KEY;
 const apiUsername = process.env.DISCOURSE_API_USERNAME;
 const baseUrl = process.env.DISCOURSE_API_URL;
 
+const logger = require('../helpers/logger');
+
 const Message = require('../models/message');
 const MessageGroup = require('../models/messageGroup');
 
 const messagesController = require('./messages');
+
+const msgsTexts = require('../msgsTexts.json');
 
 const headers = {}
 headers["Content-Type"] = "application/json";
@@ -16,45 +19,66 @@ headers["Api-Key"]= userApiKey;
 headers["Api-Username"] = apiUsername;
 headers["Accept"] = "application/json";
 
-fetchDiscordApi = async (path, method, params={}, body = {}) =>{
-    let url = new URL(`${baseUrl}/${path}`);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    let res;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-    if (method === 'get'){
-        res = await fetch(url,{
-            method,
-            headers
-        })
+const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =>{
+    try{
+        let url = new URL(`${baseUrl}/${path}`);
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+        let res;
+
+        if (method === 'get'){
+            res = await fetch(url,{
+                method,
+                headers
+            })
+        }
+        else {
+            res = await fetch(url,{
+                method,
+                body: JSON.stringify(body),
+                headers
+            })
+        }
+        return await res.json();
     }
-    else {
-        res = await fetch(url,{
-            method,
-            body: JSON.stringify(body),
-            headers
-        })
+    catch (err){
+        if (ntries<3){
+            await sleep(2000);
+            return await fetchDiscordApi(path, method, params, body, ntries +1);
+        }
+        else{
+            logger.error(err);
+            throw err;
+        }
     }
-    return await res.json();
 };
 
-search = (params) =>{
+const search = (params) =>{
     return fetchDiscordApi(`search`, 'get', params);
 }
 
-getNewReplyTopics = async () => {
-    res = await search({
+const getNewReplyTopics = async () => {
+    let res = await search({
             q:`#${process.env.DISCOURSE_API_CAT_NO_SOLUTION} status:solved`,
         });
     return res.topics ? res.topics: [];
 };
 
-getPollResult = (poll) =>{
+const getPollResult = (poll) =>{
     return poll.options.reduce(
         (prev, cur) =>{
             return ( prev.votes <= cur.votes ? cur : prev );
         },
         {votes:-1}
     );
+}
+
+const getVeracityKey = (pollLabel) =>{
+    let veracityLabel = pollLabel.slice(2);
+    return Object.keys(msgsTexts.veracityLabels).find(key => msgsTexts.veracityLabels[key][0] === veracityLabel);
 }
 
 exports.processNewReplyTopics = async (client) =>{
@@ -67,15 +91,19 @@ exports.processNewReplyTopics = async (client) =>{
             'get'
         );
 
-        let veracity = getPollResult(topic.post_stream.posts[0].polls[0]).html;
+        let veracityKey = getVeracityKey(
+            getPollResult(topic.post_stream.posts[0].polls[0]).html
+        );
 
-        let reply = await fetchDiscordApi(
+        let topicReply = await fetchDiscordApi(
             `posts/${topic.post_stream.stream[topic.accepted_answer.post_number-1]}.json`,
             'get'
         );
+        let replyText = msgsTexts.replies[veracityKey].join('\n').format(topicReply.raw);
+
         if (msgGroup){
-            msgGroup.replyMessage = reply.raw;
-            msgGroup.veracity = veracity;
+            msgGroup.replyMessage = replyText;
+            msgGroup.veracity = veracityKey;
             await msgGroup.save()
             messagesController.publishReply(msgGroup, client);
         }
@@ -97,23 +125,24 @@ exports.addMessage = async (messageGroup) => {
             body.push(`>${message.texts[0].replace(/(\r\n?|\n|\t)/g,'\n>')}\n`);
         }
         else{
-            body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+            switch (message.mediaExtensions[0]){
+                case 'mp4':
+                    body.push(`<div>\n\n![|video](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    break;
+                case 'oga':
+                    body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    break;
+                default:
+                    body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+            }
         }
     });
 
-    body.push(
-        [
-            "Baseado na sua pesquisa, essa publicação parece:\n",
-            "[poll name=veracity results=on_vote public=true chartType=bar]",
-            "* Verdade",
-            "* Mentira",
-            "* Marromenos",
-            "* Será?",
-            "* Duplicada",
-            "[/poll]"
-        ].join('\n')
-    );
-    
+    body.push("Baseado na sua pesquisa, essa publicação parece:\n");
+    body.push("[poll name=veracity results=on_vote public=true chartType=bar]");
+    body.push(Object.keys(msgsTexts.veracityLabels).map( (key,idx) => `* ${idx}-${msgsTexts.veracityLabels[key]}`).join('\n')),
+    body.push("[/poll]");
+
     if (messages.length>1){
         body.push('Quais mensagens devem estar juntas para essa notícia ser considerada?\n');
         body.push(
@@ -125,7 +154,6 @@ exports.addMessage = async (messageGroup) => {
         );
     }
     
-    let now = new Date().toISOString()
     let json = await fetchDiscordApi(
         'posts.json',
         'post',
@@ -137,6 +165,8 @@ exports.addMessage = async (messageGroup) => {
             raw: body.join('\n')
         }
     )
+    logger.info(`New topic added to discourse ${json.topic_id}`)
     messageGroup.discourseId = json.topic_id;
     await messageGroup.save();
+    return json.topic_id;
 }

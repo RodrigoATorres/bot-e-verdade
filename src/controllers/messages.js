@@ -1,34 +1,50 @@
-const mongoose = require('mongoose');
 const Message = require('../models/message');
 const Sender = require('../models/sender');
 const MessageGroup = require('../models/messageGroup');
 
 const gcController = require('./gcProcessing');
-
 const msgsTexts = require('../msgsTexts.json');
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+exports.sendTopicInfo = async (client, senderId, topic_id) =>{
+    await client.sendText(
+        senderId,
+        msgsTexts.user.TOPIC_INFO.join('\n').format(`${process.env.DISCOURSE_API_URL}/t/${topic_id}`)
+    );
+}
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
     if (messageGroup.replyMessage){
         groupInfo.groupParticipants.forEach( async(participant) => {
-            partDoc = await Sender.findOne({senderId: participant});
-            if (partDoc && partDoc.senderId === groupInfo.senderId){
+            let partDoc = await Sender.findOne({senderId: participant});
+            if (partDoc && partDoc!=null){
+                if (partDoc.senderId === groupInfo.senderId){
+                    await client.sendText(
+                        partDoc.senderId,
+                        msgsTexts.user.PRE_GRP_REPLY_AUTHOR.join('\n').format(partDoc.name, groupInfo.groupName))
+                    await sleep(2000);
+                }
+                else {
+                    await client.sendText(
+                        partDoc.senderId,
+                        msgsTexts.user.PRE_GRP_REPLY.join('\n').format(partDoc.name, groupInfo.groupName)
+                    );
+                    await sleep(2000);
+                }
+                
                 await client.sendText(
-                    parDoc.senderId,
-                    msgsTexts.user.PRE_GRP_REPLY_AUTHOR.join('\n').format(partDoc.name, groupInfo.groupName))
-                await client.sendText(
-                    parDoc.senderId,
+                    partDoc.senderId,
                     messageGroup.replyMessage
+                );
+                await sleep(2000);
+                await this.sendTopicInfo(
+                    client,
+                    partDoc.senderId,
+                    messageGroup.discourseId
                 )
-            }
-            else if (partDoc){
-                await client.sendText(
-                    parDoc.senderId,
-                    msgsTexts.user.PRE_GRP_REPLY.join('\n').format(partDoc.name, groupInfo.groupName)
-                );
-                await client.sendText(
-                    parDoc.senderId,
-                    messageGroup.replyMessage
-                );
             }
         })
         return true;
@@ -42,19 +58,32 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
             senderInfo.senderId,
             messageGroup.replyMessage
         )
+        await sleep(2000);
+        await this.sendTopicInfo(
+            client,
+            senderInfo.senderId,
+            messageGroup.discourseId
+        )
+        await sleep(2000);
         return true;
     }
     else {
         if (isNew){
-            console.log(senderInfo.senderId)
             await client.sendText(
                 senderInfo.senderId,
                 msgsTexts.user.NEW_MSG.join('\n')
                 )
+            await sleep(2000);
         } else{
             await client.sendText(
                 senderInfo.senderId,
                 msgsTexts.user.UPROCESSED_MSG.join('\n')
+            )
+            await sleep(2000);
+            await this.sendTopicInfo(
+                client,
+                senderInfo.senderId,
+                messageGroup.discourseId
             )
         }
 
@@ -66,13 +95,16 @@ exports.publishReply = async ( messageGroup, client ) =>{
     messageGroup.reportUsers.forEach( (senderInfo) => {
         this.replyPrivateMessage(messageGroup, client, senderInfo)
     });
+
+    await sleep(10000);
+
     messageGroup.reportGroups.forEach( ( groupInfo ) => {
-        this.replyPrivateMessage(messageGroup, client, groupInfo)
+        this.replyGroupMessage(messageGroup, client, groupInfo)
     });
 }
 
 exports.getMessagesTags = async (messageIds) => {
-    docs = await Message.find(
+    let docs = await Message.find(
         {
             '_id': { $in: 
                 messageIds
@@ -83,7 +115,7 @@ exports.getMessagesTags = async (messageIds) => {
     .populate({ path: 'mediaMd5s', select: 'mediaTags' })
     .exec(); 
 
-    tagList = docs.reduce(
+    let tagList = docs.reduce(
         (prev, doc) =>{
             return prev.concat( 
                 doc.mediaMd5s ? 
@@ -117,7 +149,7 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
 exports.matchMessages = async(messageDocs, createIfNull) => {
     let msgIds = [];
 
-    for (doc of messageDocs){
+    for (let doc of messageDocs){
         let msgMatch = await Message.findOne({ textMd5s: doc.textMd5, mediaMd5s: doc.mediaMd5 }).select(['forwardingScores']);
         if (msgMatch){
             msgIds.push(msgMatch._id);

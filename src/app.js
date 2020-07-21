@@ -2,7 +2,7 @@
 require('dotenv').config()
 require('./helpers/general')
 const wa = require('@open-wa/wa-automate');
-var CronJob = require('cron').CronJob;
+// var CronJob = require('cron').CronJob;
 const mongoose = require('mongoose');
 const fs = require('fs');
 const msgsTexts = require('./msgsTexts.json');
@@ -30,11 +30,11 @@ function start(done = function() { return; }) {
     .connect(
       MONGO_URL
     )
-    .then(result => {
+    .then( () => {
         wa.create({sessionDataPath: 'SessionData'})
         .then(client => {
-          var intervalProcessBuffer = setInterval(function(){messageBufferController.processBuffer(client)}, 1000);
-          var intervalProcessBuffer = setInterval(function(){discourseController.processNewReplyTopics(client)}, 5000);
+          setInterval(function(){messageBufferController.processBuffer(client)}, 1000);
+          setInterval(function(){discourseController.processNewReplyTopics(client)}, 5000);
           // var intervalCheckReviewers = setInterval(function(){curatorControler.resetReviewers(client)}, 120000);
           if (process.env.NODE_ENV !== 'test'){
             // var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 150000);
