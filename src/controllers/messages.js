@@ -46,7 +46,6 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
     }
     else {
         if (isNew){
-            console.log(senderInfo.senderId)
             await client.sendText(
                 senderInfo.senderId,
                 msgsTexts.user.NEW_MSG.join('\n')

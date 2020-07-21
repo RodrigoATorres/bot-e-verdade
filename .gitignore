@@ -115,6 +115,7 @@ dist
 .pnp.*
 
 SessionData/
+Received_msgs/*.json
 db/
 data/
 package-lock.json
