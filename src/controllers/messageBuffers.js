@@ -121,7 +121,11 @@ processGroup = async (group, client) =>{
     await grpObj.save()
 
     if (isNew){
-        discourseController.addMessage(grpObj);
+        discourseController.addMessage(grpObj)
+        .then( (topic_id) =>{
+            messagesController.sendTopicInfo(client, docs[0].senderId, topic_id)
+        }
+        );
     }
 
     docs.forEach(async (doc) => await doc.remove())

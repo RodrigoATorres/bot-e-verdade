@@ -152,7 +152,8 @@ exports.addMessage = async (messageGroup) => {
             raw: body.join('\n')
         }
     )
-    logger.info(`New topic added to discourse ${json}`)
+    logger.info(`New topic added to discourse ${json.topic_id}`)
     messageGroup.discourseId = json.topic_id;
     await messageGroup.save();
+    return json.topic_id;
 }

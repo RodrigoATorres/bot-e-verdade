@@ -21,6 +21,9 @@
         ],
         "UPROCESSED_MSG":[
             "Ainda estamos analisando esse conteúdo. Retornaremos em breve."
+        ],
+        "TOPIC_INFO":[
+            "Para ver a discussão sobre a veracidade dessa mensagem, entre em: \n{0}"
         ]
     },
     "group":{
