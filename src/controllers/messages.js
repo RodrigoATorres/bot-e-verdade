@@ -95,6 +95,9 @@ exports.publishReply = async ( messageGroup, client ) =>{
     messageGroup.reportUsers.forEach( (senderInfo) => {
         this.replyPrivateMessage(messageGroup, client, senderInfo)
     });
+
+    await sleep(10000);
+
     messageGroup.reportGroups.forEach( ( groupInfo ) => {
         this.replyGroupMessage(messageGroup, client, groupInfo)
     });
