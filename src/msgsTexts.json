@@ -110,9 +110,39 @@
             "Obrigado pela ajuda!"
         ]
     },
+    "veracityLabels":{
+        "true":[
+            "Verdadeiro"
+            ],
+        "false":[
+            "Falso"
+            ],
+        "indeterminate":[
+            "Indeterminado (sem fonte)"
+            ],
+        "noContex":[
+            "Fora de contexto"            
+        ],
+        "partially":[
+            "Parcialmente Falso"
+            ],
+        "trueWithReservations":[
+            "Verdadeiro com ressalvas"
+            ],
+        "notApplicable":[
+            "Não se aplica"
+            ],
+        "inapropriateContent":[
+            "Conteúdo impróprio (banir usuário)"
+        ],
+        "duplicate":
+        [
+            "Duplicada"
+        ]
+    },
 
     "replies":{
-        "verdadeiro":[
+        "true":[
             "Olá! Chegamos à conclusão que a mensagem é:",
             "         ✅✅*VERDADEIRA!*✅✅",
             "{0}",
@@ -122,7 +152,7 @@
             "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
             ],
-        "falso":[
+        "false":[
             "Olá! Chegamos à conclusão que a mensagem é:",
             "           ❌❌*FALSA!*❌❌",
             "{0}",
@@ -133,7 +163,7 @@
             "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
             ],
-        "indeterminado":[
+        "indeterminate":[
             "Olá! Não pudemos determinar a veracidade da mensagem.",
             "{0}",
             "",
@@ -143,7 +173,7 @@
             "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
             ],
-        "semcontexto":[
+        "noContex":[
             "Olá! Chegamos à conclusão que a mensagem está:",
             "           ‼️*FORA DE CONTEXTO!*‼️",
             "{0}",
@@ -154,7 +184,7 @@
             "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"            
         ],
-        "empartes":[
+        "partially":[
             "Olá! Chegamos à conclusão que a mensagem é:",
             "        ‼️*FALSA EM PARTES*‼️",
             "{0}",
@@ -165,7 +195,7 @@
             "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
             ],
-        "verdadecomressalvas":[
+        "trueWithReservations":[
             "Olá! Chegamos à conclusão que a mensagem é:",
             "*‼️VERDADEIRA, PORÉM COM RESSALVAS‼️*",
             "{0}",
@@ -176,12 +206,22 @@
             "Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
             ],
-        "naoaplica":[
+        "notApplicable":[
             "Olá! Essa mensagem não apresenta conteúdo cuja veracidade necessita ser checada.",
             "",
             "Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!",
             "É um prazer ajudar!😉"
-            ]
+            ],
+        "inapropriateContent":[
+            "Olá! Essa mensagem apresenta conteúdo inapropriado.",
+            "",
+            "Você será bloqueado por 30 dias. A depender do conteúdo da mensagem, providências mais drásticas serão tomadas",
+            "Se você enviou por engano, não se preocupe, em 30 dias poderá voltar a usar a ferramenta."
+        ],
+        "duplicate":
+        [
+            ""
+        ]
 
     },
     "commands":{

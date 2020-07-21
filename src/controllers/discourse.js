@@ -11,6 +11,8 @@ const MessageGroup = require('../models/messageGroup');
 
 const messagesController = require('./messages');
 
+const msgsTexts = require('../msgsTexts.json');
+
 const headers = {}
 headers["Content-Type"] = "application/json";
 headers["Api-Key"]= userApiKey;
@@ -74,6 +76,11 @@ const getPollResult = (poll) =>{
     );
 }
 
+const getVeracityKey = (pollLabel) =>{
+    let veracityLabel = pollLabel.slice(2);
+    return Object.keys(msgsTexts.veracityLabels).find(key => msgsTexts.veracityLabels[key][0] === veracityLabel);
+}
+
 exports.processNewReplyTopics = async (client) =>{
     let new_topics = await getNewReplyTopics();
     new_topics.forEach( async (topic) => {
@@ -84,15 +91,19 @@ exports.processNewReplyTopics = async (client) =>{
             'get'
         );
 
-        let veracity = getPollResult(topic.post_stream.posts[0].polls[0]).html;
+        let veracityKey = getVeracityKey(
+            getPollResult(topic.post_stream.posts[0].polls[0]).html
+        );
 
-        let reply = await fetchDiscordApi(
+        let topicReply = await fetchDiscordApi(
             `posts/${topic.post_stream.stream[topic.accepted_answer.post_number-1]}.json`,
             'get'
         );
+        let replyText = msgsTexts.replies[veracityKey].join('\n').format(topicReply.raw);
+
         if (msgGroup){
-            msgGroup.replyMessage = reply.raw;
-            msgGroup.veracity = veracity;
+            msgGroup.replyMessage = replyText;
+            msgGroup.veracity = veracityKey;
             await msgGroup.save()
             messagesController.publishReply(msgGroup, client);
         }
@@ -127,23 +138,11 @@ exports.addMessage = async (messageGroup) => {
         }
     });
 
-    body.push(
-        [
-            "Baseado na sua pesquisa, essa publicação parece:\n",
-            "[poll name=veracity results=on_vote public=true chartType=bar]",
-            "* 1-Verdadeiro",
-            "* 2-Falso",
-            "* 3-Indeterminado (sem fonte)",
-            "* 4-Fora de contexto",
-            "* 5-Falsa em partes",
-            '* 6-Verdade com Ressalvas',
-            "* 7-Não se aplica",
-            "* 8-Conteúdo impróprio (banir usuário)",
-            "* 9-Duplicada",
-            "[/poll]"
-        ].join('\n')
-    );
-    
+    body.push("Baseado na sua pesquisa, essa publicação parece:\n");
+    body.push("[poll name=veracity results=on_vote public=true chartType=bar]");
+    body.push(Object.keys(msgsTexts.veracityLabels).map( (key,idx) => `* ${idx}-${msgsTexts.veracityLabels[key]}`).join('\n')),
+    body.push("[/poll]");
+
     if (messages.length>1){
         body.push('Quais mensagens devem estar juntas para essa notícia ser considerada?\n');
         body.push(
