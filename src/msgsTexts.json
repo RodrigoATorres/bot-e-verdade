@@ -11,7 +11,7 @@
             "Olá {0}, você recebeu uma mensagem no grupo \"{1}\" e nossa comunidade acreditou que fosse importante te enviar um alerta sobre ela:"
         ],
         "PRE_GRP_REPLY_AUTHOR":[
-            "Olá {0}, você recebeu enviou uma mensagem para o grupo \"{1}\" e nossa comunidade acreditou que fosse importante te enviar um alerta sobre ela:"
+            "Olá {0}, você enviou uma mensagem para o grupo \"{1}\" e nossa comunidade acreditou que fosse importante te enviar um alerta sobre ela:"
         ],
         "GROUP_MSG_WARNING":
         [

@@ -7,8 +7,6 @@ const fs = require('fs');
 
 logger = require('../helpers/logger');
 
-logger.info('Check example.log – it will have no colors!');
-
 const Media = require('../models/media');
 const MessageBuffer = require('../models/messageBuffer');
 
@@ -175,7 +173,7 @@ exports.addMessage = async (message,client) => {
     mediaExtension = message.mimetype ? mime.extension(message.mimetype) : null;
     text = message.mimetype ? null : message.content;
     textMd5 = message.mimetype ? null : hash(text);
-    groupParticipants = message.isGroupMsg ? message.chat.groupMetadata.participants.reduce((prv, cur) => {prv.push(cur);return prev},[]) : null
+    groupParticipants = message.isGroupMsg ? message.chat.groupMetadata.participants.reduce((prv, cur) => {prv.push(cur.id);return prv},[]) : null
     groupName = message.isGroupMsg ? message.chat.name : null
 
     MessageBuffer.create({

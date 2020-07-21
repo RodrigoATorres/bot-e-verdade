@@ -13,20 +13,20 @@ exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
             partDoc = await Sender.findOne({senderId: participant});
             if (partDoc && partDoc.senderId === groupInfo.senderId){
                 await client.sendText(
-                    parDoc.senderId,
+                    partDoc.senderId,
                     msgsTexts.user.PRE_GRP_REPLY_AUTHOR.join('\n').format(partDoc.name, groupInfo.groupName))
                 await client.sendText(
-                    parDoc.senderId,
+                    partDoc.senderId,
                     messageGroup.replyMessage
                 )
             }
             else if (partDoc){
                 await client.sendText(
-                    parDoc.senderId,
+                    partDoc.senderId,
                     msgsTexts.user.PRE_GRP_REPLY.join('\n').format(partDoc.name, groupInfo.groupName)
                 );
                 await client.sendText(
-                    parDoc.senderId,
+                    partDoc.senderId,
                     messageGroup.replyMessage
                 );
             }
