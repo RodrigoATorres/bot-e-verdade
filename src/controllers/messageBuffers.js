@@ -5,6 +5,10 @@ const mime = require('mime-types');
 const path = require('path');
 const fs = require('fs');
 
+logger = require('../helpers/logger');
+
+logger.info('Check example.log – it will have no colors!');
+
 const Media = require('../models/media');
 const MessageBuffer = require('../models/messageBuffer');
 
@@ -27,11 +31,10 @@ saveImage = async( content, md5, mimetype ) =>{
 
     var filename = `${md5}.${mime.extension(mimetype)}`;
     fs.writeFile(path.join('Media',filename), Buffer.concat([content,eofBuf]), function(err) {
-        console.log(path.join('Media',filename));
         if (err) {
-          return console.log(err);
+          return logger.error(err);
         }
-        console.log('The file was saved!');
+        logger.info(`File ${path.join('Media',filename)} saved!`);
     });
 }
 
@@ -71,12 +74,23 @@ getMd5 = async( message, downloadMedia = false, processMedia = false) => {
     }
 }
 
+setAsProcessing = async (docs) =>{
+    for (doc of docs){
+        doc.processing = true;
+        await doc.save();
+    }
+}
+
 processGroup = async (group, client) =>{
+    logger.info(`Started processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
+
     let docs = await MessageBuffer.find({
         chatId: group._id.chatId,
         senderId: group._id.senderId,
         warningSent: group._id.warningSent,
     });
+
+    await setAsProcessing(docs);
 
     let msgIds = await messagesController.matchMessages(docs, !group.isGroupMsg);
     let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, !group.isGroupMsg);
@@ -113,11 +127,16 @@ processGroup = async (group, client) =>{
     }
 
     docs.forEach(async (doc) => await doc.remove())
+
+    logger.info(`Finished processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
 }
 
 exports.processBuffer = async (client) => {
     groups = await MessageBuffer.aggregate(
         [
+            {$match:
+                {processing: false}
+            }, 
             {$group:{
                 _id:{chatId:'$chatId',senderId:'$senderId', warningSent:'$warningSent'},
                 count: {$sum:1},
@@ -156,7 +175,7 @@ exports.addMessage = async (message,client) => {
     mediaExtension = message.mimetype ? mime.extension(message.mimetype) : null;
     text = message.mimetype ? null : message.content;
     textMd5 = message.mimetype ? null : hash(text);
-    groupParticipants = message.isGroupMsg ? message.chat.groupMetadata.participants.reduce((prv, cur) => prv.push(cur),[]) : null
+    groupParticipants = message.isGroupMsg ? message.chat.groupMetadata.participants.reduce((prv, cur) => {prv.push(cur);return prev},[]) : null
     groupName = message.isGroupMsg ? message.chat.name : null
 
     MessageBuffer.create({

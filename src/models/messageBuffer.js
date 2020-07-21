@@ -56,6 +56,11 @@ const messageBufferSchema = new Schema({
     msgTimestamp:{
         type: Number
     },
+
+    processing:{
+        type: Boolean,
+        default: false
+    }
 },
 {
 timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }
