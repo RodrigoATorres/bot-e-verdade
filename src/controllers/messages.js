@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const Message = require('../models/message');
 const Sender = require('../models/sender');
 const MessageGroup = require('../models/messageGroup');
@@ -20,7 +19,7 @@ exports.sendTopicInfo = async (client, senderId, topic_id) =>{
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
     if (messageGroup.replyMessage){
         groupInfo.groupParticipants.forEach( async(participant) => {
-            partDoc = await Sender.findOne({senderId: participant});
+            let partDoc = await Sender.findOne({senderId: participant});
             if (partDoc && partDoc!=null){
                 if (partDoc.senderId === groupInfo.senderId){
                     await client.sendText(
@@ -102,7 +101,7 @@ exports.publishReply = async ( messageGroup, client ) =>{
 }
 
 exports.getMessagesTags = async (messageIds) => {
-    docs = await Message.find(
+    let docs = await Message.find(
         {
             '_id': { $in: 
                 messageIds
@@ -113,7 +112,7 @@ exports.getMessagesTags = async (messageIds) => {
     .populate({ path: 'mediaMd5s', select: 'mediaTags' })
     .exec(); 
 
-    tagList = docs.reduce(
+    let tagList = docs.reduce(
         (prev, doc) =>{
             return prev.concat( 
                 doc.mediaMd5s ? 
@@ -147,7 +146,7 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
 exports.matchMessages = async(messageDocs, createIfNull) => {
     let msgIds = [];
 
-    for (doc of messageDocs){
+    for (let doc of messageDocs){
         let msgMatch = await Message.findOne({ textMd5s: doc.textMd5, mediaMd5s: doc.mediaMd5 }).select(['forwardingScores']);
         if (msgMatch){
             msgIds.push(msgMatch._id);

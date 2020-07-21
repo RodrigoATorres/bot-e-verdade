@@ -53,8 +53,8 @@ exports.mergeTagLists = (tagLists) => {
   )
   return tagsObj2Array(tags).sort( 
     (a,b) => {
-      a_type_idx = TYPES_HIERARCHY.indexOf(a.tagType);
-      b_type_idx = TYPES_HIERARCHY.indexOf(b.tagType);
+      let a_type_idx = TYPES_HIERARCHY.indexOf(a.tagType);
+      let b_type_idx = TYPES_HIERARCHY.indexOf(b.tagType);
       return (a_type_idx === b_type_idx) ? (b.salience - a.salience) : (b_type_idx - a_type_idx);
     }
   );
@@ -127,6 +127,8 @@ exports.trimAudio = async (filein, fileout) =>{
 }
 
 exports.getMediaInfo = async (md5, mimetype) =>{
+  let text = null, tags =null;
+
   if (mimetype === 'image/jpeg'){
     text = await this.getImageText( `./Media/${md5}.${mime.extension(mimetype)}` );
     tags = await this.getTextTags(text);

@@ -1,7 +1,7 @@
 
 const winston = require('winston');
 
-const { createLogger, format, transports } = winston;
+const { createLogger, transports } = winston;
 
 const fileFormat = winston.format.combine(
     winston.format.timestamp(),

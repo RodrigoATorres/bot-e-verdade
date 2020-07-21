@@ -1,4 +1,3 @@
-const mime = require('mime-types');
 const fetch = require('node-fetch');
 
 const userApiKey = process.env.DISCOURSE_API_KEY;
@@ -18,7 +17,7 @@ headers["Api-Key"]= userApiKey;
 headers["Api-Username"] = apiUsername;
 headers["Accept"] = "application/json";
 
-fetchDiscordApi = async (path, method, params={}, body = {}) =>{
+const fetchDiscordApi = async (path, method, params={}, body = {}) =>{
     let url = new URL(`${baseUrl}/${path}`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     let res;
@@ -39,18 +38,18 @@ fetchDiscordApi = async (path, method, params={}, body = {}) =>{
     return await res.json();
 };
 
-search = (params) =>{
+const search = (params) =>{
     return fetchDiscordApi(`search`, 'get', params);
 }
 
-getNewReplyTopics = async () => {
-    res = await search({
+const getNewReplyTopics = async () => {
+    let res = await search({
             q:`#${process.env.DISCOURSE_API_CAT_NO_SOLUTION} status:solved`,
         });
     return res.topics ? res.topics: [];
 };
 
-getPollResult = (poll) =>{
+const getPollResult = (poll) =>{
     return poll.options.reduce(
         (prev, cur) =>{
             return ( prev.votes <= cur.votes ? cur : prev );
@@ -140,7 +139,6 @@ exports.addMessage = async (messageGroup) => {
         );
     }
     
-    let now = new Date().toISOString()
     let json = await fetchDiscordApi(
         'posts.json',
         'post',

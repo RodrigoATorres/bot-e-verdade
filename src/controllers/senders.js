@@ -7,7 +7,7 @@ function sleep(ms) {
     });
   }   
 
-sendIntroduction = async (sender, client) =>{
+const sendIntroduction = async (sender, client) =>{
     await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
 }
 

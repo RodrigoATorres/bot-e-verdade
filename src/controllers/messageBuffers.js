@@ -1,11 +1,10 @@
-const mongoose = require('mongoose');
 const wa = require('@open-wa/wa-automate');
 const hash = require('md5');
 const mime = require('mime-types');
 const path = require('path');
 const fs = require('fs');
 
-logger = require('../helpers/logger');
+const logger = require('../helpers/logger');
 
 const Media = require('../models/media');
 const MessageBuffer = require('../models/messageBuffer');
@@ -20,11 +19,11 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-getMediaLink = (md5, mimetype) =>{
+const getMediaLink = (md5, mimetype) =>{
     return `${process.env.MEDIA_FOLDER_URL}/${md5}.${mime.extension(mimetype)}`;
 }
 
-saveImage = async( content, md5, mimetype ) =>{
+const saveImage = async( content, md5, mimetype ) =>{
     const eofBuf = Buffer.from([0xFF, 0xD9]);
 
     var filename = `${md5}.${mime.extension(mimetype)}`;
@@ -36,7 +35,7 @@ saveImage = async( content, md5, mimetype ) =>{
     });
 }
 
-getMd5 = async( message, downloadMedia = false, processMedia = false) => {
+const getMd5 = async( message, downloadMedia = false, processMedia = false) => {
     let doc = await  Media.findOne({mediaKeys: message.mediaKey}).select('_id');
     if (doc){
         return doc._id;
@@ -51,14 +50,13 @@ getMd5 = async( message, downloadMedia = false, processMedia = false) => {
             doc.save()
         }
         else{
+            let text = null, tags  = null;
             await saveImage(content, md5, message.mimetype);
             await sleep(2000);
             if (processMedia){
-                let [text, tags] = await gcController.getMediaInfo(md5, message.mimetype);
+                [text, tags] = await gcController.getMediaInfo(md5, message.mimetype);
             }
-            else{
-                let [text, tags] = [null,null];
-            }
+
             Media.create({
                 _id: md5,
                 mediaKeys: [message.mediaKey],
@@ -72,14 +70,14 @@ getMd5 = async( message, downloadMedia = false, processMedia = false) => {
     }
 }
 
-setAsProcessing = async (docs) =>{
-    for (doc of docs){
+const setAsProcessing = async (docs) =>{
+    for (let doc of docs){
         doc.processing = true;
         await doc.save();
     }
 }
 
-processGroup = async (group, client) =>{
+const processGroup = async (group, client) =>{
     logger.info(`Started processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
 
     let docs = await MessageBuffer.find({
@@ -134,7 +132,7 @@ processGroup = async (group, client) =>{
 }
 
 exports.processBuffer = async (client) => {
-    groups = await MessageBuffer.aggregate(
+    let groups = await MessageBuffer.aggregate(
         [
             {$match:
                 {processing: false}
@@ -173,12 +171,12 @@ exports.processBuffer = async (client) => {
 
 exports.addMessage = async (message,client) => {
     let downloadMedia = !message.isGroupMsg;
-    mediaMd5 = message.mimetype ? await getMd5(message, downloadMedia, downloadMedia) : null;
-    mediaExtension = message.mimetype ? mime.extension(message.mimetype) : null;
-    text = message.mimetype ? null : message.content;
-    textMd5 = message.mimetype ? null : hash(text);
-    groupParticipants = message.isGroupMsg ? message.chat.groupMetadata.participants.reduce((prv, cur) => {prv.push(cur.id);return prv},[]) : null
-    groupName = message.isGroupMsg ? message.chat.name : null
+    let mediaMd5 = message.mimetype ? await getMd5(message, downloadMedia, downloadMedia) : null;
+    let mediaExtension = message.mimetype ? mime.extension(message.mimetype) : null;
+    let text = message.mimetype ? null : message.content;
+    let textMd5 = message.mimetype ? null : hash(text);
+    let groupParticipants = message.isGroupMsg ? message.chat.groupMetadata.participants.reduce((prv, cur) => {prv.push(cur.id);return prv},[]) : null
+    let groupName = message.isGroupMsg ? message.chat.name : null
 
     MessageBuffer.create({
         text,
