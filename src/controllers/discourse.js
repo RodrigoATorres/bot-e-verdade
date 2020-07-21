@@ -17,25 +17,41 @@ headers["Api-Key"]= userApiKey;
 headers["Api-Username"] = apiUsername;
 headers["Accept"] = "application/json";
 
-const fetchDiscordApi = async (path, method, params={}, body = {}) =>{
-    let url = new URL(`${baseUrl}/${path}`);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-    let res;
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-    if (method === 'get'){
-        res = await fetch(url,{
-            method,
-            headers
-        })
+const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =>{
+    try{
+        let url = new URL(`${baseUrl}/${path}`);
+        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+        let res;
+
+        if (method === 'get'){
+            res = await fetch(url,{
+                method,
+                headers
+            })
+        }
+        else {
+            res = await fetch(url,{
+                method,
+                body: JSON.stringify(body),
+                headers
+            })
+        }
+        return await res.json();
     }
-    else {
-        res = await fetch(url,{
-            method,
-            body: JSON.stringify(body),
-            headers
-        })
+    catch (err){
+        if (ntries<3){
+            await sleep(2000);
+            return await fetchDiscordApi(path, method, params, body, ntries +1);
+        }
+        else{
+            logger.error(err);
+            throw err;
+        }
     }
-    return await res.json();
 };
 
 const search = (params) =>{
