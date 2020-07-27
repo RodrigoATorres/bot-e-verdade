@@ -15,6 +15,20 @@ const gcController = require('./gcProcessing');
 
 const msgsTexts = require('../msgsTexts.json');
 
+const {default: PQueue} = require('p-queue');
+const saveImageQueue = new PQueue({concurrency: 1});
+
+
+let BUFFER_DELAY1, BUFFER_DELAY2;
+
+if (process.env.NODE_ENV === 'test'){
+    BUFFER_DELAY1 = Number(process.env.TEST_BUFFER_DELAY1)
+    BUFFER_DELAY2 = Number(process.env.TEST_BUFFER_DELAY2)
+} else{
+    BUFFER_DELAY1 = Number(process.env.BUFFER_DELAY1)
+    BUFFER_DELAY2 = Number(process.env.BUFFER_DELAY2)
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -35,38 +49,43 @@ const saveImage = async( content, md5, mimetype ) =>{
     });
 }
 
-const getMd5 = async( message, downloadMedia = false, processMedia = false) => {
+
+const getMd5 = async( message, downloadMedia = false, processMedia = false, isQueued = false) => {
     let doc = await  Media.findOne({mediaKeys: message.mediaKey}).select('_id');
     if (doc){
         return doc._id;
     }
     else if (downloadMedia){
-        let content = await wa.decryptMedia(message);
-        let md5 = hash(content);
+        if (!isQueued){
+            return await saveImageQueue.add(async() => await getMd5( message, downloadMedia, processMedia, isQueued = true))
+        } else{
+            let content = await wa.decryptMedia(message);
+            let md5 = hash(content);
 
-        doc = await Media.findOne({_id:md5});
-        if (doc){
-            doc.mediaKeys.push(md5)
-            doc.save()
-        }
-        else{
-            let text = null, tags  = null;
-            await saveImage(content, md5, message.mimetype);
-            await sleep(2000);
-            if (processMedia){
-                [text, tags] = await gcController.getMediaInfo(md5, message.mimetype);
+            doc = await Media.findOne({_id:md5});
+            if (doc){
+                doc.mediaKeys.push(md5)
+                doc.save()
             }
+            else{
+                let text = null, tags  = null;
+                await saveImage(content, md5, message.mimetype);
+                await sleep(2000);
+                if (processMedia){
+                    [text, tags] = await gcController.getMediaInfo(md5, message.mimetype);
+                }
 
-            Media.create({
-                _id: md5,
-                mediaKeys: [message.mediaKey],
-                mediaMime: message.mimetype,
-                mediaLink: getMediaLink(md5, message.mimetype),
-                mediaText:text,
-                mediaTags:tags,
-            })
+                Media.create({
+                    _id: md5,
+                    mediaKeys: [message.mediaKey],
+                    mediaMime: message.mimetype,
+                    mediaLink: getMediaLink(md5, message.mimetype),
+                    mediaText:text,
+                    mediaTags:tags,
+                })
+            }
+            return md5;
         }
-        return md5;
     }
 }
 
@@ -147,10 +166,10 @@ exports.processBuffer = async (client) => {
     )
     
     groups.forEach( async group =>{
-        if (( Date.now() - group.last ) > 8000){
+        if (( Date.now() - group.last ) > (BUFFER_DELAY1+BUFFER_DELAY2)){
             processGroup(group, client);
         }
-        else if (( Date.now() - group.last ) > 5000){
+        else if (( Date.now() - group.last ) > BUFFER_DELAY1){
             if (group.isGroupMsg){
                 processGroup(group, client);
             }

@@ -2,7 +2,7 @@ const mime = require('mime-types');
 const language = require('@google-cloud/language');
 const vision = require('@google-cloud/vision');
 const speech = require('@google-cloud/speech');
-const speechclient = new speech.SpeechClient();
+const speechClient = new speech.SpeechClient();
 const visionClient = new vision.ImageAnnotatorClient();
 const languageClient = new language.LanguageServiceClient();
 const { exec } = require("child_process");
@@ -61,7 +61,13 @@ exports.mergeTagLists = (tagLists) => {
 }
 
 exports.getTextTags = async (text) => {
-
+  if (process.env.NODE_ENV === 'test' && !process.env.ENABLE_GC){
+    return [
+      {name:'tags', salience: 10, tagType:'OTHER'},
+      {name:'for', salience: 10, tagType:'OTHER'},
+      {name:'testing', salience: 10, tagType:'OTHER'}
+    ]
+  }
     const document = {
       content: text,
       type: 'PLAIN_TEXT',
@@ -88,12 +94,14 @@ exports.getTextTags = async (text) => {
 
 
 exports.getImageText = async (filename) => {
+    if (process.env.NODE_ENV === 'test' && !process.env.ENABLE_GC) return 'this is just a text for testing';
     // Performs label detection on the image file
     const [result] = await visionClient.documentTextDetection(filename);
     return result.fullTextAnnotation.text;
   }
 
 exports.getAudioText = async (fileName) =>{
+  if (process.env.NODE_ENV === 'test' && !process.env.ENABLE_GC) return 'this is just a text for testing';
 
   const file = fs.readFileSync(fileName);
   const audioBytes = file.toString('base64');
@@ -110,7 +118,7 @@ exports.getAudioText = async (fileName) =>{
     audio: audio,
     config: config,
   };
-  const [response] = await speechclient.recognize(request);
+  const [response] = await speechClient.recognize(request);
 
   return response.results
     .map(result => result.alternatives[0].transcript)

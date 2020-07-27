@@ -1,4 +1,7 @@
 {
+    "general":{
+        "AND":"e"
+    },
     "user":{
         "INTRO_MSG": [
             "Olá {0}, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!",
@@ -12,6 +15,24 @@
         ],
         "PRE_GRP_REPLY_AUTHOR":[
             "Olá {0}, você enviou uma mensagem para o grupo \"{1}\" e nossa comunidade acreditou que fosse importante te enviar um alerta sobre ela:"
+        ],
+        "MSG_LIST_GRP_RECEIVED":[
+            "recebeu do(s) grupo(s) {0}"
+        ],
+        "MSG_LIST_GRP_SENT":[
+            "enviou para o(s) grupo(s) {0}"
+        ],
+        "MSG_LIST_PRIVATE_SENT":[
+            "nos enviou"
+        ],
+        "PRE_PUBLISH_MSG_1":[
+            "Olá {0}, nossa comunidade analisou uma mensagem que você {1}."
+        ],
+        "PRE_PUBLISH_MSG_2":[
+            "A conclusão foi:"
+        ],
+        "PRE_PUBLISH_MSG_2_NO_PRIVATE_MSG":[
+            "Acreditamos que é importante te alertar sobre ela:"
         ],
         "GROUP_MSG_WARNING":
         [

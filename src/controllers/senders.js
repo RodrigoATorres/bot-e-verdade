@@ -1,5 +1,9 @@
-const Senders = require('../models/sender');
+const Sender = require('../models/sender');
 const msgsTexts = require('../msgsTexts.json');
+const {default: PQueue} = require('p-queue');
+ 
+const queue = new PQueue({concurrency: 1});
+
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -11,29 +15,30 @@ const sendIntroduction = async (sender, client) =>{
     await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
 }
 
+exports.getSubscribedUser = async (senderId) => {
+    return await Sender.findOne({senderId: senderId, subscribed:true});
+}
+
+const registerSender = async (message, client) =>{
+    let sender = await Sender.findOne(
+        {senderId: message.sender.id}
+    )
+    if (!sender){
+        sender = await Sender.create({
+            senderId:  message.sender.id,
+            name: message.sender.pushname
+        });
+        sendIntroduction(sender, client);
+    }
+    return sender
+}
+
 exports.registerSender = async function (message, client){
 
-    let sender = await Senders.findOne(
-        {senderid: message.sender.id
-        }
+    let sender = await Sender.findOne(
+        {senderId: message.sender.id}
     )
-    try{
-        if (!sender && !message.isGroupMsg){
-            sender = await Senders.create({
-                senderId:  message.sender.id,
-                name: message.sender.pushname
-            });
-            sendIntroduction(sender, client);
-        }
+    if (!sender && !message.isGroupMsg){
+        sender = await queue.add(async () =>{return await registerSender(message,client)})
     }
-    catch{
-        await sleep(100);
-        sender = await Senders.findOne(
-            {
-                senderid: message.sender.id
-            }
-        )
-    }
-    message.bot.sender = sender;
-
 }

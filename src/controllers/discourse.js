@@ -1,8 +1,25 @@
+require('dotenv').config()
 const fetch = require('node-fetch');
+const config = {};
+if (process.env.NODE_ENV === 'production'){
+    config.API_URL = process.env.DISCOURSE_API_URL
+    config.API_USERNAME = process.env.DISCOURSE_API_USERNAME
+    config.API_KEY = process.env.DISCOURSE_API_KEY
+    config.API_CAT_NO_SOLUTION_ID = process.env.DISCOURSE_API_CAT_NO_SOLUTION_ID
+    config.API_CAT_SOLUTION_ID = process.env.DISCOURSE_API_CAT_SOLUTION_ID
+    config.API_CAT_PROCESSING_ERROR_ID = process.env.API_CAT_PROCESSING_ERROR_ID
+} else{
+    config.API_URL = process.env.TESTING_DISCOURSE_API_URL
+    config.API_USERNAME = process.env.TESTING_DISCOURSE_API_USERNAME
+    config.API_KEY = process.env.TESTING_DISCOURSE_API_KEY
+    config.API_CAT_NO_SOLUTION_ID = process.env.TESTING_DISCOURSE_API_CAT_NO_SOLUTION_ID
+    config.API_CAT_SOLUTION_ID = process.env.TESTING_DISCOURSE_API_CAT_SOLUTION_ID
+    config.API_CAT_PROCESSING_ERROR_ID = process.env.TESTING_API_CAT_PROCESSING_ERROR_ID
+}
 
-const userApiKey = process.env.DISCOURSE_API_KEY;
-const apiUsername = process.env.DISCOURSE_API_USERNAME;
-const baseUrl = process.env.DISCOURSE_API_URL;
+const {default: PQueue} = require('p-queue');
+const fetchQueue = new PQueue({concurrency: 1});
+
 
 const logger = require('../helpers/logger');
 
@@ -15,8 +32,8 @@ const msgsTexts = require('../msgsTexts.json');
 
 const headers = {}
 headers["Content-Type"] = "application/json";
-headers["Api-Key"]= userApiKey;
-headers["Api-Username"] = apiUsername;
+headers["Api-Key"]= config.API_KEY;
+headers["Api-Username"] = config.API_USERNAME;
 headers["Accept"] = "application/json";
 
 function sleep(ms) {
@@ -24,56 +41,63 @@ function sleep(ms) {
 }
 
 const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =>{
-    try{
-        let url = new URL(`${baseUrl}/${path}`);
-        Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-        let res;
-
-        if (method === 'get'){
-            res = await fetch(url,{
-                method,
-                headers
-            })
+    return await fetchQueue.add( async() => { 
+        try{
+            let url = new URL(`${config.API_URL}/${path}`);
+            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+            let res;
+            if (method === 'get'){
+                res = await fetch(url,{
+                    method,
+                    headers
+                })
+            }
+            else {
+                res = await fetch(url,{
+                    method,
+                    body: JSON.stringify(body),
+                    headers
+                })
+            }
+            return await res.json();
         }
-        else {
-            res = await fetch(url,{
-                method,
-                body: JSON.stringify(body),
-                headers
-            })
+        catch (err){
+            if (ntries<3){
+                await sleep(2000);
+                return await fetchDiscordApi(path, method, params, body, ntries +1);
+            }
+            else{
+                logger.error(err);
+                throw err;
+            }
         }
-        return await res.json();
-    }
-    catch (err){
-        if (ntries<3){
-            await sleep(2000);
-            return await fetchDiscordApi(path, method, params, body, ntries +1);
-        }
-        else{
-            logger.error(err);
-            throw err;
-        }
-    }
+    })
 };
 
 const search = (params) =>{
     return fetchDiscordApi(`search`, 'get', params);
 }
 
-const getNewReplyTopics = async () => {
+exports.getNewReplyTopics = async (categ = config.API_CAT_NO_SOLUTION_ID) => {
     let res = await search({
-            q:`#${process.env.DISCOURSE_API_CAT_NO_SOLUTION} status:solved`,
+            q:`category:${categ} status:solved`,
         });
     return res.topics ? res.topics: [];
 };
 
+const pickPoll = (polls, pollname) => {
+    let pollNames = polls.map((poll) => poll.name)
+    let idx = pollNames.indexOf(pollname)
+    return polls[idx]
+}
+
 const getPollResult = (poll) =>{
-    return poll.options.reduce(
-        (prev, cur) =>{
-            return ( prev.votes <= cur.votes ? cur : prev );
-        },
-        {votes:-1}
+    poll.options.sort(
+        (a, b) =>{
+            return ( b.votes - a.votes);
+        }
     );
+    return  poll.options[0].votes === poll.options[1].votes ? null: poll.options[0]
 }
 
 const getVeracityKey = (pollLabel) =>{
@@ -81,26 +105,22 @@ const getVeracityKey = (pollLabel) =>{
     return Object.keys(msgsTexts.veracityLabels).find(key => msgsTexts.veracityLabels[key][0] === veracityLabel);
 }
 
-exports.processNewReplyTopics = async (client) =>{
-    let new_topics = await getNewReplyTopics();
-    new_topics.forEach( async (topic) => {
-        let msgGroup = await MessageGroup.findOne({discourseId:topic.id});
-
-        topic = await fetchDiscordApi(
-            `t/${topic.id}.json`,
-            'get'
-        );
-
+exports.processNewReplyTopic = async (topic, client) => {
+    let msgGroup = await MessageGroup.findOne({discourseId:topic.id});
+    let topicInfo = await this.getTopic(topic.id);
+    try {
         let veracityKey = getVeracityKey(
-            getPollResult(topic.post_stream.posts[0].polls[0]).html
+            getPollResult(
+                pickPoll(topicInfo.post_stream.posts[0].polls, "veracity")
+            ).html
         );
 
         let topicReply = await fetchDiscordApi(
-            `posts/${topic.post_stream.stream[topic.accepted_answer.post_number-1]}.json`,
+            `posts/${topicInfo.post_stream.stream[topicInfo.accepted_answer.post_number-1]}.json`,
             'get'
         );
         let replyText = msgsTexts.replies[veracityKey].join('\n').format(topicReply.raw);
-
+    
         if (msgGroup){
             msgGroup.replyMessage = replyText;
             msgGroup.veracity = veracityKey;
@@ -108,12 +128,35 @@ exports.processNewReplyTopics = async (client) =>{
             messagesController.publishReply(msgGroup, client);
         }
         await fetchDiscordApi(
-            `t/-/${topic.id}.json`,
+            `t/-/${topicInfo.id}.json`,
             'put',
-            {"category_id": process.env.DISCOURSE_API_CAT_SOLUTION_ID}
+            {"category_id": config.API_CAT_SOLUTION_ID}
         );
+    } catch (err) {
+        await fetchDiscordApi(
+            `t/-/${topicInfo.id}.json`,
+            'put',
+            {"category_id": config.API_CAT_PROCESSING_ERROR_ID}
+        );
+        throw err
     }
-    );
+
+}
+
+
+
+exports.processAllNewReplyTopics = async (client) =>{
+    let new_topics = await this.getNewReplyTopics();
+    new_topics.forEach( topic => this.processNewReplyTopic(topic, client));
+}
+
+exports.createTopic = (data) =>{
+    return fetchDiscordApi(
+        'posts.json',
+        'post',
+        {},
+        data
+    )
 }
 
 exports.addMessage = async (messageGroup) => {
@@ -154,14 +197,11 @@ exports.addMessage = async (messageGroup) => {
         );
     }
     
-    let json = await fetchDiscordApi(
-        'posts.json',
-        'post',
-        {},
+    let json = await this.createTopic(
         {
-            title: `${messageGroup._id}: ${messageGroup.tags.map(tag=>tag.name).join(' ')}`,
+            title: `${messageGroup.tags.map(tag=>tag.name).join(' ')} |id:${messageGroup._id}`,
             tags: messageGroup.tags.slice(0,9).map(tag=>tag.name),
-            category: process.env.DISCOURSE_API_CAT_NO_SOLUTION_ID,
+            category: config.API_CAT_NO_SOLUTION_ID,
             raw: body.join('\n')
         }
     )
@@ -169,4 +209,68 @@ exports.addMessage = async (messageGroup) => {
     messageGroup.discourseId = json.topic_id;
     await messageGroup.save();
     return json.topic_id;
+}
+
+exports.getNoReplyTopics = async (categ = config.API_CAT_NO_SOLUTION_ID) =>{
+    let res = await search({
+        q:`category:${categ} status:unsolved`,
+    });
+    return res.topics ? res.topics: [];
+}
+
+exports.answerTopic = (message, topicId) =>{
+    return fetchDiscordApi(
+        'posts.json',
+        'post',
+        {},
+        {
+            topic_id: topicId,
+            raw: message
+        }
+    )
+
+}
+
+exports.getTopic = (topicId) =>{
+    return fetchDiscordApi(
+        `t/${topicId}.json`,
+        'get',
+        {},
+        {}
+)};
+
+exports.acceptAnswer = async (post_id) =>{
+    return fetchDiscordApi(
+        'solution/accept',
+        'post',
+        {},
+        {
+            id: post_id,
+        }
+    )
+}
+
+exports.voteOnPoll = async (post_id, poll_name, options) => {
+    return fetchDiscordApi(
+        'polls/vote',
+        'put',
+        {},
+        {
+            post_id,
+            poll_name,
+            options
+        }
+    )
+}
+
+exports.voteVeracity = async (topicId, veracity) => {
+    let topicInfo = await this.getTopic(topicId);
+    let veracity_idx = Object.keys(msgsTexts.veracityLabels).indexOf(veracity);
+
+    return this.voteOnPoll(
+        topicInfo.post_stream.posts[0].id,
+        "veracity",
+        [pickPoll(topicInfo.post_stream.posts[0].polls, "veracity").options[veracity_idx].id]
+    )
+
 }

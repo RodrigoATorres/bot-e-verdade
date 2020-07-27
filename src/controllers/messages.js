@@ -1,7 +1,7 @@
 const Message = require('../models/message');
-const Sender = require('../models/sender');
 const MessageGroup = require('../models/messageGroup');
 
+const sendersController = require('./senders')
 const gcController = require('./gcProcessing');
 const msgsTexts = require('../msgsTexts.json');
 
@@ -9,42 +9,41 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+
+exports.sendMultiMessage = async (client, chatId, msgs, delay = 2000) => {
+    for (let msg of msgs){
+        await client.sendText(chatId, msg);
+        await sleep(delay)
+    }
+}
+
+exports.genTopicInfo = (topic_id) =>{
+    return msgsTexts.user.TOPIC_INFO.join('\n').format(`${process.env.DISCOURSE_API_URL}/t/${topic_id}`)
+}
+
 exports.sendTopicInfo = async (client, senderId, topic_id) =>{
-    await client.sendText(
-        senderId,
-        msgsTexts.user.TOPIC_INFO.join('\n').format(`${process.env.DISCOURSE_API_URL}/t/${topic_id}`)
-    );
+    return await client.sendText( senderId, this.genTopicInfo(topic_id) );
+}
+
+exports.genPreGrpReplyMessage = (groupInfo, userObj) =>{
+    if (userObj.senderId === groupInfo.senderId){
+        return msgsTexts.user.PRE_GRP_REPLY_AUTHOR.join('\n').format(userObj.name, groupInfo.groupName)
+    }
+    else{
+        return msgsTexts.user.PRE_GRP_REPLY.join('\n').format(userObj.name, groupInfo.groupName)
+    }
 }
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
     if (messageGroup.replyMessage){
-        groupInfo.groupParticipants.forEach( async(participant) => {
-            let partDoc = await Sender.findOne({senderId: participant});
-            if (partDoc && partDoc!=null){
-                if (partDoc.senderId === groupInfo.senderId){
-                    await client.sendText(
-                        partDoc.senderId,
-                        msgsTexts.user.PRE_GRP_REPLY_AUTHOR.join('\n').format(partDoc.name, groupInfo.groupName))
-                    await sleep(2000);
-                }
-                else {
-                    await client.sendText(
-                        partDoc.senderId,
-                        msgsTexts.user.PRE_GRP_REPLY.join('\n').format(partDoc.name, groupInfo.groupName)
-                    );
-                    await sleep(2000);
-                }
-                
-                await client.sendText(
-                    partDoc.senderId,
-                    messageGroup.replyMessage
-                );
-                await sleep(2000);
-                await this.sendTopicInfo(
-                    client,
-                    partDoc.senderId,
-                    messageGroup.discourseId
-                )
+        groupInfo.groupParticipants.forEach( async(userId) => {
+            let userObj = await sendersController.getSubscribedUser(userId);
+            if (userObj){
+                let msgs = [];
+                msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
+                msgs.push(messageGroup.replyMessage);
+                msgs.push(this.genTopicInfo(messageGroup.discourseId));
+                this.sendMultiMessage(client, userId, msgs)
             }
         })
         return true;
@@ -53,54 +52,111 @@ exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
 }
 
 exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>{
-    if (messageGroup.replyMessage){
-        await client.sendText(
-            senderInfo.senderId,
-            messageGroup.replyMessage
-        )
-        await sleep(2000);
-        await this.sendTopicInfo(
-            client,
-            senderInfo.senderId,
-            messageGroup.discourseId
-        )
-        await sleep(2000);
-        return true;
+    let msgs = []
+    if (isNew){
+        msgs.push(msgsTexts.user.NEW_MSG.join('\n'))
     }
-    else {
-        if (isNew){
-            await client.sendText(
-                senderInfo.senderId,
-                msgsTexts.user.NEW_MSG.join('\n')
-                )
-            await sleep(2000);
-        } else{
-            await client.sendText(
-                senderInfo.senderId,
-                msgsTexts.user.UPROCESSED_MSG.join('\n')
-            )
-            await sleep(2000);
-            await this.sendTopicInfo(
-                client,
-                senderInfo.senderId,
-                messageGroup.discourseId
-            )
+    else{
+        if (messageGroup.replyMessage){
+            msgs.push( messageGroup.replyMessage )
         }
-
-        return false;
+        else {
+            msgs.push(msgsTexts.user.UPROCESSED_MSG.join('\n'));
+        }
+        msgs.push( this.genTopicInfo(messageGroup.discourseId) )
     }
+
+    this.sendMultiMessage(client,senderInfo.senderId,msgs)
+
+    return Boolean(messageGroup.replyMessage)
+}
+
+
+const organizeReportData = (reportUsers, reportGroups) =>{
+    const allReportData = {};
+    for (let reportUser of reportUsers){
+        allReportData[reportUser.senderId] = {receivGroups:[], sentGroups:[], private:true};
+    }
+
+    for (let group of reportGroups){
+        for (let participant of group.groupParticipants){
+            if (!Object.keys(allReportData).includes(participant)){
+                allReportData[participant] = {receivGroups:[], sentGroups:[], private:false}
+            }
+            if (group.senderId === participant){
+                allReportData[participant].sentGroups.push(group.groupName);
+            }
+            else{
+                allReportData[participant].receivGroups.push(group.groupName);
+            }
+        }
+    }
+
+    return allReportData;
+}
+
+exports.genPrePublishMessage = (reportData, userName) => {
+    let grp_info = [];
+    let lines = [];
+
+    if (reportData.private){
+        grp_info.push(msgsTexts.user.MSG_LIST_PRIVATE_SENT.join('\n'));
+    }
+
+    if (reportData.sentGroups.length > 0){
+        grp_info.push( 
+            msgsTexts.user.MSG_LIST_GRP_SENT.join('\n').format(reportData.sentGroups.join('; '))
+        );
+    }
+    if (reportData.receivGroups.length > 0){
+        grp_info.push( 
+            msgsTexts.user.MSG_LIST_GRP_RECEIVED.join('\n').format(reportData.receivGroups.join('; '))
+        );
+    }
+
+    lines.push(
+        grp_info.length > 1
+        ?
+        msgsTexts.user.PRE_PUBLISH_MSG_1.join('\n').format(
+            userName,
+            grp_info.slice(0, -1).join(', ')+ ` ${msgsTexts.general.AND} ` + grp_info.slice(-1)
+        )
+        :
+        msgsTexts.user.PRE_PUBLISH_MSG_1.join('\n').format(
+            userName,
+            grp_info[0]
+        )
+    )
+
+    if (reportData.private){
+        lines.push(msgsTexts.user.PRE_PUBLISH_MSG_2.join('\n'));
+    }
+    else{
+        lines.push(msgsTexts.user.PRE_PUBLISH_MSG_2_NO_PRIVATE_MSG.join('\n'));
+    }
+
+    return lines.join('\n');
 }
 
 exports.publishReply = async ( messageGroup, client ) =>{
-    messageGroup.reportUsers.forEach( (senderInfo) => {
-        this.replyPrivateMessage(messageGroup, client, senderInfo)
-    });
 
-    await sleep(10000);
+    let publishToUser = async (userId) => {
+        let userObj = await sendersController.getSubscribedUser(userId);
+        if (userObj){
+            await client.sendText( 
+                userId,
+                this.genPrePublishMessage(allReportData[userId], userObj.name)
+            );
+            await sleep(2500);
+            await client.sendText( userId, messageGroup.replyMessage );
+        }
+    }
 
-    messageGroup.reportGroups.forEach( ( groupInfo ) => {
-        this.replyGroupMessage(messageGroup, client, groupInfo)
-    });
+    let allReportData = organizeReportData(messageGroup.reportUsers, messageGroup.reportGroups);
+    for (let user of Object.keys(allReportData)){
+        publishToUser(user)
+    }
+
 }
 
 exports.getMessagesTags = async (messageIds) => {
@@ -131,8 +187,8 @@ exports.getMessagesTags = async (messageIds) => {
 
 
 exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
+    let msgGroup = await MessageGroup.findOne({messages:{ $all:messageIds}});
 
-    let msgGroup = await MessageGroup.findOne({messages:{$elemMatch:{$all:messageIds}}});
     if (msgGroup){
         return [msgGroup, false];
     }

@@ -24,7 +24,11 @@ const consoleFormat = winston.format.combine(
 const logger = createLogger({
   format: fileFormat,
   transports: [
-    new transports.Console({format:consoleFormat}),
+    new transports.Console({
+        format:consoleFormat,
+        handleExceptions: true,
+        level: process.env.NODE_ENV==='test' ? 'error': 'silly'
+    }),
     new winston.transports.File(
         {
             filename: 'Logs/error.log',
