@@ -11,7 +11,7 @@ A maneira que o projeto se propõe a fazer isso é utilizando um robô, que rece
 
 Se uma análise estiver registrada em nossos bancos de dados, o usuário é prontamente notificado.
 
-Se uma análise ainda não tiver sido registrada, o robô publica a mensagem em um [fórum](forum.everdade.com.br) onde uma comunidade vai fazer uma pesquisa e decidir qual resposta deve ser dada aos usuários. Essa comunidade é aberta a todos e conta com mecanismos de moderação, para evitar que seja usada de maneira maliciosa.
+Se uma análise ainda não tiver sido registrada, o robô publica a mensagem em um [fórum](https://forum.everdade.com.br) onde uma comunidade vai fazer uma pesquisa e decidir qual resposta deve ser dada aos usuários. Essa comunidade é aberta a todos e conta com mecanismos de moderação, para evitar que seja usada de maneira maliciosa.
 
 ## Fórum
 Toda a dinâmica do É Verdade? depende da contribuição da comunidade com o fórum.
@@ -19,9 +19,9 @@ Toda a dinâmica do É Verdade? depende da contribuição da comunidade com o f�
 
 # Quero fazer parte!
 
-É possível fazer parte do **É Verdade?** de diferentes maneiras ( para mais detalhes veja esse [tópico](forum.everdade.com.br/t/186) do nosso fórum).
+É possível fazer parte do **É Verdade?** de diferentes maneiras ( para mais detalhes veja esse [tópico](https://forum.everdade.com.br/t/186) do nosso fórum).
 
-Para contribuir como código fonte acesse [esse tópcio](forum.everdade.com.br/t/446) do nosso fórum, onde concentramos a documentação do código e dê uma olhada nas [issues](./issues) no github.
+Para contribuir como código fonte acesse [esse tópcio](https://forum.everdade.com.br/t/446) do nosso fórum, onde concentramos a documentação do código e dê uma olhada nas [issues](../../issues) no github.
 
 Utilizaremos o seguinte fluxo para organização das nossa branches:
 
