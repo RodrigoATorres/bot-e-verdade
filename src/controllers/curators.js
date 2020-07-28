@@ -83,12 +83,24 @@ exports.execute_command = async (message,client) => {
     }
 
     async function sendForReview(){
+        var requested_id = message.body.match(/#id:\s*([a-zA-Z0-9]+)/);
+        if (requested_id){
+            var doc = await Message.findOne(
+                {replymessage: null,
+                 reviewer: null,
+                 _id: requested_id[1]
+                }
+            )
+        }
+        else{
         var doc = await Message.findOne(
             {replymessage: null,
              reviewer: null,
              _id: {"$nin": cura.messagesBlackList}
             }
         )
+        }
+
         if(doc){
             await client.sendText(message.sender.id, [
                                                         msgsTexts.curator.ASK_REVIEW_MSG_1.join('\n'),
@@ -126,7 +138,7 @@ exports.execute_command = async (message,client) => {
 
 
     async function getAnswer(){
-        var status = message.body.match(/#status:([a-z]+)/)[1];
+        var status = message.body.match(/#status:\s*([a-zA-Z]+)/)[1].toLowerCase();
         if (!Object.keys(msgsTexts.replies).includes(status)){
             throw new Error(msgsTexts.curator.NOT_A_STATUS_OPTION.join('\n').format(status))
         }

@@ -7,6 +7,7 @@ const mime = require('mime-types');
 const fs = require('fs');
 
 const Message = require('../models/message');
+const Curators = require('../models/curators');
 
 const msgsTexts = require('../msgsTexts.json');
 
@@ -46,20 +47,26 @@ async function searchMsg(message){
     return [doc, mediaData]
 }
 
-async function sendReplyMsg(doc, message, client){
-
+async function sendReplyMsg(doc, message, client, add_text = null){
     if (doc){
         if (doc.replymessage){
+
             var destinatary = (message.isGroupMsg) ? (message.chat.id) : (message.sender.id);
-            await client.sendText(destinatary, msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
+            var response_txt = msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage)
+            if (add_text){response_txt += add_text}
+            await client.sendText(destinatary, response_txt);
         }
         else if(!message.isGroupMsg) {
-            await client.sendText(message.sender.id, msgsTexts.user.UPROCESSED_MSG.join('\n'));
+            var response_txt = msgsTexts.user.UPROCESSED_MSG.join('\n');
+            if (add_text){response_txt += add_text}
+            await client.sendText(message.sender.id, );
         }
     }
     else{
         if (!message.isGroupMsg){
-            await client.sendText(message.sender.id, msgsTexts.user.NEW_MSG.join('\n'));
+            response_txt = msgsTexts.user.NEW_MSG.join('\n')
+            if (add_text){response_txt += add_text}
+            await client.sendText(message.sender.id, response_txt);
         }
 
     }
@@ -69,6 +76,11 @@ async function sendReplyMsg(doc, message, client){
 
 async function updateMsgsDatabase(doc, message, mediaData){
 
+    var cura = await Curators.findOne(
+        {curatorid: message.sender.id
+        }
+    )
+
     if (doc){
         if(!doc.replymessage && !doc.reportUsers.includes(message.sender.id)){
             doc.reportUsers.push({userId: message.sender.id,
@@ -77,10 +89,11 @@ async function updateMsgsDatabase(doc, message, mediaData){
         doc.forwardingScores.push(message.forwardingScore);
         doc.update( { $inc: {timesReceived:1}});
         doc.save();
+        var register = doc;
     }
     else{
         if (!message.isGroupMsg){
-            Message.create({
+                var register = await Message.create({
                 text:  message.body,
                 mediaMd5: mediaData['media_md5'],
                 mediaMime: message.mimetype,
@@ -105,12 +118,15 @@ async function updateMsgsDatabase(doc, message, mediaData){
         }
     }
 
+    return cura? register.id : null;
+
 }
 
 exports.check_message = async (message,client) => {  
     var [doc, mediaData] = await searchMsg(message);
-    sendReplyMsg(doc, message, client);
-    updateMsgsDatabase(doc,message,mediaData);    
+    var register_id = await updateMsgsDatabase(doc,message,mediaData);
+    var add_text = register_id ? msgsTexts.curator.SEND_MSG_ID.join('\n').format(register_id) : null
+    sendReplyMsg(doc, message, client, add_text);   
     await client.sendSeen(message.chatId);
 }
 
@@ -125,7 +141,7 @@ exports.check_reports = async (client) => {
     for (const doc of docs){
         console.log('ANNOUNCING REPLIES');
         for (const index in doc.reportUsers){
-            await client.sendText(doc.reportUsers[index], msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
+            await client.sendText(doc.reportUsers[index]['userId'], msgsTexts.replies[doc.veracity].join('\n').format(doc.replymessage));
         }
         doc.announced = true;
         await doc.save();

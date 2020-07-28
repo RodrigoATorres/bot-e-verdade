@@ -29,6 +29,10 @@
             "   *#diretizes*",
             "   *#status*"
         ],
+        "SEND_MSG_ID":[
+            "",
+            "Essa mensagem est� registrada no seguinte id:{0}"
+        ],
         "EXPIRING_ALERT_MSG":[
             "Você tem 2 minutos para enviar a resposta da sua mensagem, caso contrário ela será novamente disponibilizada para outros curadores",
             "Caso precise de mais tempo, me envie a mensagem \"#renovar\""
