@@ -3,10 +3,9 @@ const glob = require('glob');
 const path = require('path');
 var fs = require('fs');
 var json2mongo = require('json2mongo');
-const mongoose = require('mongoose');
 
-var test_data = {}
-files = glob.sync('./test/__test_data/*.json')
+let test_data = {}
+let files = glob.sync('./test/__test_data/*.json')
 for (let file of files){
     test_data[path.parse(file).name] = JSON.parse(fs.readFileSync(file))
 }

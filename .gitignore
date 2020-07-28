@@ -114,7 +114,11 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
-session.data.json
-testing.data.json
+SessionData/
+Received_msgs/*.json
 db/
+data/
 package-lock.json
+Media/**
+temp_testing/**
+gcp_credentials.json

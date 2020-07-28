@@ -1,30 +1,44 @@
-const wa = require('@open-wa/wa-automate');
-const hash = md5 = require('md5');
-const path = require('path');
-
-const mime = require('mime-types');
-const fs = require('fs');
-
-const Message = require('../models/message');
-const Curators = require('../models/curators');
-const Senders = require('../models/senders');
-
+const Sender = require('../models/sender');
 const msgsTexts = require('../msgsTexts.json');
+const {default: PQueue} = require('p-queue');
+ 
+const queue = new PQueue({concurrency: 1});
 
-exports.isNew = async function (senderId){
-    var doc = await Message.findOne(
-        {senderid: senderId
-        }
+
+function sleep(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }   
+
+const sendIntroduction = async (sender, client) =>{
+    await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
+}
+
+exports.getSubscribedUser = async (senderId) => {
+    return await Sender.findOne({senderId: senderId, subscribed:true});
+}
+
+const registerSender = async (message, client) =>{
+    let sender = await Sender.findOne(
+        {senderId: message.sender.id}
     )
-    console.log(doc);
-    if (doc){
-        return false;
-    }
-    else{
-        Senders.create({
-            senderid:  senderId,
-            banned: false,
+    if (!sender){
+        sender = await Sender.create({
+            senderId:  message.sender.id,
+            name: message.sender.pushname
         });
-        return true;
+        sendIntroduction(sender, client);
+    }
+    return sender
+}
+
+exports.registerSender = async function (message, client){
+
+    let sender = await Sender.findOne(
+        {senderId: message.sender.id}
+    )
+    if (!sender && !message.isGroupMsg){
+        sender = await queue.add(async () =>{return await registerSender(message,client)})
     }
 }
