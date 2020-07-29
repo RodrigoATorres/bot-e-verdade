@@ -109,6 +109,7 @@ const processGroup = async (group, client) =>{
 
     let msgIds = await messagesController.matchMessages(docs, !group.isGroupMsg);
     let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, !group.isGroupMsg);
+    if (!grpObj) return;
 
     if (group.isGroupMsg){
         await messagesController.replyGroupMessage(
