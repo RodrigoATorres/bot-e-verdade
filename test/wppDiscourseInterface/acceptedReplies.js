@@ -46,4 +46,43 @@ describe('Wpp-discourse', function () {
 
     });
 
+    it('Não enviar mensagem para os membros do grupo não cadastrados, quando uma mensagem falsa já verificada for enviada', async function () {
+
+        prepare.startApp();
+        let testClient = prepare.startTestWp();
+        let testMsgs = prepare.getTestMessages();
+        let testGroups =  prepare.getTestWpGroups();
+
+        testClient.sendText(process.env.BOT_WA_ID, this.test.title);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        await helpers.addMessageReply(testClient, testMsgs.slice(0,2), 'Testando uma resposta', "false");
+        await helpers.removeFromSenders(process.env.TEST_WAID);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        let messages = [];
+        helpers.storeMessage(testClient, messages);
+        testClient.forwardMessages(testGroups[0], testMsgs[0]);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+        helpers.stopStoreMessage(testClient);
+
+        expect(messages).to.have.lengthOf(0);
+    });
+
+    it('Deve armazenar a resposta do discourse no banco de dados do bot.', async function () {
+
+        prepare.startApp();
+        let testClient = prepare.startTestWp();
+        let testMsgs = prepare.getTestMessages();
+        
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+        let mensagemResposta = 'Testando uma resposta com ácènto e çedilha e tĩl, alem de "aspas", simbolo > < ; :';
+        await helpers.addMessageReply(testClient, testMsgs.slice(0,2), mensagemResposta, "false");
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+        let msg = await helpers.getMessageByReply(mensagemResposta);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+
+        expect(mensagemResposta).to.equal(msg);
+    });
 });

@@ -5,6 +5,7 @@ const prepare = require('./prepare')
 const discourseController = require('../src/controllers/discourse');
 
 const Sender = require('../src/models/sender');
+const MessageGroup = require('../src/models/messageGroup');
 
 const testData = require("./test_data.json");
 
@@ -55,6 +56,15 @@ module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
     await discourseController.voteVeracity(topic_id, veracity);
     let postInfo = await discourseController.answerTopic(reply, topic_id)
     await discourseController.acceptAnswer(postInfo.id)
+}
+
+module.exports.getMessageByReply = async (msgText) =>{
+
+    let msgGroup = []
+    msgGroup = MessageGroup.findOne({
+        'replyMessage': msgText,
+    });
+    return text = ((msgGroup) ? msgGroup.replyMessage : 'not available');
 }
 
 module.exports.regexFromMessage = (message) =>{
