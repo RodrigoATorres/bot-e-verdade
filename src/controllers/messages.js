@@ -151,8 +151,9 @@ exports.publishReply = async ( messageGroup, client ) =>{
             await client.sendText( userId, messageGroup.replyMessage );
         }
     }
-
-    let allReportData = organizeReportData(messageGroup.reportUsers, messageGroup.reportGroups);
+    let publishVeracity = ['noContex','false','trueWithReservations','partially'];
+    let msgGroup = (publishVeracity.indexOf(messageGroup.veracity) >= 0) ? messageGroup.reportGroups : [] ;
+    let allReportData = organizeReportData(messageGroup.reportUsers, msgGroup);
     for (let user of Object.keys(allReportData)){
         publishToUser(user)
     }
