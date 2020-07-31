@@ -149,6 +149,7 @@ exports.publishReply = async ( messageGroup, client ) =>{
             );
             await sleep(2500);
             await client.sendText( userId, messageGroup.replyMessage );
+            await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }
     }
 
