@@ -237,10 +237,16 @@ exports.processCommands = async(message,client) => {
 
     if (msgsTexts.commands.UNSUBSCRIBE_CMD.includes(command)){
         sendersController.unsubscribeUser(message.sender.id, client)
-    }
-
-    if (msgsTexts.commands.SUBSCRIBE_CMD.includes(command)){
+    } 
+    else if (msgsTexts.commands.SUBSCRIBE_CMD.includes(command)){
         sendersController.subscribeUser(message.sender.id, client)
     }
-
+    else if (msgsTexts.commands.LINK_DISCOURSE_CMD.includes(command)){
+        let userName = message.content.match(/\w+/g)[1];
+        sendersController.linkDiscourseAccount(message.sender.id, userName, client);
+    }
+    else if (msgsTexts.commands.LINK_DISCOURSE_CODE_CMD.includes(command)){
+        let code = message.content.match(/\w+/g)[1];
+        sendersController.confirmLinkDiscourseAccount(message.sender.id, code, client);
+    }
 }

@@ -88,4 +88,4 @@ function start(done = function() { return; }) {
     .catch(err => console.log(err));  
   }
 
-module.exports.start = start;
+module.exports = start;

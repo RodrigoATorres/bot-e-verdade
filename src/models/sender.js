@@ -26,7 +26,17 @@ const sendersSchema = new Schema({
     isCurator:{
         type: Boolean,
         default: false,
-    }
+    },
+
+    discourseUserName:{
+        type: String,
+    },
+
+    discourLinkRequest:{
+        userName:String,
+        confirmCode:String,
+        expiration:Date
+    },
     
 })
 
