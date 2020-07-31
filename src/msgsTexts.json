@@ -10,6 +10,14 @@
         "NEW_MSG": [
             "É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!"
         ],
+        "SUBSCRIBED": [
+            "Você acabou de se inscrever para receber mensagens do \"É Verdade?\"",
+            "Se quiser parar de receber, basta me enviar a mensagem \"parar\""
+        ],
+        "UNSUBSCRIBED": [
+            "Você acabou de se desinscrever do \"É Verdade?\"",
+            "Se quiser voltar a receber mensagens, basta me enviar a mensagem \"inscrever\""
+        ],
         "PRE_GRP_REPLY":[
             "Olá {0}, você recebeu uma mensagem no grupo \"{1}\" e nossa comunidade acreditou que fosse importante te enviar um alerta sobre ela:"
         ],
@@ -246,13 +254,8 @@
 
     },
     "commands":{
-        "HELP_CMD":"ajuda",
-        "SEND_CMD":"manda",
-        "GUIDELINES_CMD":"diretrizes",
-        "STATUS_CMD":"status",
-        "ANSWER_CMD":"resposta",
-        "SKIP_CMD":"pular",
-        "RENEW_EXP_CMD":"renovar"
+        "SUBSCRIBE_CMD":["inscrever", "receber", "cadastrar"],
+        "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"]
     }
 
 

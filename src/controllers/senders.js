@@ -42,3 +42,13 @@ exports.registerSender = async function (message, client){
         sender = await queue.add(async () =>{return await registerSender(message,client)})
     }
 }
+
+exports.subscribeUser = async function (senderId, client){
+    await Sender.update({senderId}, {subscribed:true});
+    await client.sendText(senderId, msgsTexts.user.SUBSCRIBED.join('\n'))
+}
+
+exports.unsubscribeUser = async function (senderId, client){
+    await Sender.update({senderId}, {subscribed:false});
+    await client.sendText(senderId, msgsTexts.user.UNSUBSCRIBED.join('\n'))
+}

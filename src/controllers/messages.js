@@ -229,3 +229,18 @@ exports.matchMessages = async(messageDocs, createIfNull) => {
     }
     return msgIds;
 }
+
+
+exports.processCommands = async(message,client) => {
+    if (message.mimetype) return;
+    let command = message.content.match(/\w+/)[0].toLowerCase()
+
+    if (msgsTexts.commands.UNSUBSCRIBE_CMD.includes(command)){
+        sendersController.unsubscribeUser(message.sender.id, client)
+    }
+
+    if (msgsTexts.commands.SUBSCRIBE_CMD.includes(command)){
+        sendersController.subscribeUser(message.sender.id, client)
+    }
+
+}
