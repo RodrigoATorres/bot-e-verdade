@@ -69,6 +69,28 @@ describe('Wpp-discourse', function () {
         expect(messages).to.have.lengthOf(0);
     });
 
+    it('Não enviar mensagem para os membros do grupo cadastrados, quando a veracidade não for relevante', async function () {
+
+        prepare.startApp();
+        let testClient = prepare.startTestWp();
+        let testMsgs = prepare.getTestMessages();
+        let testGroups =  prepare.getTestWpGroups();
+
+        testClient.sendText(process.env.BOT_WA_ID, this.test.title);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        await helpers.addMessageReply(testClient, testMsgs.slice(0,2), 'Testando uma resposta', "true");
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        let messages = [];
+        helpers.storeMessage(testClient, messages);
+        testClient.forwardMessages(testGroups[0], testMsgs[0]);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+        helpers.stopStoreMessage(testClient);
+
+        expect(messages).to.have.lengthOf(0);
+    });
+
     it('Deve armazenar a resposta do discourse no banco de dados do bot.', async function () {
 
         prepare.startApp();
