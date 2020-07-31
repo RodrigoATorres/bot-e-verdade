@@ -59,6 +59,7 @@ const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =
                     headers
                 })
             }
+            logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
             return await res.json();
         }
         catch (err){
