@@ -10,7 +10,7 @@ const msgsTexts = require('./msgsTexts.json');
 const messageBufferController =  require('./controllers/messageBuffers');
 const senderControler = require('./controllers/senders');
 const discourseController = require('./controllers/discourse');
-// const messageControler = require('./controllers/messages')
+const messageControler = require('./controllers/messages')
 // const curatorControler = require('./controllers/curators')
 
 if (require.main === module) {
@@ -49,12 +49,6 @@ function start(done = function() { return; }) {
         .then(client => {
           setInterval(function(){messageBufferController.processBuffer(client)}, 500);
           setInterval(function(){discourseController.processAllNewReplyTopics(client)}, 5000);
-          // var intervalCheckReviewers = setInterval(function(){curatorControler.resetReviewers(client)}, 120000);
-          if (process.env.NODE_ENV !== 'test'){
-            // var intervalCheckReports = setInterval(function(){messageControler.check_reports(client)}, 150000);
-            // var sendStatusJob = new CronJob('00 37 18 * * *', curatorControler.sendStatusAll(client), undefined, true, "America/Sao_Paulo");
-            // sendStatusJob.start();
-          }
 
           client.onAddedToGroup( (chat) =>{
             client.sendText(chat.id, msgsTexts.group.INTRO_MSG.join('\n'));
@@ -75,6 +69,10 @@ function start(done = function() { return; }) {
             
             if (!message.isGroupMsg){
               senderControler.registerSender(message, client);
+            }
+
+            if (!message.isGroupMsg && !message.isForwarded){
+              messageControler.processCommands(message, client);
             }
 
             if (message.isForwarded){
