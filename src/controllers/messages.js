@@ -243,4 +243,9 @@ exports.processCommands = async(message,client) => {
         sendersController.subscribeUser(message.sender.id, client)
     }
 
+    if (process.env.NODE_ENV === 'test' && command === 'savedb'){
+        const devController = require('./development');
+        devController.saveDb()
+    }
+
 }

@@ -19,6 +19,6 @@ mongoUnit.start()
     mongoUnit.load(json2mongo(testData))
 })
 .then(()=>{
-    var start = require('./app.js')
+    var {start} = require('./app.js')
     start();
 })
