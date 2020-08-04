@@ -36,17 +36,20 @@ exports.genPreGrpReplyMessage = (groupInfo, userObj) =>{
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
     if (messageGroup.replyMessage){
-        groupInfo.groupParticipants.forEach( async(userId) => {
-            let userObj = await sendersController.getSubscribedUser(userId);
-            if (userObj){
-                let msgs = [];
-                msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
-                msgs.push(messageGroup.replyMessage);
-                msgs.push(this.genTopicInfo(messageGroup.discourseId));
-                this.sendMultiMessage(client, userId, msgs)
-            }
-        })
-        return true;
+        let publishVeracity = ['noContex','false','trueWithReservations','partially'];
+        if (publishVeracity.indexOf(messageGroup.veracity) >= 0){
+            groupInfo.groupParticipants.forEach( async(userId) => {
+                let userObj = await sendersController.getSubscribedUser(userId);
+                if (userObj){
+                    let msgs = [];
+                    msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
+                    msgs.push(messageGroup.replyMessage);
+                    msgs.push(this.genTopicInfo(messageGroup.discourseId));
+                    this.sendMultiMessage(client, userId, msgs)
+                }
+            })
+            return true;
+        }
     }
     return false;
 }
@@ -152,8 +155,9 @@ exports.publishReply = async ( messageGroup, client ) =>{
             await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }
     }
-
-    let allReportData = organizeReportData(messageGroup.reportUsers, messageGroup.reportGroups);
+    let publishVeracity = ['noContex','false','trueWithReservations','partially'];
+    let msgGroup = (publishVeracity.indexOf(messageGroup.veracity) >= 0) ? messageGroup.reportGroups : [] ;
+    let allReportData = organizeReportData(messageGroup.reportUsers, msgGroup);
     for (let user of Object.keys(allReportData)){
         publishToUser(user)
     }
