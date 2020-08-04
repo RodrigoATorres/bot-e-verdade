@@ -33,7 +33,6 @@ exports.registerSender = async function (message, client){
     let sender = await Sender.findOne(
         {senderId: message.sender.id}
     )
-    console.log(sender);
     if (!sender && !message.isGroupMsg){
         sender = await queue.add(async () =>{return await registerSenderQueue(message,client)})
     }
@@ -52,9 +51,6 @@ exports.unsubscribeUser = async function (senderId, client){
 exports.confirmLinkDiscourseAccount = async function (senderId, confirmCode, client) {
     let senderObj = await Sender.findOne({senderId});
     let confirmReq = senderObj.discourLinkRequest;
-    console.log(confirmReq);
-    console.log(Date.now());
-    console.log(confirmCode);
     if (confirmReq && confirmReq.confirmCode === confirmCode && confirmReq.expiration > Date.now()){
         senderObj.discourseUserName = confirmReq.userName
         await senderObj.save();
