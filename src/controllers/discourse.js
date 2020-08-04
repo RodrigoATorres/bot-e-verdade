@@ -289,3 +289,12 @@ exports.sendPrivateMessage = ( userNames, title, message) =>{
         }
     )
 }
+
+exports.getPrivateMessages = (userName) =>{
+    return fetchDiscordApi(
+        `topics/private-messages/${userName}.json`,
+        'get',
+        {},
+        {}
+    )
+}
