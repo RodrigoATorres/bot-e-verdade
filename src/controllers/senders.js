@@ -81,3 +81,7 @@ exports.linkDiscourseAccount = async function (senderId, userName, client) {
 
     await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_INFO.join('\n'))
 }
+
+exports.addLastTopicId = async function(senderId, topicId){
+    await Sender.update({senderId: senderId}, {lastTopicId: topicId});
+}

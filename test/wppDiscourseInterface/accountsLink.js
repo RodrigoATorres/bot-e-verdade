@@ -5,7 +5,7 @@ const helpers = require('../helpers');
 
 const Sender = require('../../src/models/sender')
 
-const discourseController = require('../../src/controllers/discourse')
+// const discourseController = require('../../src/controllers/discourse')
 
 const msgsTexts = require('../../src/msgsTexts.json');
 

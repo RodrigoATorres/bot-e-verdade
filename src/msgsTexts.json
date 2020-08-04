@@ -70,6 +70,12 @@
             "Olá, recebemos uma solicitação do número {0} para linkar sua conta ao número.",
             "Se foi você que nos enviou, nos envie a seguinte mensagem:",
             "{1}"
+        ],
+        "DISCOURSE_REPLY_SUCESS":[
+            "Sua resposta foi adicionada ao discourse com sucesso"
+        ],
+        "DISCOURSE_REPLY_FAIL":[
+            "Não foi possível adicionar sua resposta ao discourse"
         ]
     },
     "group":{
@@ -274,7 +280,8 @@
         "SUBSCRIBE_CMD":["inscrever", "receber", "cadastrar"],
         "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"],
         "LINK_DISCOURSE_CMD":["link_forum"],
-        "LINK_DISCOURSE_CODE_CMD":["forum_code"]
+        "LINK_DISCOURSE_CODE_CMD":["forum_code"],
+        "REPLY_DISCOURSE_TOPIC_CMD":["#resposta"]
     }
 
 

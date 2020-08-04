@@ -28,6 +28,10 @@ const sendersSchema = new Schema({
         default: false,
     },
 
+    lastTopicId:{
+        type: String,
+    },
+
     discourseUserName:{
         type: String,
     },
