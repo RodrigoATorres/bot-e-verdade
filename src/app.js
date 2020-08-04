@@ -11,6 +11,7 @@ const messageBufferController =  require('./controllers/messageBuffers');
 const senderControler = require('./controllers/senders');
 const discourseController = require('./controllers/discourse');
 const messageControler = require('./controllers/messages')
+const versionMigrations = require('./controllers/versionMigrations')
 // const curatorControler = require('./controllers/curators')
 
 if (require.main === module) {
@@ -46,7 +47,10 @@ function start(done = function() { return; }) {
     )
     .then( () => {
         wa.create({sessionDataPath: 'SessionData', disableSpins:true})
-        .then(client => {
+        .then(async client => {
+
+          await versionMigrations(client);
+
           setInterval(function(){messageBufferController.processBuffer(client)}, 500);
           setInterval(function(){discourseController.processAllNewReplyTopics(client)}, 5000);
 

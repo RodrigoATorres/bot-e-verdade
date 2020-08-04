@@ -59,6 +59,7 @@ const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =
                     headers
                 })
             }
+            logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
             return await res.json();
         }
         catch (err){
@@ -197,9 +198,11 @@ exports.addMessage = async (messageGroup) => {
         );
     }
     
+    let title = `${messageGroup.tags.slice(0,9).map(tag=>tag.name).join(' ')}`.slice(0,200) + `|id:${messageGroup._id}`
+
     let json = await this.createTopic(
         {
-            title: `${messageGroup.tags.map(tag=>tag.name).join(' ')} |id:${messageGroup._id}`,
+            title,
             tags: messageGroup.tags.slice(0,9).map(tag=>tag.name),
             category: config.API_CAT_NO_SOLUTION_ID,
             raw: body.join('\n')

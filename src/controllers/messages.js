@@ -149,6 +149,7 @@ exports.publishReply = async ( messageGroup, client ) =>{
             );
             await sleep(2500);
             await client.sendText( userId, messageGroup.replyMessage );
+            await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }
     }
 
@@ -249,4 +250,10 @@ exports.processCommands = async(message,client) => {
         let code = message.content.match(/\w+/g)[1];
         sendersController.confirmLinkDiscourseAccount(message.sender.id, code, client);
     }
+
+    if (process.env.NODE_ENV === 'test' && command === 'savedb'){
+        const devController = require('./development');
+        devController.saveDb()
+    }
+
 }
