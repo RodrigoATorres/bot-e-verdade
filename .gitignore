@@ -123,4 +123,4 @@ Media/**
 temp_testing/**
 gcp_credentials.json
 test/__test_data/**
-test/__test_data.json
+test/test_data.json

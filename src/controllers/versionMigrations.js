@@ -4,6 +4,8 @@ const MessageGroup = require('../models/messageGroup');
 const discourseController = require('./discourse');
 const messagesController = require('./messages');
 
+const logger = require('../helpers/logger');
+
 function isPositiveInteger(x) {
     // http://stackoverflow.com/a/1019526/11236
     return /^\d+$/.test(x);
@@ -87,8 +89,11 @@ module.exports = async (client) => {
         latestDbInfo = { releaseVersion: '0.0.0'}
     }
 
-    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.2') < 0){
+    logger.info(`Current Version ${latestDbInfo.releaseVersion}`);
 
+    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.2') < 0){
+        logger.info('running db uptdate 0.1.2');
+        console.log('running db uptdate 0.1.2');
         await recreateTopics(client);
 
         await DbInfo.create({

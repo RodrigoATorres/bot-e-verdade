@@ -4,10 +4,9 @@ const Schema = mongoose.Schema;
 
 const dbInfo = new Schema({
 
-    releaseVersion:[{
+    releaseVersion:{
         type: String,
-        index: { unique: true },
-    }],
+    },
 
 },
 {
