@@ -12,7 +12,7 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe('Wpp-discourse', function () {
+describe('Wpp-discourse-accepted-replies', function () {
 
 
     it('Deve enviar mensagem para os membros do grupo cadastrados, quando algumas mensagem já verificada for enviada', async function () {
