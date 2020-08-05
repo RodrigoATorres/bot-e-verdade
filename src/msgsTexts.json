@@ -53,6 +53,29 @@
         ],
         "TOPIC_INFO":[
             "Para ver a discussão sobre a veracidade dessa mensagem, entre em: \n{0}"
+        ],
+        "LINK_DISCOURSE_WPP_INFO":[
+            "Olá, você receberá uma mensagem no fórum, com um código para confirmar seu usuário"
+        ],
+        "LINK_DISCOURSE_WPP_SUCESS":[
+            "As suas contas de wpp e do fórum foram associadas com sucesso"
+        ],
+        "LINK_DISCOURSE_WPP_FAIL":[
+            "Não foi possível fazer a associação entre o seu número de whatsapp e o usuário do fórum apresentado."
+        ],
+        "LINK_DISCOURSE_WPP_CODE_TITLE":[
+            "Confirmação de número de Whatsapp"
+        ],
+        "LINK_DISCOURSE_WPP_CODE":[
+            "Olá, recebemos uma solicitação do número {0} para linkar sua conta ao número.",
+            "Se foi você que nos enviou, nos envie a seguinte mensagem:",
+            "{1}"
+        ],
+        "DISCOURSE_REPLY_SUCESS":[
+            "Sua resposta foi adicionada ao discourse com sucesso"
+        ],
+        "DISCOURSE_REPLY_FAIL":[
+            "Não foi possível adicionar sua resposta ao discourse"
         ]
     },
     "group":{
@@ -255,7 +278,10 @@
     },
     "commands":{
         "SUBSCRIBE_CMD":["inscrever", "receber", "cadastrar"],
-        "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"]
+        "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"],
+        "LINK_DISCOURSE_CMD":["link_forum"],
+        "LINK_DISCOURSE_CODE_CMD":["forum_code"],
+        "REPLY_DISCOURSE_TOPIC_CMD":["#resposta"]
     }
 
 

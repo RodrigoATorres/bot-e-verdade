@@ -277,3 +277,27 @@ exports.voteVeracity = async (topicId, veracity) => {
     )
 
 }
+
+exports.sendPrivateMessage = ( userNames, title, message) =>{
+    let target_recipients = userNames.join(',');
+    return fetchDiscordApi(
+        'posts.json',
+        'post',
+        {},
+        {
+            archetype: "private_message",
+            title,
+            target_recipients,
+            raw:message
+        }
+    )
+}
+
+exports.getPrivateMessages = (userName) =>{
+    return fetchDiscordApi(
+        `topics/private-messages/${userName}.json`,
+        'get',
+        {},
+        {}
+    )
+}
