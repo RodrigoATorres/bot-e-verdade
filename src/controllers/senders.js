@@ -2,12 +2,28 @@ const Sender = require('../models/sender');
 const msgsTexts = require('../msgsTexts.json');
 const {default: PQueue} = require('p-queue');
  
-const queue = new PQueue({concurrency: 1});
+const registerQueue = new PQueue({concurrency: 1});
+const notifyQueue = new PQueue({concurrency: 1});
 
 const discourseController = require('./discourse');
 
 const sendIntroduction = async (sender, client) =>{
     await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
+}
+
+exports.notifyOnlyForwarded = async (senderId, client) =>{
+    await notifyQueue.add(async () =>{
+        let senderObj = await Sender.findOne({senderId: senderId});
+        if (
+            senderObj && (
+                senderObj.lastOnlyForwardedNorify &&(senderObj.lastOnlyForwardedNorify + 10000 < Date.now())
+                || !senderObj.lastOnlyForwardedNorify
+            )){
+            await client.sendText( senderObj.senderId, msgsTexts.user.FORWARDED_ONLY_MSG.join('\n').format(senderObj.name) );
+            senderObj.lastOnlyForwardedNorify = Date.now();
+            await senderObj.save();
+        }
+    })
 }
 
 exports.getSubscribedUser = async (senderId) => {
@@ -34,17 +50,17 @@ exports.registerSender = async function (message, client){
         {senderId: message.sender.id}
     )
     if (!sender && !message.isGroupMsg){
-        sender = await queue.add(async () =>{return await registerSenderQueue(message,client)})
+        sender = await registerQueue.add(async () =>{return await registerSenderQueue(message,client)})
     }
 }
 
 exports.subscribeUser = async function (senderId, client){
-    await Sender.update({senderId}, {subscribed:true});
+    await Sender.updateOne({senderId}, {subscribed:true});
     await client.sendText(senderId, msgsTexts.user.SUBSCRIBED.join('\n'))
 }
 
 exports.unsubscribeUser = async function (senderId, client){
-    await Sender.update({senderId}, {subscribed:false});
+    await Sender.updateOne({senderId}, {subscribed:false});
     await client.sendText(senderId, msgsTexts.user.UNSUBSCRIBED.join('\n'))
 }
 
@@ -83,5 +99,5 @@ exports.linkDiscourseAccount = async function (senderId, userName, client) {
 }
 
 exports.addLastTopicId = async function(senderId, topicId){
-    await Sender.update({senderId: senderId}, {lastTopicId: topicId});
+    await Sender.updateOne({senderId: senderId}, {lastTopicId: topicId});
 }

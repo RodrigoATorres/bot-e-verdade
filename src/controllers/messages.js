@@ -275,5 +275,8 @@ exports.processCommands = async(message,client) => {
         const devController = require('./development');
         devController.saveDb()
     }
+    else{
+        await sendersController.notifyOnlyForwarded(message.sender.id, client);
+    }
 
 }

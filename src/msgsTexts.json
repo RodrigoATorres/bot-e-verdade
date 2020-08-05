@@ -7,6 +7,9 @@
             "Olá {0}, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!",
             "Para conhecer um pouco mais sobre mim, entre no site: everdade.com.br"
         ],
+        "FORWARDED_ONLY_MSG": [
+            "Olá {0}, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não!"
+        ],
         "NEW_MSG": [
             "É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!"
         ],

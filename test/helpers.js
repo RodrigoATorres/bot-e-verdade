@@ -33,7 +33,7 @@ module.exports.stopStoreMessage = (client) =>{
 }
 
 module.exports.removeFromSenders = async (senderId) =>{
-    return await Sender.remove({senderId})
+    return await Sender.deleteOne({senderId})
 }
 
 module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
@@ -59,7 +59,7 @@ module.exports.getMessageByReply = async (msgText) =>{
     msgGroup = MessageGroup.findOne({
         'replyMessage': msgText,
     });
-    return text = ((msgGroup) ? msgGroup.replyMessage : 'not available');
+    return ((msgGroup) ? msgGroup.replyMessage : 'not available');
 }
 
 module.exports.regexFromMessage = (message) =>{
