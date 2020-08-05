@@ -23,10 +23,11 @@ describe('Mensagens-texto', function () {
         let testGroups =  prepare.getTestWpGroups();
         let myInfo = prepare.getMyInfo();
         
-        let messages = []
-              
-        helpers.storeMessage(testClient, messages);
         testClient.sendText(process.env.BOT_WA_ID, this.test.title);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        let messages = []
+        helpers.storeMessage(testClient, messages);
         await sleep(process.env.TESTING_DEFAULT_DELAY);
         helpers.stopStoreMessage(testClient);
 
@@ -41,11 +42,13 @@ describe('Mensagens-texto', function () {
                 let testClient = prepare.startTestWp();
         let myInfo = prepare.getMyInfo();
         
-        let messages = []
-              
-        helpers.storeMessage(testClient, messages);
         testClient.sendText(process.env.BOT_WA_ID, this.test.title);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        let messages = []
+        helpers.storeMessage(testClient, messages);
         testClient.sendText(process.env.BOT_WA_ID, 'Olá, a pai da prima da amiga do colega da minha vizinha disse que o Bill Gates é bobo. É verdade?');
+        testClient.sendText(process.env.BOT_WA_ID, 'Responde logo. É verdade?');
         await sleep(process.env.TESTING_DEFAULT_DELAY);
         helpers.stopStoreMessage(testClient);
 

@@ -10,6 +10,15 @@ const sendIntroduction = async (sender, client) =>{
     await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
 }
 
+exports.notifyOnlyForwarded = async (senderId, client) =>{
+    let senderObj = await Sender.findOne({senderId: senderId});
+    if (senderObj && (senderObj.lastOnlyForwardedNorify + 10000 < Date.now())){
+        await client.sendText( senderObj.senderId, msgsTexts.user.FORWARDED_ONLY__MSG.join('\n').format(senderObj.name) );
+        senderObj.lastOnlyForwardedNorify = Date.now();
+        await senderObj.save();
+    }
+}
+
 exports.getSubscribedUser = async (senderId) => {
     return await Sender.findOne({senderId: senderId, subscribed:true});
 }
@@ -39,12 +48,12 @@ exports.registerSender = async function (message, client){
 }
 
 exports.subscribeUser = async function (senderId, client){
-    await Sender.update({senderId}, {subscribed:true});
+    await Sender.updateOne({senderId}, {subscribed:true});
     await client.sendText(senderId, msgsTexts.user.SUBSCRIBED.join('\n'))
 }
 
 exports.unsubscribeUser = async function (senderId, client){
-    await Sender.update({senderId}, {subscribed:false});
+    await Sender.updateOne({senderId}, {subscribed:false});
     await client.sendText(senderId, msgsTexts.user.UNSUBSCRIBED.join('\n'))
 }
 
@@ -83,5 +92,5 @@ exports.linkDiscourseAccount = async function (senderId, userName, client) {
 }
 
 exports.addLastTopicId = async function(senderId, topicId){
-    await Sender.update({senderId: senderId}, {lastTopicId: topicId});
+    await Sender.updateOne({senderId: senderId}, {lastTopicId: topicId});
 }
