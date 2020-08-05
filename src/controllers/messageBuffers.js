@@ -12,6 +12,7 @@ const MessageBuffer = require('../models/messageBuffer');
 const messagesController = require('./messages');
 const discourseController = require('./discourse');
 const gcController = require('./gcProcessing');
+const sendersController = require('./senders')
 
 const msgsTexts = require('../msgsTexts.json');
 
@@ -70,7 +71,7 @@ const getMd5 = async( message, downloadMedia = false, processMedia = false, isQu
             else{
                 let text = null, tags  = null;
                 await saveImage(content, md5, message.mimetype);
-                await sleep(2000);
+                await sleep(200);
                 if (processMedia){
                     [text, tags] = await gcController.getMediaInfo(md5, message.mimetype);
                 }
@@ -142,6 +143,7 @@ const processGroup = async (group, client) =>{
         discourseController.addMessage(grpObj)
         .then( (topic_id) =>{
             messagesController.sendTopicInfo(client, docs[0].senderId, topic_id)
+            sendersController.addLastTopicId(docs[0].senderId, topic_id);
         }
         );
     }

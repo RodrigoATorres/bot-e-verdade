@@ -7,7 +7,6 @@ const discourseController = require('../src/controllers/discourse');
 const Sender = require('../src/models/sender');
 const MessageGroup = require('../src/models/messageGroup');
 
-const testData = require("./test_data.json");
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -15,11 +14,7 @@ function sleep(ms) {
 
 beforeEach((done) => {
     prepare.startDb();
-    mongoUnit.load(json2mongo(testData)).
-    then(()=>{done()})
-    .catch(err =>{
-        done()
-    })
+    done()
 })
 
 afterEach(() => mongoUnit.drop());
@@ -38,7 +33,7 @@ module.exports.stopStoreMessage = (client) =>{
 }
 
 module.exports.removeFromSenders = async (senderId) =>{
-    return await Sender.remove({senderId})
+    return await Sender.deleteOne({senderId})
 }
 
 module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
@@ -56,15 +51,6 @@ module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
     await discourseController.voteVeracity(topic_id, veracity);
     let postInfo = await discourseController.answerTopic(reply, topic_id)
     await discourseController.acceptAnswer(postInfo.id)
-}
-
-module.exports.getMessageByReply = async (msgText) =>{
-
-    let msgGroup = []
-    msgGroup = MessageGroup.findOne({
-        'replyMessage': msgText,
-    });
-    return text = ((msgGroup) ? msgGroup.replyMessage : 'not available');
 }
 
 module.exports.regexFromMessage = (message) =>{

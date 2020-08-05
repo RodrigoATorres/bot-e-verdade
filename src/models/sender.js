@@ -10,7 +10,8 @@ const sendersSchema = new Schema({
     },
 
     name:{
-        type: String
+        type: String,
+        default:''
     },
 
     banned:{
@@ -26,7 +27,25 @@ const sendersSchema = new Schema({
     isCurator:{
         type: Boolean,
         default: false,
-    }
+    },
+
+    lastTopicId:{
+        type: String,
+    },
+
+    discourseUserName:{
+        type: String,
+    },
+
+    lastOnlyForwardedNorify:{
+        type:Date
+    },
+
+    discourLinkRequest:{
+        userName:String,
+        confirmCode:String,
+        expiration:Date
+    },
     
 })
 

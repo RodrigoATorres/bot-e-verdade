@@ -1,8 +1,10 @@
 const Message = require('../models/message');
 const MessageGroup = require('../models/messageGroup');
+const Sender = require('../models/sender');
 
 const sendersController = require('./senders')
 const gcController = require('./gcProcessing');
+const discourseController = require('./discourse');
 const msgsTexts = require('../msgsTexts.json');
 
 function sleep(ms) {
@@ -36,17 +38,20 @@ exports.genPreGrpReplyMessage = (groupInfo, userObj) =>{
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
     if (messageGroup.replyMessage){
-        groupInfo.groupParticipants.forEach( async(userId) => {
-            let userObj = await sendersController.getSubscribedUser(userId);
-            if (userObj){
-                let msgs = [];
-                msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
-                msgs.push(messageGroup.replyMessage);
-                msgs.push(this.genTopicInfo(messageGroup.discourseId));
-                this.sendMultiMessage(client, userId, msgs)
-            }
-        })
-        return true;
+        let publishVeracity = ['noContex','false','trueWithReservations','partially'];
+        if (publishVeracity.indexOf(messageGroup.veracity) >= 0){
+            groupInfo.groupParticipants.forEach( async(userId) => {
+                let userObj = await sendersController.getSubscribedUser(userId);
+                if (userObj){
+                    let msgs = [];
+                    msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
+                    msgs.push(messageGroup.replyMessage);
+                    msgs.push(this.genTopicInfo(messageGroup.discourseId));
+                    this.sendMultiMessage(client, userId, msgs)
+                }
+            })
+            return true;
+        }
     }
     return false;
 }
@@ -147,12 +152,13 @@ exports.publishReply = async ( messageGroup, client ) =>{
                 userId,
                 this.genPrePublishMessage(allReportData[userId], userObj.name)
             );
-            await sleep(2500);
             await client.sendText( userId, messageGroup.replyMessage );
+            await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }
     }
-
-    let allReportData = organizeReportData(messageGroup.reportUsers, messageGroup.reportGroups);
+    let publishVeracity = ['noContex','false','trueWithReservations','partially'];
+    let msgGroup = (publishVeracity.indexOf(messageGroup.veracity) >= 0) ? messageGroup.reportGroups : [] ;
+    let allReportData = organizeReportData(messageGroup.reportUsers, msgGroup);
     for (let user of Object.keys(allReportData)){
         publishToUser(user)
     }
@@ -228,4 +234,48 @@ exports.matchMessages = async(messageDocs, createIfNull) => {
         }
     }
     return msgIds;
+}
+
+
+exports.processCommands = async(message,client) => {
+    if (message.mimetype) return;
+    let command = message.content.match(/#{0,1}\w+/)[0].toLowerCase()
+
+    if (msgsTexts.commands.UNSUBSCRIBE_CMD.includes(command)){
+        sendersController.unsubscribeUser(message.sender.id, client)
+    } 
+    else if (msgsTexts.commands.SUBSCRIBE_CMD.includes(command)){
+        sendersController.subscribeUser(message.sender.id, client)
+    }
+    else if (msgsTexts.commands.LINK_DISCOURSE_CMD.includes(command)){
+        let userName = message.content.match(/\w+/g)[1];
+        sendersController.linkDiscourseAccount(message.sender.id, userName, client);
+    }
+    else if (msgsTexts.commands.LINK_DISCOURSE_CODE_CMD.includes(command)){
+        let code = message.content.match(/\w+/g)[1];
+        sendersController.confirmLinkDiscourseAccount(message.sender.id, code, client);
+    }
+    else if (msgsTexts.commands.REPLY_DISCOURSE_TOPIC_CMD.includes(command)){
+        let re = new RegExp(command,'im');
+        let replyMessage = message.content.replace(re,'');
+        let senderObj = await Sender.findOne({senderId: message.sender.id})
+        let postText = senderObj.discourseUserName ? `@${senderObj.discourseUserName}`: ''
+        postText += replyMessage;
+        if (senderObj.lastTopicId){
+            await discourseController.answerTopic(postText, senderObj.lastTopicId);
+            client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_SUCESS.join('\n'))
+        }
+        else{
+            await client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_FAIL.join('\n'))
+
+        }
+    }
+    else if (process.env.NODE_ENV === 'test' && command === 'savedb'){
+        const devController = require('./development');
+        devController.saveDb()
+    }
+    else{
+        await sendersController.notifyOnlyForwarded(message.sender.id, client);
+    }
+
 }

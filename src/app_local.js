@@ -11,6 +11,31 @@ for (let file of files){
 }
 fs.writeFileSync('./test/test_data.json', JSON.stringify(test_data));
 
+var ps = require('ps-node');
+
+// A simple pid lookup
+ps.lookup({
+    command: 'mongodb-memory-server',
+    }, function(err, resultList ) {
+    if (err) {
+        throw new Error( err );
+    }
+
+    resultList.forEach(function( process ){
+        if( process ){
+            ps.kill( process.pid, function( err ) {
+                if (err) {
+                    throw new Error( err );
+                }
+                else {
+                    console.log( 'Process %s has been killed!', process.pid, );
+                }
+            });
+        }
+    });
+});
+
+
 mongoUnit.start()
 .then(testMongoUrl => {
     process.env.NODE_ENV = 'test'
@@ -19,6 +44,6 @@ mongoUnit.start()
     mongoUnit.load(json2mongo(testData))
 })
 .then(()=>{
-    var start = require('./app.js')
+    var {start} = require('./app.js')
     start();
 })
