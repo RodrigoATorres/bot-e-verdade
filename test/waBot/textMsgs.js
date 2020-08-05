@@ -28,11 +28,12 @@ describe('Mensagens-texto', function () {
 
         let messages = []
         helpers.storeMessage(testClient, messages);
+        testClient.sendText(process.env.BOT_WA_ID, 'Olá, a pai da prima da amiga do colega da minha vizinha disse que o Bill Gates é bobo. É verdade?');
         await sleep(process.env.TESTING_DEFAULT_DELAY);
         helpers.stopStoreMessage(testClient);
 
         expect(messages).to.have.lengthOf(1);
-        expect(messages[0].content).to.equal(msgsTexts.user.INTRO_MSG.join('\n').format(myInfo.pushname));
+        expect(messages[0].content).to.equal(msgsTexts.user.FORWARDED_ONLY_MSG.join('\n').format(myInfo.pushname));
 
     });
 
@@ -53,7 +54,7 @@ describe('Mensagens-texto', function () {
         helpers.stopStoreMessage(testClient);
 
         expect(messages).to.have.lengthOf(1);
-        expect(messages[0].content).to.equal(msgsTexts.user.INTRO_MSG.join('\n').format(myInfo.pushname));
+        expect(messages[0].content).to.equal(msgsTexts.user.FORWARDED_ONLY_MSG.join('\n').format(myInfo.pushname));
 
 
     });

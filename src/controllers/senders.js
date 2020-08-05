@@ -2,7 +2,8 @@ const Sender = require('../models/sender');
 const msgsTexts = require('../msgsTexts.json');
 const {default: PQueue} = require('p-queue');
  
-const queue = new PQueue({concurrency: 1});
+const registerQueue = new PQueue({concurrency: 1});
+const notifyQueue = new PQueue({concurrency: 1});
 
 const discourseController = require('./discourse');
 
@@ -11,12 +12,18 @@ const sendIntroduction = async (sender, client) =>{
 }
 
 exports.notifyOnlyForwarded = async (senderId, client) =>{
-    let senderObj = await Sender.findOne({senderId: senderId});
-    if (senderObj && (senderObj.lastOnlyForwardedNorify + 10000 < Date.now())){
-        await client.sendText( senderObj.senderId, msgsTexts.user.FORWARDED_ONLY__MSG.join('\n').format(senderObj.name) );
-        senderObj.lastOnlyForwardedNorify = Date.now();
-        await senderObj.save();
-    }
+    await notifyQueue.add(async () =>{
+        let senderObj = await Sender.findOne({senderId: senderId});
+        if (
+            senderObj && (
+                senderObj.lastOnlyForwardedNorify &&(senderObj.lastOnlyForwardedNorify + 10000 < Date.now())
+                || !senderObj.lastOnlyForwardedNorify
+            )){
+            await client.sendText( senderObj.senderId, msgsTexts.user.FORWARDED_ONLY_MSG.join('\n').format(senderObj.name) );
+            senderObj.lastOnlyForwardedNorify = Date.now();
+            await senderObj.save();
+        }
+    })
 }
 
 exports.getSubscribedUser = async (senderId) => {
@@ -43,7 +50,7 @@ exports.registerSender = async function (message, client){
         {senderId: message.sender.id}
     )
     if (!sender && !message.isGroupMsg){
-        sender = await queue.add(async () =>{return await registerSenderQueue(message,client)})
+        sender = await registerQueue.add(async () =>{return await registerSenderQueue(message,client)})
     }
 }
 
