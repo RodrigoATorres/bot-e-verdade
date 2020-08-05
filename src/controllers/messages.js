@@ -152,7 +152,6 @@ exports.publishReply = async ( messageGroup, client ) =>{
                 userId,
                 this.genPrePublishMessage(allReportData[userId], userObj.name)
             );
-            await sleep(2500);
             await client.sendText( userId, messageGroup.replyMessage );
             await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }

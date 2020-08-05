@@ -53,15 +53,6 @@ module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
     await discourseController.acceptAnswer(postInfo.id)
 }
 
-module.exports.getMessageByReply = async (msgText) =>{
-
-    let msgGroup = []
-    msgGroup = MessageGroup.findOne({
-        'replyMessage': msgText,
-    });
-    return ((msgGroup) ? msgGroup.replyMessage : 'not available');
-}
-
 module.exports.regexFromMessage = (message) =>{
     let re = new RegExp(
         message.join('\n')

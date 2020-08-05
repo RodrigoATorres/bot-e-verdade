@@ -71,7 +71,7 @@ const getMd5 = async( message, downloadMedia = false, processMedia = false, isQu
             else{
                 let text = null, tags  = null;
                 await saveImage(content, md5, message.mimetype);
-                await sleep(2000);
+                await sleep(200);
                 if (processMedia){
                     [text, tags] = await gcController.getMediaInfo(md5, message.mimetype);
                 }

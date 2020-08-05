@@ -14,7 +14,26 @@ function sleep(ms) {
 
 describe('Wpp-discourse-accepted-replies', function () {
 
+    it('Deve armazenar a resposta do discourse no banco de dados do bot.', async function () {
 
+        prepare.startApp();
+        let testClient = prepare.startTestWp();
+        let testMsgs = prepare.getTestMessages();
+
+        testClient.sendText(process.env.BOT_WA_ID, this.test.title);
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+
+        let mensagemResposta = 'Testando uma resposta com ácènto e çedilha e tĩl, alem de "aspas", simbolo > < ; :';
+        await helpers.addMessageReply(testClient, testMsgs.slice(0,2), mensagemResposta, "false");
+        await sleep(process.env.TESTING_DEFAULT_DELAY);
+        let msgGroup = await MessageGroup.findOne({});
+
+        let replyMsg = msgGroup.replyMessage;
+
+        expect(replyMsg).to.include(mensagemResposta);
+    });
+
+    
     it('Deve enviar mensagem para os membros do grupo cadastrados, quando algumas mensagem já verificada for enviada', async function () {
 
         prepare.startApp();
@@ -89,22 +108,5 @@ describe('Wpp-discourse-accepted-replies', function () {
         helpers.stopStoreMessage(testClient);
 
         expect(messages).to.have.lengthOf(0);
-    });
-
-    it('Deve armazenar a resposta do discourse no banco de dados do bot.', async function () {
-
-        prepare.startApp();
-        let testClient = prepare.startTestWp();
-        let testMsgs = prepare.getTestMessages();
-        
-        await sleep(process.env.TESTING_DEFAULT_DELAY);
-        let mensagemResposta = 'Testando uma resposta com ácènto e çedilha e tĩl, alem de "aspas", simbolo > < ; :';
-        await helpers.addMessageReply(testClient, testMsgs.slice(0,2), mensagemResposta, "false");
-        await sleep(process.env.TESTING_DEFAULT_DELAY);
-        let msg = await helpers.getMessageByReply(mensagemResposta);
-        await sleep(process.env.TESTING_DEFAULT_DELAY);
-
-
-        expect(mensagemResposta).to.equal(msg);
     });
 });
