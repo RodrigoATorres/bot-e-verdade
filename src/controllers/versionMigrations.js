@@ -97,13 +97,13 @@ module.exports = async (client) => {
 
     logger.info(`Current Version ${latestDbInfo.releaseVersion}`);
 
-    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.3') < 0){
-        logger.info('running db uptdate 0.1.3');
-        console.log('running db uptdate 0.1.3');
+    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.3.1') < 0){
+        logger.info('running db uptdate 0.1.3.1');
+        console.log('running db uptdate 0.1.3.1');
         await recreateTopics(client);
 
         await DbInfo.create({
-            releaseVersion: '0.1.3'
+            releaseVersion: '0.1.3.1'
         }
         );
     }
