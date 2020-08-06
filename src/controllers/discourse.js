@@ -40,27 +40,32 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+exports.config = config;
+
+const fetchDiscordApiQueue = async (path, method, params, body , ntries) =>{
+    let url = new URL(`${config.API_URL}/${path}`);
+    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
+    let res;
+    if (method === 'get'){
+        res = await fetch(url,{
+            method,
+            headers
+        })
+    }
+    else {
+        res = await fetch(url,{
+            method,
+            body: JSON.stringify(body),
+            headers
+        })
+    }
+    logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
+    return await res.json();
+}
+
 const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =>{
-    return await fetchQueue.add( async() => { 
         try{
-            let url = new URL(`${config.API_URL}/${path}`);
-            Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
-            let res;
-            if (method === 'get'){
-                res = await fetch(url,{
-                    method,
-                    headers
-                })
-            }
-            else {
-                res = await fetch(url,{
-                    method,
-                    body: JSON.stringify(body),
-                    headers
-                })
-            }
-            logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
-            return await res.json();
+            return await fetchQueue.add( async() => fetchDiscordApiQueue(path, method, params, body, ntries)) 
         }
         catch (err){
             if (ntries<3){
@@ -72,7 +77,6 @@ const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =
                 throw err;
             }
         }
-    })
 };
 
 const search = (params) =>{

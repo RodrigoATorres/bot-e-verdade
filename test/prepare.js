@@ -3,6 +3,7 @@ const wa = require('@open-wa/wa-automate');
 const deasync = require('deasync');
 const mongoUnit = require('mongo-unit');
 const {start} = require('../src/app');
+const discourseController = require('../src/controllers/discourse')
 
 let isDbStarted = false;
 let isAppStarted = false;
@@ -111,4 +112,12 @@ module.exports.getMyInfo = () =>{
     });
     deasync.loopWhile(function(){return !myInfo;});
     return myInfo;
+}
+
+module.exports.simulateDiscourseDown = () =>{
+    discourseController.config.API_URL = 'www.urlthatwillnevereverwork.never.work'
+}
+
+module.exports.simulateDiscourseRestore = () =>{
+    discourseController.config.API_URL = process.env.TESTING_DISCOURSE_API_URL
 }
