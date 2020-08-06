@@ -11,6 +11,11 @@ function isPositiveInteger(x) {
     return /^\d+$/.test(x);
 }
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 /**
  * Compare two software version numbers (e.g. 1.7.1)
  * Returns:
@@ -75,6 +80,7 @@ const recreateTopics = async (client) => {
         let topic_id = await discourseController.addMessage(messageGroup);
         messageGroup.reportUsers.forEach( async (userInfo) =>{
             await messagesController.sendTopicInfo(client, userInfo.senderId, topic_id);
+            await sleep(15000);
         })
     })
 
@@ -91,13 +97,13 @@ module.exports = async (client) => {
 
     logger.info(`Current Version ${latestDbInfo.releaseVersion}`);
 
-    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.2') < 0){
-        logger.info('running db uptdate 0.1.2');
-        console.log('running db uptdate 0.1.2');
+    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.3.1') < 0){
+        logger.info('running db uptdate 0.1.3.1');
+        console.log('running db uptdate 0.1.3.1');
         await recreateTopics(client);
 
         await DbInfo.create({
-            releaseVersion: '0.1.2'
+            releaseVersion: '0.1.3.1'
         }
         );
     }
