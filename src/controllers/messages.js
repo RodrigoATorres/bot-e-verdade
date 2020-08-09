@@ -5,6 +5,7 @@ const Sender = require('../models/sender');
 const sendersController = require('./senders')
 const gcController = require('./gcProcessing');
 const discourseController = require('./discourse');
+const messageBufferController = require('./messageBuffers');
 const msgsTexts = require('../msgsTexts.json');
 
 function sleep(ms) {
@@ -269,6 +270,9 @@ exports.processCommands = async(message,client) => {
             await client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_FAIL.join('\n'))
 
         }
+    }
+    else if (msgsTexts.commands.CANCEL_BUFFER_CMD.includes(command)){
+        let tmp = await messageBufferController.removeUserMessages(message.sender.id);
     }
     else if (process.env.NODE_ENV === 'test' && command === 'savedb'){
         const devController = require('./development');

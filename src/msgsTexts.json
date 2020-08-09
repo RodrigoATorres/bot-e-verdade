@@ -282,6 +282,7 @@
     "commands":{
         "SUBSCRIBE_CMD":["inscrever", "receber", "cadastrar"],
         "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"],
+        "CANCEL_BUFFER_CMD":["cancelar"],
         "LINK_DISCOURSE_CMD":["link_forum"],
         "LINK_DISCOURSE_CODE_CMD":["forum_code"],
         "REPLY_DISCOURSE_TOPIC_CMD":["#resposta"]
