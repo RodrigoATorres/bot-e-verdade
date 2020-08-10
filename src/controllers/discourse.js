@@ -112,7 +112,7 @@ exports.processNewReplyTopic = async (topic, client) => {
     try {
         let veracityKey = getVeracityKey(
             getPollResult(
-                pickPoll(topicInfo.post_stream.posts[0].polls, "veracity")
+                pickPoll(topicInfo.post_stream.posts[1].polls, "veracity")
             ).html
         );
 
@@ -161,7 +161,7 @@ exports.createTopic = (data) =>{
 }
 
 exports.addMessage = async (messageGroup) => {
-    const messages = await Message.find({_id: {$in: messageGroup.messages}});
+    const messages = await Message.find({_id: {$in: messageGroup.messages}}).populate('mediaMd5s');
     let body = [];
     messages.forEach( (message, idx) =>{
         body.push(`Menssagem ${idx+1}`)
@@ -171,34 +171,19 @@ exports.addMessage = async (messageGroup) => {
         else{
             switch (message.mediaExtensions[0]){
                 case 'mp4':
-                    body.push(`<div>\n\n![|video](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    body.push(`<div>\n\n![|video](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
                     break;
                 case 'oga':
-                    body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
                     break;
                 default:
-                    body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]}.${message.mediaExtensions[0]})</div>`)
+                    body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
             }
+            body.push(`<details><summary>Texto Extraído</summary><p>${message.mediaMd5s[0].mediaText}</p></details>`)
         }
     });
-
-    body.push("Baseado na sua pesquisa, essa publicação parece:\n");
-    body.push("[poll name=veracity results=on_vote public=true chartType=bar]");
-    body.push(Object.keys(msgsTexts.veracityLabels).map( (key,idx) => `* ${idx}-${msgsTexts.veracityLabels[key]}`).join('\n')),
-    body.push("[/poll]");
-
-    if (messages.length>1){
-        body.push('Quais mensagens devem estar juntas para essa notícia ser considerada?\n');
-        body.push(
-            [
-                "[poll name=relevant_msgs type=multiple min=1 max = 10 results=on_vote public=true chartType=bar]",
-                ...Array.from(Array(messages.length), (_, i) => `* ${i + 1}`),
-                "[/poll]"
-            ].join('\n')
-        );
-    }
     
-    let title = `${messageGroup.tags.slice(0,9).map(tag=>tag.name).join(' ')}`.slice(0,200) + `|id:${messageGroup._id}`
+    let title = `${messageGroup.tags.slice(0,9).map(tag=>tag.name).join(' ')}`.slice(0,200) + ` | id:${messageGroup._id}`
 
     let json = await this.createTopic(
         {
@@ -209,6 +194,29 @@ exports.addMessage = async (messageGroup) => {
         }
     )
     logger.info(`New topic added to discourse ${json.topic_id}`)
+
+    body = []
+    body.push("Baseado na sua pesquisa, essa publicação parece:\n");
+    body.push("[poll name=veracity public=true chartType=bar]");
+    body.push(Object.keys(msgsTexts.veracityLabels).map( (key,idx) => `* ${idx}-${msgsTexts.veracityLabels[key]}`).join('\n')),
+    body.push("[/poll]");
+
+    if (messages.length>1){
+        body.push('Quais mensagens devem estar juntas para essa notícia ser considerada?\n');
+        body.push(
+            [
+                "[poll name=relevant_msgs type=multiple min=1 max = 10 public=true chartType=bar]",
+                ...Array.from(Array(messages.length), (_, i) => `* ${i + 1}`),
+                "[/poll]"
+            ].join('\n')
+        );
+    }
+
+    this.answerTopic(
+        body.join('\n'),
+        json.topic_id
+    )
+
     messageGroup.discourseId = json.topic_id;
     await messageGroup.save();
     return json.topic_id;
@@ -271,9 +279,9 @@ exports.voteVeracity = async (topicId, veracity) => {
     let veracity_idx = Object.keys(msgsTexts.veracityLabels).indexOf(veracity);
 
     return this.voteOnPoll(
-        topicInfo.post_stream.posts[0].id,
+        topicInfo.post_stream.posts[1].id,
         "veracity",
-        [pickPoll(topicInfo.post_stream.posts[0].polls, "veracity").options[veracity_idx].id]
+        [pickPoll(topicInfo.post_stream.posts[1].polls, "veracity").options[veracity_idx].id]
     )
 
 }
