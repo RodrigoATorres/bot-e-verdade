@@ -1,5 +1,6 @@
 const DbInfo = require('../models/dbInfo');
 const MessageGroup = require('../models/messageGroup');
+const Media = require('../models/media');
 
 const discourseController = require('./discourse');
 const messagesController = require('./messages');
@@ -98,6 +99,18 @@ module.exports = async (client) => {
 
         await DbInfo.create({
             releaseVersion: '0.1.2'
+        }
+        );
+    }
+
+    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.2.0') < 0){
+        logger.info('running db uptdate 0.2.0');
+        console.log('running db uptdate 0.2.0');
+
+        await Media.update({ fileHashes: { $exists: false } }, { fileHashes: [] }, { multi: true })
+
+        await DbInfo.create({
+            releaseVersion: '0.2.0'
         }
         );
     }

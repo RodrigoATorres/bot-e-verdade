@@ -52,7 +52,7 @@ const saveImage = async( content, md5, mimetype ) =>{
 
 
 const getMd5 = async( message, downloadMedia = false, processMedia = false, isQueued = false) => {
-    let doc = await  Media.findOne({mediaKeys: message.mediaKey}).select('_id');
+    let doc = await  Media.findOne({fileHashes: message.filehash}).select('_id');
     if (doc){
         return doc._id;
     }
@@ -62,10 +62,9 @@ const getMd5 = async( message, downloadMedia = false, processMedia = false, isQu
         } else{
             let content = await wa.decryptMedia(message);
             let md5 = hash(content);
-
             doc = await Media.findOne({_id:md5});
             if (doc){
-                doc.mediaKeys.push(md5)
+                doc.fileHashes.push(message.filehash)
                 doc.save()
             }
             else{
@@ -78,7 +77,7 @@ const getMd5 = async( message, downloadMedia = false, processMedia = false, isQu
 
                 Media.create({
                     _id: md5,
-                    mediaKeys: [message.mediaKey],
+                    fileHashes: [message.filehash],
                     mediaMime: message.mimetype,
                     mediaLink: getMediaLink(md5, message.mimetype),
                     mediaText:text,
@@ -122,7 +121,7 @@ const processGroup = async (group, client) =>{
                 senderId: docs[0].senderId
             }
         );
-        grpObj.reportGroups.push({
+        await grpObj.reportGroups.push({
             groupParticipants: docs[0].groupParticipants,
             groupName: docs[0].groupName,
             senderId: docs[0].senderId
