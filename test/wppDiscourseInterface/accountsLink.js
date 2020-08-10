@@ -47,7 +47,7 @@ describe('Wpp-discourse-accounts-link', function () {
 
         expect(messages).to.have.lengthOf(2);
         expect(messages[0].content).to.equal(msgsTexts.user.LINK_DISCOURSE_WPP_INFO.join('\n'))
-        expect(messages[1].content).to.equal(msgsTexts.user.LINK_DISCOURSE_WPP_SUCESS.join('\n'))
+        expect(messages[1].content).to.equal(msgsTexts.user.LINK_DISCOURSE_WPP_SUCCESS.join('\n'))
         expect(linkedUserName).to.equal(process.env.TESTING_DISCOURSE_API_USERNAME)
 
     });

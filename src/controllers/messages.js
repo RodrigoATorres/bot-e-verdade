@@ -264,7 +264,7 @@ exports.processCommands = async(message,client) => {
         postText += replyMessage;
         if (senderObj.lastTopicId){
             await discourseController.answerTopic(postText, senderObj.lastTopicId);
-            client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_SUCESS.join('\n'))
+            client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_SUCCESS.join('\n'))
         }
         else{
             await client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_FAIL.join('\n'))
@@ -273,6 +273,12 @@ exports.processCommands = async(message,client) => {
     }
     else if (msgsTexts.commands.CANCEL_BUFFER_CMD.includes(command)){
         let tmp = await messageBufferController.removeUserMessages(message.sender.id);
+        if (tmp.deletedCount > 0){
+            await client.sendText(message.sender.id, msgsTexts.user.CANCEL_BUFFER_SUCCESS.join('\n'))
+        }
+        else{
+            await client.sendText(message.sender.id, msgsTexts.user.CANCEL_BUFFER_FAIL.join('\n'))
+        }
     }
     else if (process.env.NODE_ENV === 'test' && command === 'savedb'){
         const devController = require('./development');
