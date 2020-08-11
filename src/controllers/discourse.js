@@ -22,6 +22,7 @@ const fetchQueue = new PQueue({concurrency: 1});
 
 
 const logger = require('../helpers/logger');
+const generalHelpers = require('../helpers/general');
 
 const Message = require('../models/message');
 const MessageGroup = require('../models/messageGroup');
@@ -110,13 +111,22 @@ const getVeracityKey = (pollLabel) =>{
     return Object.keys(msgsTexts.veracityLabels).find(key => msgsTexts.veracityLabels[key][0] === veracityLabel);
 }
 
+const getPollIndex = (discourseTopicVersion) =>{
+    if (generalHelpers.compareVersionNumbers(discourseTopicVersion,'0.2.0') >= 0){
+        return 1;
+    }else {
+        return 0;
+    }
+}
+
 exports.processNewReplyTopic = async (topic, client) => {
     let msgGroup = await MessageGroup.findOne({discourseId:topic.id});
     let topicInfo = await this.getTopic(topic.id);
     try {
+        let pollPostIdx = getPollIndex(msgGroup.discourseTopicVersion);
         let veracityKey = getVeracityKey(
             getPollResult(
-                pickPoll(topicInfo.post_stream.posts[1].polls, "veracity")
+                pickPoll(topicInfo.post_stream.posts[pollPostIdx].polls, "veracity")
             ).html
         );
 
@@ -222,6 +232,7 @@ exports.addMessage = async (messageGroup) => {
     )
 
     messageGroup.discourseId = json.topic_id;
+    messageGroup.discourseTopicVersion = generalHelpers.__version__;
     await messageGroup.save();
     return json.topic_id;
 }
@@ -278,14 +289,15 @@ exports.voteOnPoll = async (post_id, poll_name, options) => {
     )
 }
 
-exports.voteVeracity = async (topicId, veracity) => {
+exports.voteVeracity = async (topicId, veracity, topicVersion = generalHelpers.__version__) => {
     let topicInfo = await this.getTopic(topicId);
     let veracity_idx = Object.keys(msgsTexts.veracityLabels).indexOf(veracity);
+    let pollPostIdx = getPollIndex(topicVersion);
 
     return this.voteOnPoll(
         topicInfo.post_stream.posts[1].id,
         "veracity",
-        [pickPoll(topicInfo.post_stream.posts[1].polls, "veracity").options[veracity_idx].id]
+        [pickPoll(topicInfo.post_stream.posts[pollPostIdx].polls, "veracity").options[veracity_idx].id]
     )
 
 }

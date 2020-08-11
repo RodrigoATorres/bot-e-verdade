@@ -60,7 +60,11 @@ const messageGroupSchema = new Schema({
     discourseId:{
         type:Number,
         unique:true,
-    }
+    },
+
+    discourseTopicVersion:{
+        type:String
+    },
 
 },
 {
