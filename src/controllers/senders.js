@@ -70,7 +70,7 @@ exports.confirmLinkDiscourseAccount = async function (senderId, confirmCode, cli
     if (confirmReq && confirmReq.confirmCode === confirmCode && confirmReq.expiration > Date.now()){
         senderObj.discourseUserName = confirmReq.userName
         await senderObj.save();
-        await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_SUCESS.join('\n'))
+        await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_SUCCESS.join('\n'))
     } else{
         await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_FAIL.join('\n'))
     }

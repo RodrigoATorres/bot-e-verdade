@@ -60,8 +60,8 @@
         "LINK_DISCOURSE_WPP_INFO":[
             "Olá, você receberá uma mensagem no fórum, com um código para confirmar seu usuário"
         ],
-        "LINK_DISCOURSE_WPP_SUCESS":[
-            "As suas contas de wpp e do fórum foram associadas com sucesso"
+        "LINK_DISCOURSE_WPP_SUCCESS":[
+            "As suas contas de wpp e do fórum foram associadas com SUCCESSo"
         ],
         "LINK_DISCOURSE_WPP_FAIL":[
             "Não foi possível fazer a associação entre o seu número de whatsapp e o usuário do fórum apresentado."
@@ -74,11 +74,17 @@
             "Se foi você que nos enviou, nos envie a seguinte mensagem:",
             "{1}"
         ],
-        "DISCOURSE_REPLY_SUCESS":[
-            "Sua resposta foi adicionada ao discourse com sucesso"
+        "DISCOURSE_REPLY_SUCCESS":[
+            "Sua resposta foi adicionada ao discourse com SUCCESSo"
         ],
         "DISCOURSE_REPLY_FAIL":[
             "Não foi possível adicionar sua resposta ao discourse"
+        ],
+        "CANCEL_BUFFER_SUCCESS":[
+            "As últimas mensagens que você enviou foram desconsideradas. Você pode reenviá-las separadamente, se quiser."
+        ],
+        "CANCEL_BUFFER_FAIL":[
+            "Não há nenhuma mensagem sua aguardando para se processada."
         ]
     },
     "group":{
@@ -89,80 +95,6 @@
             "Não se preocupe, você pode me desativar se quiser, basta me enviar a mensagem 'parar' ou 'desativar'.",
             "Se vocẽ estiver com dúvida em relação a alguma mensagem, pode me encaminhar diretamente também, que eu verifico.",
             "Para mais informações acesse: everdade.com.br"
-        ]
-    },
-    "curator":{
-        "STATUS_MSG":[
-            "--------------------------------------------",
-            "-------------- *É Verdade* --------------",
-            "--------------------------------------------",
-            "Olá, muito obrigado pela sua ajuda!",
-            "Recebemos até hoje um total de *{0} mensagens!*",
-            "E já *revisamos {1}*!",
-            "Nos últimos *7 dias* recebemos *{2}*!",
-            "",
-            "Ainda *precisamos da sua ajuda* para revisar as *{3} mensagens* que faltam!!!"
-        ],
-        "GUIDELINES":[
-            "TODO"
-        ],
-        "HELP_MSG":[
-            "Obrigado por colaborar com o É VERDADE.",
-            "Esses são os comandos que você pode utilizar:",
-            "   *#manda*",
-            "   *#diretizes*",
-            "   *#status*"
-        ],
-        "SEND_MSG_ID":[
-            "",
-            "Essa mensagem est� registrada no seguinte id:{0}"
-        ],
-        "EXPIRING_ALERT_MSG":[
-            "Você tem 2 minutos para enviar a resposta da sua mensagem, caso contrário ela será novamente disponibilizada para outros curadores",
-            "Caso precise de mais tempo, me envie a mensagem \"#renovar\""
-        ],
-        "ASK_REVIEW_MSG_1":
-        [
-            "Olá, estamos precisando que você revise a mensagem"
-        ],
-        "ASK_REVIEW_MSG_1_MEDIA":[
-            "com a seguinte mídia:",
-            "{0}",
-            ""
-        ],
-        "ASK_REVIEW_MSG_1_TEXT":[
-            "com o seguinte texto:",
-            "{0}",
-            ""
-        ],
-        "ASK_REVIEW_MSG_2":[
-            "Quando terminar de revisar, por favor me mande a seguinte mensagem, preenchendo os campos indicados:"
-        ],
-        "ASK_REVIEW_MSG_3":[
-            "#resposta",
-            "#status:{0}",
-            "#textoresposta:",
-            "<sua resposta>"
-        ],
-        "NO_MSG_BEING_REVIEWD":[
-            "Você não tem nenhuma mensagem sendo revisada"
-        ],
-        "NOT_A_STATUS_OPTION":[
-            "Opção de status \"{0}\" não existente!"
-        ],
-        "SHORT_ANSWER":[
-            "Resposta muito curta ou inexistente!"
-        ],
-        "INVALID_COMMAND":[
-            "Commando \"{0}\" inválido!"
-        ]
-        ,
-        "ANSWER_ACCEPTED_1":[
-            "Mensagem salva. Essa será a resposta que demais usuários vão receber:"
-        ],
-        "ANSWER_ACCEPTED_3":[
-            "Se quiser alterar algo, basta reenviar a mensagem.",
-            "Obrigado pela ajuda!"
         ]
     },
     "veracityLabels":{
@@ -282,6 +214,7 @@
     "commands":{
         "SUBSCRIBE_CMD":["inscrever", "receber", "cadastrar"],
         "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"],
+        "CANCEL_BUFFER_CMD":["cancelar"],
         "LINK_DISCOURSE_CMD":["link_forum"],
         "LINK_DISCOURSE_CODE_CMD":["forum_code"],
         "REPLY_DISCOURSE_TOPIC_CMD":["#resposta"]

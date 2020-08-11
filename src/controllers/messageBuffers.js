@@ -152,6 +152,10 @@ const processGroup = async (group, client) =>{
     logger.info(`Finished processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
 }
 
+exports.removeUserMessages = async (senderId) =>{
+    return await MessageBuffer.deleteMany({senderId, isGroupMsg:false});
+}
+
 exports.processBuffer = async (client) => {
     let groups = await MessageBuffer.aggregate(
         [
