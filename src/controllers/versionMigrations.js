@@ -52,6 +52,8 @@ module.exports = async (client) => {
         console.log('running db uptdate 0.2.0');
 
         await Media.update({ fileHashes: { $exists: false } }, { fileHashes: [] }, { multi: true })
+        await Media.update({ children: { $exists: false } }, { children: [] }, { multi: true })
+        await Media.update({ isSubSetOf: { $exists: false } }, { isSubSetOf: [] }, { multi: true })
         await MessageGroup.update({ discourseTopicVersion: { $exists: false } }, { discourseTopicVersion: '0.0.1' }, { multi: true })
 
         await DbInfo.create({

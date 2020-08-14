@@ -57,6 +57,21 @@ const messageGroupSchema = new Schema({
         ref:'MessageGroup',
     },
     
+    children:[{
+        type:Schema.Types.ObjectId,
+        ref:'MessageGroup',
+    }],
+
+    isSubSetOf:{
+        type:[
+            {
+                type:Schema.Types.ObjectId,
+                ref:'MessageGroup',
+            }
+        ],
+        default: [],
+    },
+
     discourseId:{
         type:Number,
         unique:true,
@@ -71,5 +86,57 @@ const messageGroupSchema = new Schema({
     timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }
 }
 )
+
+messageGroupSchema.methods.getVeracity = async function() {
+    if (this.parent){
+        return this.parent.veracity;
+    }
+    else{
+        return this.veracity;
+    }
+};
+
+messageGroupSchema.methods.getReplyMessage =  async function() {
+    if (this.parent){
+        return this.parent.replyMessage;
+    }
+    else{
+        return this.replyMessage;
+    }
+};
+
+messageGroupSchema.methods.getReportGroups = function() {
+    return  new Promise((resolve) => {
+        let reportGroups = this.reportGroups;
+        this.populate('children', function(err, result) {
+            result.children.forEach( (child) => {
+                reportGroups = reportGroups.concat(child.reportGroups);
+            })
+            resolve(reportGroups);
+        });
+    });
+};
+
+messageGroupSchema.methods.getReportUsers = function () {
+    return  new Promise((resolve) => {
+        let reportUsers = this.reportUsers;
+        this.populate('children', function(err, result) {
+            result.children.forEach( (child) => {
+                reportUsers = reportUsers.concat(child.reportUsers);
+            })
+            resolve(reportUsers);
+        });
+    });
+}
+
+
+var autoPopulateParent = function(next) {
+    this.populate('parent');
+    next();
+  };
+
+messageGroupSchema.
+    pre('findOne', autoPopulateParent).
+    pre('find', autoPopulateParent);
 
 module.exports = mongoose.model('MessageGroup', messageGroupSchema);

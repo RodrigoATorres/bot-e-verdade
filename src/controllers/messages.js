@@ -38,15 +38,15 @@ exports.genPreGrpReplyMessage = (groupInfo, userObj) =>{
 }
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
-    if (messageGroup.replyMessage){
+    if (await messageGroup.getReplyMessage()){
         let publishVeracity = ['noContex','false','trueWithReservations','partially'];
-        if (publishVeracity.indexOf(messageGroup.veracity) >= 0){
+        if (publishVeracity.indexOf(await messageGroup.getVeracity()) >= 0){
             groupInfo.groupParticipants.forEach( async(userId) => {
                 let userObj = await sendersController.getSubscribedUser(userId);
                 if (userObj){
                     let msgs = [];
                     msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
-                    msgs.push(messageGroup.replyMessage);
+                    msgs.push(await messageGroup.getReplyMessage());
                     msgs.push(this.genTopicInfo(messageGroup.discourseId));
                     this.sendMultiMessage(client, userId, msgs)
                 }
@@ -63,8 +63,8 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
         msgs.push(msgsTexts.user.NEW_MSG.join('\n'))
     }
     else{
-        if (messageGroup.replyMessage){
-            msgs.push( messageGroup.replyMessage )
+        if (await messageGroup.getReplyMessage()){
+            msgs.push( await messageGroup.getReplyMessage() )
         }
         else {
             msgs.push(msgsTexts.user.UPROCESSED_MSG.join('\n'));
@@ -74,7 +74,7 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
 
     this.sendMultiMessage(client,senderInfo.senderId,msgs)
 
-    return Boolean(messageGroup.replyMessage)
+    return Boolean(await messageGroup.getReplyMessage())
 }
 
 
@@ -145,7 +145,6 @@ exports.genPrePublishMessage = (reportData, userName) => {
 }
 
 exports.publishReply = async ( messageGroup, client ) =>{
-
     let publishToUser = async (userId) => {
         let userObj = await sendersController.getSubscribedUser(userId);
         if (userObj){
@@ -153,13 +152,14 @@ exports.publishReply = async ( messageGroup, client ) =>{
                 userId,
                 this.genPrePublishMessage(allReportData[userId], userObj.name)
             );
-            await client.sendText( userId, messageGroup.replyMessage );
+            await client.sendText( userId, await messageGroup.getReplyMessage() );
             await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }
     }
     let publishVeracity = ['noContex','false','trueWithReservations','partially'];
-    let msgGroup = (publishVeracity.indexOf(messageGroup.veracity) >= 0) ? messageGroup.reportGroups : [] ;
-    let allReportData = organizeReportData(messageGroup.reportUsers, msgGroup);
+    let msgGroup = publishVeracity.includes(await messageGroup.getVeracity()) ? await messageGroup.getReportGroups() : [] ;
+    
+    let allReportData = organizeReportData(await messageGroup.getReportUsers(), msgGroup);
     for (let user of Object.keys(allReportData)){
         publishToUser(user)
     }
@@ -193,8 +193,35 @@ exports.getMessagesTags = async (messageIds) => {
 }
 
 
+exports.matchAllMessageGroups = async (messageIds) => {
+    // TODO atualmente se um grupo está contido no outro o mais externo é sempre o selecionado,
+    // seria interessante se o mais externo que tenha alguma resposta fosse o selecionado.
+    let msgGroups =  await MessageGroup.find({messages: {"$not": {"$elemMatch": {"$nin" : messageIds }}}})
+    let allIds = msgGroups.map( x => x._id);
+    msgGroups = msgGroups.filter( (msgGroup) =>{
+        return !msgGroup.isSubSetOf.some((el1) => allIds.some((el2) => (el1.equals(el2))))
+    })
+    return msgGroups
+}
+
+exports.setIsSubsetOf = async (msgGroup) =>{
+    let parentMsgGroups =  await MessageGroup.find({messages: {"$all": msgGroup.messages}});
+
+    msgGroup.isSubSetOf = parentMsgGroups.map(el => el._id).filter(el => !el.equals(msgGroup._id));
+    await msgGroup.save();
+    let subsetMsgGroups =  await MessageGroup.find({messages: {"$not": {"$elemMatch": {"$nin" : msgGroup.messages }}}});
+
+    subsetMsgGroups.forEach( async el => {
+        if (el._id.equals(msgGroup.id)) return;
+        el.isSubSetOf.push(msgGroup)
+        await el.save()
+    });
+}
+
 exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
-    let msgGroup = await MessageGroup.findOne({messages:{ $all:messageIds}});
+    messageIds.sort()
+
+    let msgGroup = await MessageGroup.findOne({messages: messageIds});
 
     if (msgGroup){
         return [msgGroup, false];
@@ -204,6 +231,7 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
             messages: messageIds,
             tags: await this.getMessagesTags(messageIds)
         } );
+        await this.setIsSubsetOf(msgGroup);
         return [msgGroup, true];
     }
     return [null, null];
