@@ -134,29 +134,29 @@ exports.trimAudio = async (filein, fileout) =>{
   await exec(`ffmpeg -i ${filein} -ss 00:00:00 -to 00:00:20 -c copy ${fileout} -y`);
 }
 
-exports.getMediaInfo = async (md5, mimetype) =>{
+exports.getMediaInfo = async (md5, mimetype, dirpath = './Media') =>{
   let text = null, tags =null;
 
   if (mimetype === 'image/jpeg'){
-    text = await this.getImageText( `./Media/${md5}.${mime.extension(mimetype)}` );
+    text = await this.getImageText( `${dirpath}/${md5}.${mime.extension(mimetype)}` );
     tags = await this.getTextTags(text);
   }
   else  if (mimetype === 'video/mp4'){
     await this.extractVideoAudio(
-      `./Media/${md5}.${mime.extension(mimetype)}`,
-      `./Media/${md5}.oga`
+      `${dirpath}/${md5}.${mime.extension(mimetype)}`,
+      `${dirpath}/${md5}.oga`
     );
     await sleep(1000);
-    text = await this.getAudioText(`./Media/${md5}.oga`);
+    text = await this.getAudioText(`${dirpath}/${md5}.oga`);
     tags = await this.getTextTags(text);
   }
   else if (mimetype === "audio/ogg; codecs=opus"){
     await this.trimAudio(
-      `./Media/${md5}.${mime.extension(mimetype)}`,
-      `./Media/${md5}_trim.${mime.extension(mimetype)}`
+      `${dirpath}/${md5}.${mime.extension(mimetype)}`,
+      `${dirpath}/${md5}_trim.${mime.extension(mimetype)}`
     );
     await sleep(1000);
-    text = await this.getAudioText(`./Media/${md5}_trim.${mime.extension(mimetype)}`);
+    text = await this.getAudioText(`${dirpath}/${md5}_trim.${mime.extension(mimetype)}`);
     tags = await this.getTextTags(text);
   }
   else{
