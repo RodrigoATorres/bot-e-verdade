@@ -41,6 +41,7 @@ function standarizeTags(tags){
   tags.forEach( tag =>{
     tag.name = tag.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
   })
+  return tags;
 }
 
 exports.mergeTagLists = (tagLists) => {
