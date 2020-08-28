@@ -166,6 +166,34 @@ exports.publishReply = async ( messageGroup, client ) =>{
 
 }
 
+exports.getForwardingScoreTag = async (messageGroup) =>{
+    let docs = await Message.aggregate(
+        [
+            { $match: { _id: { $in: messageGroup.messages }  } },
+            { $project: { message_score_sum: { $sum: "$forwardingScores" }, } },
+            { $group: {_id: null,group_forwarding_score: {$sum: "$message_score_sum"} } }
+        ]
+    )
+
+    let scores = [
+        1  , 1e1, 5e1, 1e2, 5e2,
+        1e3, 5e3, 1e4, 5e4, 1e5, 5e5,
+        1e6, 5e6, 1e7, 5e7, 1e8, 5e8,
+        Infinity
+    ]
+
+    let tags   = [
+        '1' , '10', '50', '100', '500',
+        '1k', '5k', '10k', '50k', '100k', '500k',
+        '1M', '5M', '10M', '50M', '100M', '500M',
+    ]
+
+    
+    let tag = tags[scores.findIndex(x=>x>=docs[0].group_forwarding_score)-1] 
+
+    return `forwarding_score:${tag}`
+}
+
 exports.getMessagesTags = async (messageIds) => {
     let docs = await Message.find(
         {

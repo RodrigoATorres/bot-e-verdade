@@ -17,6 +17,10 @@ const messageGroupSchema = new Schema({
         salience:Number
     }],
 
+    forwardingScoreTag:{
+        type:String,
+    },
+
     timesReceived:{
         type: Number,
         defautl: 1

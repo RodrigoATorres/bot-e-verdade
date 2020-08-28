@@ -146,6 +146,9 @@ const processGroup = async (group, client) =>{
         }
         );
     }
+    else{
+        discourseController.updateForwardingScoreTag(grpObj)
+    }
 
     docs.forEach(async (doc) => await doc.remove())
 

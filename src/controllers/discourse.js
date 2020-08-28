@@ -148,8 +148,6 @@ exports.processNewReplyTopic = async (topic, client) => {
 
 }
 
-
-
 exports.processAllNewReplyTopics = async (client) =>{
     let new_topics = await this.getNewReplyTopics();
     new_topics.forEach( topic => this.processNewReplyTopic(topic, client));
@@ -162,6 +160,21 @@ exports.createTopic = (data) =>{
         {},
         data
     )
+}
+
+exports.updateForwardingScoreTag = async (messageGroup) => {
+    let new_tag = await messagesController.getForwardingScoreTag(messageGroup)
+    console.log(new_tag)
+    if (new_tag !== messageGroup.forwardingScoreTag){
+        let res = await this.updateTopic(
+            messageGroup.discourseId,
+            {tags: messageGroup.tags.slice(0,9).map(tag=>tag.name).concat(new_tag)}    
+        )
+        console.log(res)
+        messageGroup.forwardingScoreTag = new_tag
+        messageGroup.save()
+    }
+
 }
 
 exports.addMessage = async (messageGroup) => {
@@ -189,10 +202,13 @@ exports.addMessage = async (messageGroup) => {
     
     let title = `${messageGroup.tags.slice(0,9).map(tag=>tag.name).join(' ')}`.slice(0,200) + ` | id:${messageGroup._id}`
 
+    let scoreTag = await messagesController.getForwardingScoreTag(messageGroup)
+    messageGroup.forwardingScoreTag = scoreTag
+
     let json = await this.createTopic(
         {
             title,
-            tags: messageGroup.tags.slice(0,9).map(tag=>tag.name),
+            tags: messageGroup.tags.slice(0,9).map(tag=>tag.name).concat(scoreTag),
             category: config.API_CAT_NO_SOLUTION_ID,
             raw: body.join('\n')
         }
@@ -224,6 +240,16 @@ exports.addMessage = async (messageGroup) => {
     messageGroup.discourseId = json.topic_id;
     await messageGroup.save();
     return json.topic_id;
+}
+
+
+exports.updateTopic = async (topic_id, data) => {
+    return fetchDiscordApi(
+        `t/-/${topic_id}`,
+        'put',
+        {},
+        data
+    )
 }
 
 exports.getNoReplyTopics = async (categ = config.API_CAT_NO_SOLUTION_ID) =>{
