@@ -164,19 +164,21 @@ exports.createTopic = (data) =>{
 
 exports.updateForwardingScoreTag = async (messageGroup) => {
     let new_tag = await messagesController.getForwardingScoreTag(messageGroup)
-    console.log(new_tag)
-    if (new_tag !== messageGroup.forwardingScoreTag){
+
+    if (new_tag !== messageGroup.forwardingScoreTag) {
+
+        let topicInfo = await this.getTopic(messageGroup.discourseId);
+        let tags = topicInfo.tags.filter(tag => tag !== messageGroup.forwardingScoreTag)
+
         let res = await this.updateTopic(
             messageGroup.discourseId,
-            {tags: messageGroup.tags.slice(0,9).map(tag=>tag.name).concat(new_tag)}    
+            { tags: tags.concat(new_tag) }
         )
-        console.log(res)
         messageGroup.forwardingScoreTag = new_tag
         messageGroup.save()
     }
 
 }
-
 exports.addMessage = async (messageGroup) => {
     const messages = await Message.find({_id: {$in: messageGroup.messages}}).populate('mediaMd5s');
     let body = [];

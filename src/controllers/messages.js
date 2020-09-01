@@ -191,7 +191,7 @@ exports.getForwardingScoreTag = async (messageGroup) =>{
     
     let tag = tags[scores.findIndex(x=>x>=docs[0].group_forwarding_score)-1] 
 
-    return `forwarding_score:${tag}`
+    return `x${tag}`
 }
 
 exports.getMessagesTags = async (messageIds) => {
