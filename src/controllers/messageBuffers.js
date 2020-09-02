@@ -96,22 +96,40 @@ const setAsProcessing = async (docs) =>{
     }
 }
 
-const processGroup = async (group, client) =>{
-    logger.info(`Started processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
+const processPrivateGroup = async (docs, client) =>{
 
-    let docs = await MessageBuffer.find({
-        chatId: group._id.chatId,
-        senderId: group._id.senderId,
-        warningSent: group._id.warningSent,
-    });
+    let msgIds = await messagesController.matchMessages(docs, true);
+    let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, true);
 
-    await setAsProcessing(docs);
+    await messagesController.replyPrivateMessage(
+        grpObj,
+        client,
+        {senderId:docs[0].senderId ,msgId:docs[0].messageId},
+        isNew
+    );
+    
+    grpObj.reportUsers.push({senderId:docs[0].senderId ,msgId:docs[0].messageId});
 
-    let msgIds = await messagesController.matchMessages(docs, !group.isGroupMsg);
-    let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, !group.isGroupMsg);
-    if (!grpObj) return;
+    if (isNew){
+        discourseController.addMessage(grpObj)
+        .then( (topic_id) =>{
+            messagesController.sendTopicInfo(client, docs[0].senderId, topic_id)
+            sendersController.addLastTopicId(docs[0].senderId, topic_id);
+        }
+        );
+    } 
+    else{
+        await discourseController.updateForwardingScoreTag(grpObj)
+    }
 
-    if (group.isGroupMsg){
+    await grpObj.save()
+}
+
+const processGroupGroup = async (docs, client) =>{
+    let msgIds = await messagesController.matchMessages(docs, false);
+    let grpObjs = await messagesController.matchAllMessageGroups(msgIds)
+
+    grpObjs.forEach( async (grpObj) => {
         await messagesController.replyGroupMessage(
             grpObj,
             client,
@@ -126,32 +144,31 @@ const processGroup = async (group, client) =>{
             groupName: docs[0].groupName,
             senderId: docs[0].senderId
         });
-    }
-    else{
-        await messagesController.replyPrivateMessage(
-            grpObj,
-            client,
-            {senderId:docs[0].senderId ,msgId:docs[0].messageId},
-            isNew
-        );
-        grpObj.reportUsers.push({senderId:docs[0].senderId ,msgId:docs[0].messageId});
-    }
-    await grpObj.save()
 
-    if (isNew){
-        discourseController.addMessage(grpObj)
-        .then( (topic_id) =>{
-            messagesController.sendTopicInfo(client, docs[0].senderId, topic_id)
-            sendersController.addLastTopicId(docs[0].senderId, topic_id);
-        }
-        );
+        await discourseController.updateForwardingScoreTag(grpObj)
+
+    })
+
+}
+
+const processGroup = async (group, client) =>{
+    logger.info(`Started processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
+
+    let docs = await MessageBuffer.find({
+        chatId: group._id.chatId,
+        senderId: group._id.senderId,
+        warningSent: group._id.warningSent,
+    });
+
+    await setAsProcessing(docs);
+    if (group.isGroupMsg){
+        await processGroupGroup(docs, client);
     }
     else{
-        discourseController.updateForwardingScoreTag(grpObj)
+        await processPrivateGroup(docs, client);
     }
 
     docs.forEach(async (doc) => await doc.remove())
-
     logger.info(`Finished processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
 }
 

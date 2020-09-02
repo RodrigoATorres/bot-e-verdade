@@ -37,6 +37,11 @@ module.exports.removeFromSenders = async (senderId) =>{
 }
 
 module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
+    let topic_id = await this.addMessage2Discourse(testClient, msgIds);
+    await this.replyTopic(topic_id, reply, veracity);
+}
+
+module.exports.addMessage2Discourse = async (testClient, msgIds) =>{
     let messages = []
     this.storeMessage(testClient, messages);
     msgIds.forEach( msgId =>{
@@ -46,11 +51,27 @@ module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
     this.stopStoreMessage(testClient);
 
     let re = new RegExp(`${process.env.DISCOURSE_API_URL}/t/([0-9]*)`);
-    let topic_id = messages[2].content.match(re)[1];
 
+    let topic_id;
+    if (msgIds.length > 1){
+        topic_id = messages[2].content.match(re)[1];
+    }
+    else{
+        topic_id = messages[1].content.match(re)[1];
+    }
+    return topic_id
+}
+
+module.exports.replyTopic = async (topic_id, reply, veracity) =>{
     await discourseController.voteVeracity(topic_id, veracity);
     let postInfo = await discourseController.answerTopic(reply, topic_id)
     await discourseController.acceptAnswer(postInfo.id)
+}
+
+module.exports.removeTopicReportUsers = async (topic_id) =>{
+    let messageGrp = await MessageGroup.findOne({discourseId:topic_id});
+    messageGrp.reportUsers = [];
+    await messageGrp.save()
 }
 
 module.exports.regexFromMessage = (message) =>{
