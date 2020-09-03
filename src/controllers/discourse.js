@@ -201,6 +201,24 @@ exports.processAllNewReplyTopics = async (client) =>{
     new_topics.forEach( topic => this.processNewReplyTopic(topic, client));
 }
 
+exports.updateForwardingScoreTag = async (messageGroup) => {
+    let new_tag = await messagesController.getForwardingScoreTag(messageGroup)
+
+    if (new_tag !== messageGroup.forwardingScoreTag) {
+
+        let topicInfo = await this.getTopic(messageGroup.discourseId);
+        let tags = topicInfo.tags.filter(tag => tag !== messageGroup.forwardingScoreTag)
+
+        let res = await this.updateTopic(
+            messageGroup.discourseId,
+            { tags: tags.concat(new_tag) }
+        )
+        messageGroup.forwardingScoreTag = new_tag
+        await messageGroup.save()
+    }
+
+}
+
 const genTopicBody = (messageGroup, messages) =>{
     messageGroup.populate('children')
 
@@ -246,10 +264,14 @@ exports.addMessage = async (messageGroup) => {
     const messages = await Message.find({_id: {$in: messageGroup.messages}}).populate('mediaMd5s');
     let title = `${messageGroup.tags.slice(0,9).map(tag=>tag.name).join(' ')}`.slice(0,200) + ` | id:${messageGroup._id}`
     let topicBody = genTopicBody(messageGroup, messages)
-        let json = await this.createTopic(
+
+    let scoreTag = await messagesController.getForwardingScoreTag(messageGroup)
+    messageGroup.forwardingScoreTag = scoreTag
+
+    let json = await this.createTopic(
         {
             title,
-            tags: messageGroup.tags.slice(0,9).map(tag=>tag.name),
+            tags: messageGroup.tags.slice(0,9).map(tag=>tag.name).concat(scoreTag),
             category: config.API_CAT_NO_SOLUTION_ID,
             raw: topicBody.join('\n')
         }
@@ -282,6 +304,16 @@ exports.addMessage = async (messageGroup) => {
     messageGroup.discourseTopicVersion = generalHelpers.__version__;
     await messageGroup.save();
     return json.topic_id;
+}
+
+
+exports.updateTopic = async (topic_id, data) => {
+    return fetchDiscordApi(
+        `t/-/${topic_id}`,
+        'put',
+        {},
+        data
+    )
 }
 
 const search = (params) =>{
