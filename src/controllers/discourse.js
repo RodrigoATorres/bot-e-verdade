@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === 'production'){
 const {default: PQueue} = require('p-queue');
 const fetchQueue = new PQueue({concurrency: 1});
 
-
 const logger = require('../helpers/logger');
 const generalHelpers = require('../helpers/general');
 
@@ -43,7 +42,7 @@ function sleep(ms) {
 
 exports.config = config;
 
-const fetchDiscordApiQueue = async (path, method, params, body , ntries) =>{
+const fetchDiscordApiQueue = async (path, method, params, body , ntries, expect_json) =>{
     let url = new URL(`${config.API_URL}/${path}`);
     Object.keys(params).forEach(key => url.searchParams.append(key, params[key]))
     let res;
@@ -60,19 +59,24 @@ const fetchDiscordApiQueue = async (path, method, params, body , ntries) =>{
             headers
         })
     }
-    let json = await res.json()
+
     logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
-    return json;
+
+    if (expect_json){
+        let json = await res.json()
+        return json;
+    }
+
 }
 
-const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0) =>{
+const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0, expect_json = true) =>{
         try{
-            return await fetchQueue.add( async() => fetchDiscordApiQueue(path, method, params, body, ntries)) 
+            return await fetchQueue.add( async() => fetchDiscordApiQueue(path, method, params, body, ntries, expect_json)) 
         }
         catch (err){
             if (ntries<3){
                 await sleep(2000);
-                return await fetchDiscordApi(path, method, params, body, ntries +1);
+                return await fetchDiscordApi(path, method, params, body, ntries +1, expect_json);
             }
             else{
                 logger.error(err);
@@ -110,7 +114,7 @@ const getVeracityKey = (pollLabel) =>{
 
 const getPollIndex = (discourseTopicVersion) =>{
     if (generalHelpers.compareVersionNumbers(discourseTopicVersion,'0.2.0') >= 0){
-        return 1;
+        return 2;
     }else {
         return 0;
     }
@@ -256,6 +260,22 @@ exports.addMessage = async (messageGroup) => {
     )
     logger.info(`New topic added to discourse ${json.topic_id}`)
 
+
+    let checklist_body = []
+    checklist_body.push(`|${msgsTexts.discourse.task_checklist.started}|${msgsTexts.discourse.task_checklist.finished}|${msgsTexts.discourse.task_checklist.task}|`)
+    checklist_body.push('|-|-|-|')
+    msgsTexts.discourse.task_checklist.list.forEach( (task) =>{
+        checklist_body.push(`|[]|[]|${task}|`)
+    }
+    )
+
+    let wiki_json = await this.answerTopic(
+        checklist_body.join('\n'),
+        json.topic_id
+    )
+
+    await this.setPostAsWiki(wiki_json.id);
+
     let body = []
     body.push("Baseado na sua pesquisa, essa publicação parece:\n");
     body.push("[poll name=veracity public=true chartType=bar]");
@@ -273,11 +293,11 @@ exports.addMessage = async (messageGroup) => {
         );
     }
 
-    this.answerTopic(
+    await this.answerTopic(
         body.join('\n'),
         json.topic_id
-    )
-
+    );
+    
     messageGroup.discourseId = json.topic_id;
     messageGroup.discourseTopicVersion = generalHelpers.__version__;
     await messageGroup.save();
@@ -294,6 +314,17 @@ exports.updateTopic = (postId, newRaw) =>{
         'put',
         {},
         {post: {raw: newRaw}},
+    )
+}
+
+exports.setPostAsWiki = (postId, wiki = true) =>{
+    return fetchDiscordApi(
+        `posts/${postId}/wiki`,
+        'put',
+        {},
+        {wiki},
+        0,
+        false
     )
 }
 

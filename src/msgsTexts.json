@@ -218,6 +218,20 @@
         "LINK_DISCOURSE_CMD":["link_forum"],
         "LINK_DISCOURSE_CODE_CMD":["forum_code"],
         "REPLY_DISCOURSE_TOPIC_CMD":["#resposta"]
+    },
+
+    "discourse":{
+        "task_checklist":{
+            "started": "Iniciada?",
+            "finished": "Concluída?",
+            "task": "Tarefa",
+            "list": [
+                "Procurar duplicadas no fórum",
+                "Verificar agências de fact-checking",
+                "Procurar outras fontes",
+                "Redigir resposta"
+            ]
+        }
     }
 
 
