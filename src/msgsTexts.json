@@ -232,6 +232,25 @@
                 "Redigir resposta"
             ]
         }
+    },
+
+    "curators":{
+        "report":[
+            "Olá {0}, é um orgulho ter você na equipe do  \"É Verdade\".",
+            "Essa *semana* você verificou *{1} mensagens!!!*",
+            "Já são *{2} no total!!!*",
+            "",
+            "Nossa *equipe* verificou *{3} mensagens essa semana!*",
+            "Já são *{4} ao todo!!!*Foram *{5} mensagens de usuários* respondidas, e *{6} mensagens de grupos*!!!",
+            "",
+            "Mas não vamos relaxar! Recebemos *{7} mensagens* que ainda *não foram verificadas.*",
+            "",
+            "Seguem os rankings da semana e geral:",
+            "",
+            "{8}",
+            "",
+            "{9}"
+        ]
     }
 
 

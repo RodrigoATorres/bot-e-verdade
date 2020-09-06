@@ -27,6 +27,7 @@ const Message = require('../models/message');
 const MessageGroup = require('../models/messageGroup');
 
 const messagesController = require('./messages');
+const sendersController = require('./senders')
 
 const msgsTexts = require('../msgsTexts.json');
 
@@ -153,6 +154,9 @@ const processDuplicate = async(msgGroup, topicReply) =>{
     parentMsgGroup.children.push(msgGroup);
     msgGroup.parent = parentMsgGroup;
     await parentMsgGroup.save();
+    msgGroup.replyDiscourseAuthor = topicReply.username;
+    msgGroup.replyDate = new Date()
+    sendersController.incrementRepyCount(topicReply.username)
     await msgGroup.save();
     await updateMsgGroupTopic(parentMsgGroup);
 }
@@ -187,6 +191,9 @@ exports.processNewReplyTopic = async (topic, client) => {
         if (msgGroup){
             msgGroup.replyMessage = replyText;
             msgGroup.veracity = veracityKey;
+            msgGroup.replyDiscourseAuthor = topicReply.username;
+            msgGroup.replyDate = new Date()
+            sendersController.incrementRepyCount(topicReply.username)
             await msgGroup.save()
         }
     }
