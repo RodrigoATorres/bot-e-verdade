@@ -14,7 +14,7 @@ const sendIntroduction = async (sender, client) =>{
 exports.createDiscourseSender = async(discourseUserName) => {
     let senderObj = await Sender.create(
         {
-            senderId: Date.now().toString() + Math.random().toString(36),
+            senderId: 'DISC_' + Date.now().toString() + Math.random().toString(36),
             discourseUserName
         }
     )
@@ -92,10 +92,10 @@ exports.confirmLinkDiscourseAccount = async function (senderId, confirmCode, cli
         let senderObjDiscourseOnly = await Sender.findOne({discourseUserName: confirmReq.userName});
         if (senderObjDiscourseOnly){
             senderObj.acceptedRepliesCount = senderObjDiscourseOnly.acceptedRepliesCount;
+            senderObjDiscourseOnly.remove();
         }
         senderObj.discourseUserName = confirmReq.userName
         await senderObj.save();
-        senderObjDiscourseOnly.remove();
         await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_SUCCESS.join('\n'))
     } else{
         await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_FAIL.join('\n'))
