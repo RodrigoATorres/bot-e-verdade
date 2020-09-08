@@ -37,6 +37,13 @@ function tagsObj2Array(tags){
   return out;
 }
 
+function standarizeTags(tags){
+  tags.forEach( tag =>{
+    tag.name = tag.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+  })
+  return tags;
+}
+
 exports.mergeTagLists = (tagLists) => {
   let allTags = Array.prototype.concat(...tagLists);
   let tags = allTags.reduce(
@@ -89,7 +96,8 @@ exports.getTextTags = async (text) => {
     );
     
     filterTags(tags);
-    return tagsObj2Array(tags);
+    tags = tagsObj2Array(tags);
+    return standarizeTags(tags);
   }
 
 

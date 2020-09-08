@@ -117,7 +117,11 @@ const processPrivateGroup = async (docs, client) =>{
             sendersController.addLastTopicId(docs[0].senderId, topic_id);
         }
         );
+    } 
+    else{
+        await discourseController.updateForwardingScoreTag(grpObj)
     }
+
     await grpObj.save()
 }
 
@@ -141,6 +145,8 @@ const processGroupGroup = async (docs, client) =>{
             senderId: docs[0].senderId
         });
         await grpObj.save();
+        await discourseController.updateForwardingScoreTag(grpObj)
+
     })
 
 }
