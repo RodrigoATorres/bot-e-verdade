@@ -18,7 +18,7 @@ function sleep(ms) {
 describe('Wpp-discourse-accounts-link', function () {
 
 
-    it('Deve fazer o link entre a conta de wpp e discourse, caso o código apresentado estaja correto', async function () {
+    it.only('Deve fazer o link entre a conta de wpp e discourse, caso o código apresentado estaja correto', async function () {
         //Não é possível o bot_testador enviar uma mensagem para ele mesmo. Adicionar um novoa api de bot traria muita complexidade.
         //Optou-se por verificar apenas manualmente se os códigos estavam sendo enviados corretamente, e pegar o código direto do banco de dados
 
