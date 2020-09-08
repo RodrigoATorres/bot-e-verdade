@@ -61,7 +61,7 @@
             "Olá, você receberá uma mensagem no fórum, com um código para confirmar seu usuário"
         ],
         "LINK_DISCOURSE_WPP_SUCCESS":[
-            "As suas contas de wpp e do fórum foram associadas com SUCCESSo"
+            "As suas contas de wpp e do fórum foram associadas com SUCCESSO"
         ],
         "LINK_DISCOURSE_WPP_FAIL":[
             "Não foi possível fazer a associação entre o seu número de whatsapp e o usuário do fórum apresentado."
@@ -75,7 +75,7 @@
             "{1}"
         ],
         "DISCOURSE_REPLY_SUCCESS":[
-            "Sua resposta foi adicionada ao discourse com SUCCESSo"
+            "Sua resposta foi adicionada ao discourse com SUCCESSO"
         ],
         "DISCOURSE_REPLY_FAIL":[
             "Não foi possível adicionar sua resposta ao discourse"
@@ -236,19 +236,20 @@
 
     "curators":{
         "report":[
-            "Olá {0}, é um orgulho ter você na equipe do  \"É Verdade\".",
-            "Essa *semana* você verificou *{1} mensagens!!!*",
-            "Já são *{2} no total!!!*",
+            "Olá {0},",
+            "É um orgulho ter você na equipe do  \"É Verdade?\".",
             "",
-            "Nossa *equipe* verificou *{3} mensagens essa semana!*",
-            "Já são *{4} ao todo!!!*Foram *{5} mensagens de usuários* respondidas, e *{6} mensagens de grupos*!!!",
+            "Essa *semana* você verificou *{1} mensagens!* Já são *{2} no total!*",
+            "",
+            "Nossa *equipe* recebeu *{3} mensagens diferentes essa semana!* Já são *{4} ao todo!*",
+            "Foram *{5} mensagens de usuários* respondidas, e *{6} mensagens de grupos*!",
             "",
             "Mas não vamos relaxar! Recebemos *{7} mensagens* que ainda *não foram verificadas.*",
             "",
-            "Seguem os rankings da semana e geral:",
-            "",
+            "*Ranking da Semana*",
             "{8}",
             "",
+            "*Ranking Geral*",
             "{9}"
         ]
     }

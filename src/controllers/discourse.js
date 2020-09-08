@@ -85,6 +85,7 @@ const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0, e
             }
         }
 };
+exports.fetchDiscordApi = fetchDiscordApi;
 
 exports.getNewReplyTopics = async (categ = config.API_CAT_NO_SOLUTION_ID) => {
     let res = await search({

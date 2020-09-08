@@ -4,8 +4,20 @@ const Sender = require('../models/sender');
 
 const msgsTexts = require('../msgsTexts.json');
 
+let client, reportCron;
+
+exports.setClient = (wppClient) => {
+  client = wppClient
+}
+
 exports.setPublishReportCron = (cron_str, reportPeriodFunc) =>{
-    cron.schedule(cron_str, () => this.publishReports(reportPeriodFunc));
+    reportCron = cron.schedule(cron_str, () => {
+      this.publishReports(reportPeriodFunc)
+    });
+}
+
+exports.cancelPublishReportCron = () =>{
+  reportCron.stop()
 }
 
 exports.getUsersReplyCount = (periodStart, periodEnd) => {
@@ -61,7 +73,7 @@ exports.getMessagesCount = async (periodStart, periodEnd) => {
         }
       ])
 
-    return doc[0].messages_count
+    return (doc[0]||{messages_count:0}).messages_count
 }
 
 exports.getUnrepliedCount = async() => {
@@ -79,7 +91,7 @@ exports.getUnrepliedCount = async() => {
         }
       ])
 
-    return doc[0].messages_count
+    return (doc[0]||{messages_count:0}).messages_count
 }
 
 exports.getTotalUniqueMessagesnCount = () => {
@@ -108,47 +120,53 @@ exports.getTotalMessagesCount = async () => {
 exports.genRank = (data, userName = '', n = 5) =>{
   let body = []
   let line
-  data.forEach( el, idx =>{
-    line = `${idx+1} -> ${data.id} (${data.count} mensagens)`
-    line = el.id === userName ? '*' + line + '*🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉': line
-    body.push(line)
+  data.forEach( (el, idx) =>{
+    line = `${idx+1} -> ${el._id} (${el.count} mensagens)`
+    line = el._id == userName ? '*' + line + '* 🎉🎉🎉🎉🎉🎉🎉🎉🎉🎉': line
+    if ((el._id !== null) && ( idx<n || el._id == userName)){
+      body.push(line)
+    }
   })
+  return body.join('\n')
 }
 
-exports.genUserReport = async(
+exports.genUserReport = (
   userName,
   usersReplyCount, totalUsersReplyCount, uniqueMessageCount, unrepliedCount, totalUniqueMessageCount, totalMessagesnCount
 ) => {
-  console.log(
-    msgsTexts.curators.report.join('\n').format(
+
+  let rank1 = this.genRank(usersReplyCount, userName)
+  let rank2 = this.genRank(totalUsersReplyCount, userName)
+  return msgsTexts.curators.report.join('\n').format(
       userName,
-      (usersReplyCount.find(el => el.id == userName) || {count:0}).count,
-      (totalUsersReplyCount.find(el => el.id == userName) || {count:0}).count,
+      (usersReplyCount.find(el => el._id == userName) || {count:0}).count,
+      (totalUsersReplyCount.find(el => el._id == userName) || {count:0}).count,
       uniqueMessageCount,
       totalUniqueMessageCount,
       totalMessagesnCount['totalCountUsers'],
       totalMessagesnCount['totalCountGroups'],
       unrepliedCount,
-      'rank1',
-      'rank2'
-    )
-  );
+      rank1,
+      rank2
+    );
 }
 
-exports.genReport = async (reportPeriodFunc) => {
+exports.publishReports = async (reportPeriodFunc) =>{
     let [periodStart, periodEnd] = reportPeriodFunc();
     let usersReplyCount = await this.getUsersReplyCount(periodStart, periodEnd );
     let totalUsersReplyCount = await this.getAllUserReplyCount();
     let uniqueMessageCount = await this.getMessagesCount(periodStart, periodEnd );
-    let unrepliedCount =  await this.getUnrepliedCount(periodStart, periodEnd );
+    let unrepliedCount =  await this.getUnrepliedCount();
     let totalUniqueMessageCount = await this.getTotalUniqueMessagesnCount();
     let totalMessagesnCount = await this.getTotalMessagesCount();
 
-    totalUsersReplyCount.forEach( (obj) =>{
-     this.genUserReport(obj.id, usersReplyCount, totalUsersReplyCount, uniqueMessageCount, unrepliedCount, totalUniqueMessageCount, totalMessagesnCount)
+    totalUsersReplyCount.forEach( async (obj) =>{
+      if (obj._id !== null){
+        let senderObj = await Sender.findOne({discourseUserName:obj._id})
+        if (!senderObj.senderId.includes('DISC_')){
+          let message = this.genUserReport(obj._id, usersReplyCount, totalUsersReplyCount, uniqueMessageCount, unrepliedCount, totalUniqueMessageCount, totalMessagesnCount)
+          await client.sendText( senderObj.senderId, message)
+        }
+      }
     });
-}
-
-exports.publishReports = (reportPeriodFunc) =>{
-
 }

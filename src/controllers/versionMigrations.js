@@ -1,9 +1,11 @@
 const DbInfo = require('../models/dbInfo');
 const MessageGroup = require('../models/messageGroup');
 const Media = require('../models/media');
+const Sender = require('../models/sender');
 
 const discourseController = require('./discourse');
 const messagesController = require('./messages');
+const sendersController = require('./senders');
 
 const logger = require('../helpers/logger');
 const generalHelper = require('../helpers/general');
@@ -55,6 +57,37 @@ module.exports = async (client) => {
         await Media.update({ children: { $exists: false } }, { children: [] }, { multi: true })
         await Media.update({ isSubSetOf: { $exists: false } }, { isSubSetOf: [] }, { multi: true })
         await MessageGroup.update({ discourseTopicVersion: { $exists: false } }, { discourseTopicVersion: '0.0.1' }, { multi: true })
+
+        // Reports
+        await Sender.update({ acceptedRepliesCount: { $exists: false } }, { acceptedRepliesCount: 0 }, { multi: true })
+        
+        let noDiscourseAuthorDocs = await MessageGroup.find({replyDiscourseAuthor:{ $exists: false } })
+        for (let doc of noDiscourseAuthorDocs){
+            if (doc.veracity){
+                try{
+                    let topicInfo = await discourseController.getTopic(doc.discourseId);
+
+                    let topicReply = await discourseController.fetchDiscordApi(
+                        `posts/${topicInfo.post_stream.stream[topicInfo.accepted_answer.post_number-1]}.json`,
+                        'get'
+                    );
+                    
+                    doc.replyDiscourseAuthor = topicReply.username;
+                    doc.replyDate = new Date(topicReply.updated_at)
+                    await sendersController.incrementRepyCount(topicReply.username)
+                    await doc.save()
+                    console.log(doc.discourseId)
+                    await sleep(2000)
+                }
+                catch(err){
+                    console.log(err)
+                    console.log(doc.discourseId)
+                }
+            }
+            else{
+                console.log(doc);
+            }
+        }
 
         await DbInfo.create({
             releaseVersion: '0.2.0'
