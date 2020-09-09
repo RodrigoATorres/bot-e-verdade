@@ -4,21 +4,21 @@
     },
     "user":{
         "INTRO_MSG": [
-            "Olá {0}, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!",
+            "Olá {0}, o _\"É Verdade?\"_ analisa somente mensagens encaminhadas e diz se é fake ou não! Se for a primeira vez que vemos a mensagem, pode demorar um pouquinho... Mas retornaremos!",
             "Para conhecer um pouco mais sobre mim, entre no site: everdade.com.br"
         ],
         "FORWARDED_ONLY_MSG": [
-            "Olá {0}, o É Verdade analisa somente mensagens encaminhadas e diz se é fake ou não!"
+            "Olá {0}, o _\"É Verdade?\"_ analisa somente mensagens encaminhadas e diz se é fake ou não!"
         ],
         "NEW_MSG": [
             "É a primeira vez que recebemos esse conteúdo. Retornaremos em breve, obrigado pelo envio!"
         ],
         "SUBSCRIBED": [
-            "Você acabou de se inscrever para receber mensagens do \"É Verdade?\"",
+            "Você acabou de se inscrever para receber mensagens do _\"É Verdade?\"_",
             "Se quiser parar de receber, basta me enviar a mensagem \"parar\""
         ],
         "UNSUBSCRIBED": [
-            "Você acabou de se desinscrever do \"É Verdade?\"",
+            "Você acabou de se desinscrever do _\"É Verdade?\"_",
             "Se quiser voltar a receber mensagens, basta me enviar a mensagem \"inscrever\""
         ],
         "PRE_GRP_REPLY":[
@@ -47,7 +47,7 @@
         ],
         "GROUP_MSG_WARNING":
         [
-            "Olá, o É verdade processa no máximo um grupo de mensagens por usuário a cada minuto.",
+            "Olá, o _\"É Verdade?\"_ processa no máximo um grupo de mensagens por usuário a cada minuto.",
             "Se as últimas {0} você acabou de nos enviar fazem parte da mesma sequência, não se preocupe, vamos analizá-las em conjunto.",
             "Se você queria enviar várias mensagens para serem avaliadas separadamente, por favor me envie a mensagem *Cancelar* e envie as mensagens novamente com intervalos de 1 min."
         ],
@@ -55,13 +55,13 @@
             "Ainda estamos analisando esse conteúdo. Retornaremos em breve."
         ],
         "TOPIC_INFO":[
-            "Para ver a discussão sobre a veracidade dessa mensagem, entre em: \n{0}"
+            "_Para ver a discussão sobre a veracidade dessa mensagem, entre em:_ \n{0}"
         ],
         "LINK_DISCOURSE_WPP_INFO":[
             "Olá, você receberá uma mensagem no fórum, com um código para confirmar seu usuário"
         ],
-        "LINK_DISCOURSE_WPP_SUCESS":[
-            "As suas contas de wpp e do fórum foram associadas com sucesso"
+        "LINK_DISCOURSE_WPP_SUCCESS":[
+            "As suas contas de wpp e do fórum foram associadas com SUCCESSO"
         ],
         "LINK_DISCOURSE_WPP_FAIL":[
             "Não foi possível fazer a associação entre o seu número de whatsapp e o usuário do fórum apresentado."
@@ -74,95 +74,27 @@
             "Se foi você que nos enviou, nos envie a seguinte mensagem:",
             "{1}"
         ],
-        "DISCOURSE_REPLY_SUCESS":[
-            "Sua resposta foi adicionada ao discourse com sucesso"
+        "DISCOURSE_REPLY_SUCCESS":[
+            "Sua resposta foi adicionada ao discourse com SUCCESSO"
         ],
         "DISCOURSE_REPLY_FAIL":[
             "Não foi possível adicionar sua resposta ao discourse"
+        ],
+        "CANCEL_BUFFER_SUCCESS":[
+            "As últimas mensagens que você enviou foram desconsideradas. Você pode reenviá-las separadamente, se quiser."
+        ],
+        "CANCEL_BUFFER_FAIL":[
+            "Não há nenhuma mensagem sua aguardando para se processada."
         ]
     },
     "group":{
         "INTRO_MSG":[
-            "Olá, sou o Robô do é verdade.",
+            "Olá, sou o Robô do _\"É Verdade?\"_",
             "Se você quiser saber se você ou alguma outra pessoa do grupro enviou uma menssagem que não é verdadeira me mande uma mensagem.",
             "Se eu receber uma mensagem sua no privado, sempre te informarei quando alguma mensagem falsa for enviada a algum grupo que eu também faço parte.",
             "Não se preocupe, você pode me desativar se quiser, basta me enviar a mensagem 'parar' ou 'desativar'.",
             "Se vocẽ estiver com dúvida em relação a alguma mensagem, pode me encaminhar diretamente também, que eu verifico.",
-            "Para mais informações acesse: everdade.com.br"
-        ]
-    },
-    "curator":{
-        "STATUS_MSG":[
-            "--------------------------------------------",
-            "-------------- *É Verdade* --------------",
-            "--------------------------------------------",
-            "Olá, muito obrigado pela sua ajuda!",
-            "Recebemos até hoje um total de *{0} mensagens!*",
-            "E já *revisamos {1}*!",
-            "Nos últimos *7 dias* recebemos *{2}*!",
-            "",
-            "Ainda *precisamos da sua ajuda* para revisar as *{3} mensagens* que faltam!!!"
-        ],
-        "GUIDELINES":[
-            "TODO"
-        ],
-        "HELP_MSG":[
-            "Obrigado por colaborar com o É VERDADE.",
-            "Esses são os comandos que você pode utilizar:",
-            "   *#manda*",
-            "   *#diretizes*",
-            "   *#status*"
-        ],
-        "SEND_MSG_ID":[
-            "",
-            "Essa mensagem est� registrada no seguinte id:{0}"
-        ],
-        "EXPIRING_ALERT_MSG":[
-            "Você tem 2 minutos para enviar a resposta da sua mensagem, caso contrário ela será novamente disponibilizada para outros curadores",
-            "Caso precise de mais tempo, me envie a mensagem \"#renovar\""
-        ],
-        "ASK_REVIEW_MSG_1":
-        [
-            "Olá, estamos precisando que você revise a mensagem"
-        ],
-        "ASK_REVIEW_MSG_1_MEDIA":[
-            "com a seguinte mídia:",
-            "{0}",
-            ""
-        ],
-        "ASK_REVIEW_MSG_1_TEXT":[
-            "com o seguinte texto:",
-            "{0}",
-            ""
-        ],
-        "ASK_REVIEW_MSG_2":[
-            "Quando terminar de revisar, por favor me mande a seguinte mensagem, preenchendo os campos indicados:"
-        ],
-        "ASK_REVIEW_MSG_3":[
-            "#resposta",
-            "#status:{0}",
-            "#textoresposta:",
-            "<sua resposta>"
-        ],
-        "NO_MSG_BEING_REVIEWD":[
-            "Você não tem nenhuma mensagem sendo revisada"
-        ],
-        "NOT_A_STATUS_OPTION":[
-            "Opção de status \"{0}\" não existente!"
-        ],
-        "SHORT_ANSWER":[
-            "Resposta muito curta ou inexistente!"
-        ],
-        "INVALID_COMMAND":[
-            "Commando \"{0}\" inválido!"
-        ]
-        ,
-        "ANSWER_ACCEPTED_1":[
-            "Mensagem salva. Essa será a resposta que demais usuários vão receber:"
-        ],
-        "ANSWER_ACCEPTED_3":[
-            "Se quiser alterar algo, basta reenviar a mensagem.",
-            "Obrigado pela ajuda!"
+            "_Para mais informações acesse: everdade.com.br_"
         ]
     },
     "veracityLabels":{
@@ -198,80 +130,85 @@
 
     "replies":{
         "true":[
-            "Olá! Chegamos à conclusão que a mensagem é:",
-            "         ✅✅*VERDADEIRA!*✅✅",
+            "Chegamos à conclusão que a mensagem é:",
+            "         *✅✅VERDADEIRA!✅✅*",
             "{0}",
             "",
-            "Pode compartilhar à vontade!",
+            "_*Pode compartilhar à vontade!*_",
             "",
-            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"
+            "_Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"
             ],
         "false":[
-            "Olá! Chegamos à conclusão que a mensagem é:",
-            "           ❌❌*FALSA!*❌❌",
+            "Chegamos à conclusão que a mensagem é:",
+            "           *❌❌FALSA!❌❌*",
             "{0}",
             "",
-            "*Por favor, não compartilhe essa mensagem!*",
-            "Avise quem te enviou também, para evitar que ela se espalhe mais!",
+            "_*Por favor, não compartilhe essa mensagem!*_",
+            "_Avise quem te enviou também, para evitar que ela se espalhe mais!_",
             "",
-            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"
+            "_Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"
             ],
         "indeterminate":[
-            "Olá! Não pudemos determinar a veracidade da mensagem.",
+            "As informações da sua mensagem",
+            "*‼️NÃO PUDERAM SER CONFIRMADAS!‼️*",
             "{0}",
             "",
-            "*Por favor, tenha cuidado ao compartilhar essa mensagem!*",
-            "Na dúvida, é melhor não espalhar.",
+            "_Não conseguimos encontrar, em nossas pesquisas, comprovações para essas informações._",
+            "_*Por favor, não a compartilhe até que elas sejam confirmadas.*_",
             "",
-            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"
+            "_Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"
             ],
         "noContex":[
-            "Olá! Chegamos à conclusão que a mensagem está:",
-            "           ‼️*FORA DE CONTEXTO!*‼️",
+            "Chegamos à conclusão que a mensagem está:",
+            "           *‼️FORA DE CONTEXTO!‼️*",
             "{0}",
             "",
-            "*Por favor, tenha cuidado ao compartilhar essa mensagem!*",
-            "Se for compartilhar, explique o contexto.",
+            "_Recomendamos que você *não compartilhe* essa mensagem!_",
+            "_Se for compartilhar, explique o contexto._",
             "",
-            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"            
+            "_Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"            
         ],
         "partially":[
-            "Olá! Chegamos à conclusão que a mensagem é:",
-            "        ‼️*FALSA EM PARTES*‼️",
+            "Chegamos à conclusão que a mensagem é:",
+            "        *‼️FALSA EM PARTES‼️*",
             "{0}",
             "",
-            "*Por favor, tenha cuidado ao compartilhar essa mensagem!*",
-            "Se for compartilhar, explique o contexto.",
+            "_*Por favor, não compartilhe essa mensagem!*_",
+            "_Avise quem te enviou também, para evitar que ela se espalhe mais!_",
             "",
-            "Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"
+            "_Continue nos enviando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"
             ],
         "trueWithReservations":[
-            "Olá! Chegamos à conclusão que a mensagem é:",
+            "Chegamos à conclusão que a mensagem é:",
             "*‼️VERDADEIRA, PORÉM COM RESSALVAS‼️*",
             "{0}",
             "",
-            "Portanto, tenha cuidado ao compartilhar essa mensagem!",
-            "Se for compartilhar, explique o contexto.",
+            "_Recomendamos que você *não compartilhe* essa mensagem!_",
+            "_Se for compartilhar, explique o contexto._",
             "",
-            "Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"
+            "_Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"
             ],
         "notApplicable":[
-            "Olá! Essa mensagem não apresenta conteúdo cuja veracidade necessita ser checada.",
+            "Essa mensagem não apresenta conteúdo cuja veracidade necessita ser checada.",
             "",
-            "Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!",
-            "É um prazer ajudar!😉"
+            "{0}",
+            "",
+            "_Continue nos encaminhando mensagens quando tiver dúvida sobre a veracidade!_",
+            "_É um prazer ajudar!😉_"
             ],
         "inapropriateContent":[
-            "Olá! Essa mensagem apresenta conteúdo inapropriado.",
+            "Essa mensagem apresenta conteúdo inapropriado.",
+            "",
+            "{0}",
             "",
             "Você será bloqueado por 30 dias. A depender do conteúdo da mensagem, providências mais drásticas serão tomadas",
-            "Se você enviou por engano, não se preocupe, em 30 dias poderá voltar a usar a ferramenta."
+            "_Se você enviou por engano, não se preocupe, em 30 dias poderá voltar a usar a ferramenta._"
         ],
         "duplicate":
         [
@@ -282,9 +219,44 @@
     "commands":{
         "SUBSCRIBE_CMD":["inscrever", "receber", "cadastrar"],
         "UNSUBSCRIBE_CMD":["sair", "descadastrar", "parar"],
+        "CANCEL_BUFFER_CMD":["cancelar"],
         "LINK_DISCOURSE_CMD":["link_forum"],
         "LINK_DISCOURSE_CODE_CMD":["forum_code"],
         "REPLY_DISCOURSE_TOPIC_CMD":["#resposta"]
+    },
+
+    "discourse":{
+        "task_checklist":{
+            "started": "Iniciada?",
+            "finished": "Concluída?",
+            "task": "Tarefa",
+            "list": [
+                "Procurar duplicadas no fórum",
+                "Verificar agências de fact-checking",
+                "Procurar outras fontes",
+                "Redigir resposta"
+            ]
+        }
+    },
+
+    "curators":{
+        "report":[
+            "Olá {0},",
+            "É um orgulho ter você na equipe do  _\"É Verdade?\"_.",
+            "",
+            "Essa *semana* você verificou *{1} mensagens!* Já são *{2} no total!*",
+            "",
+            "Nossa *equipe* recebeu *{3} mensagens diferentes essa semana!* Já são *{4} ao todo!*",
+            "Foram *{5} mensagens de usuários* respondidas, e *{6} mensagens de grupos*!",
+            "",
+            "Mas não vamos relaxar! Recebemos *{7} mensagens* que ainda *não foram verificadas.*",
+            "",
+            "*Ranking da Semana*",
+            "{8}",
+            "",
+            "*Ranking Geral*",
+            "{9}"
+        ]
     }
 
 

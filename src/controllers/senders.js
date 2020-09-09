@@ -11,6 +11,27 @@ const sendIntroduction = async (sender, client) =>{
     await client.sendText( sender.senderId, msgsTexts.user.INTRO_MSG.join('\n').format(sender.name) )
 }
 
+exports.createDiscourseSender = async(discourseUserName) => {
+    let senderObj = await Sender.create(
+        {
+            senderId: 'DISC_' + Date.now().toString() + Math.random().toString(36),
+            discourseUserName
+        }
+    )
+    return senderObj
+    }
+
+exports.incrementRepyCount = async (discourseUserName) => {
+    let senderObj = await Sender.findOne({discourseUserName});
+    if (!senderObj){
+        senderObj = await this.createDiscourseSender(discourseUserName);
+    }
+    if (senderObj) {
+        senderObj.acceptedRepliesCount = senderObj.acceptedRepliesCount + 1;
+        await senderObj.save()
+    }
+}
+
 exports.notifyOnlyForwarded = async (senderId, client) =>{
     await notifyQueue.add(async () =>{
         let senderObj = await Sender.findOne({senderId: senderId});
@@ -68,9 +89,14 @@ exports.confirmLinkDiscourseAccount = async function (senderId, confirmCode, cli
     let senderObj = await Sender.findOne({senderId});
     let confirmReq = senderObj.discourLinkRequest;
     if (confirmReq && confirmReq.confirmCode === confirmCode && confirmReq.expiration > Date.now()){
+        let senderObjDiscourseOnly = await Sender.findOne({discourseUserName: confirmReq.userName});
+        if (senderObjDiscourseOnly){
+            senderObj.acceptedRepliesCount = senderObjDiscourseOnly.acceptedRepliesCount;
+            senderObjDiscourseOnly.remove();
+        }
         senderObj.discourseUserName = confirmReq.userName
         await senderObj.save();
-        await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_SUCESS.join('\n'))
+        await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_SUCCESS.join('\n'))
     } else{
         await client.sendText(senderId, msgsTexts.user.LINK_DISCOURSE_WPP_FAIL.join('\n'))
     }

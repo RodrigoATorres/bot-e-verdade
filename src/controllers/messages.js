@@ -5,6 +5,7 @@ const Sender = require('../models/sender');
 const sendersController = require('./senders')
 const gcController = require('./gcProcessing');
 const discourseController = require('./discourse');
+const messageBufferController = require('./messageBuffers');
 const msgsTexts = require('../msgsTexts.json');
 
 function sleep(ms) {
@@ -37,15 +38,15 @@ exports.genPreGrpReplyMessage = (groupInfo, userObj) =>{
 }
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
-    if (messageGroup.replyMessage){
+    if (await messageGroup.getReplyMessage()){
         let publishVeracity = ['noContex','false','trueWithReservations','partially'];
-        if (publishVeracity.indexOf(messageGroup.veracity) >= 0){
+        if (publishVeracity.indexOf(await messageGroup.getVeracity()) >= 0){
             groupInfo.groupParticipants.forEach( async(userId) => {
                 let userObj = await sendersController.getSubscribedUser(userId);
                 if (userObj){
                     let msgs = [];
                     msgs.push(this.genPreGrpReplyMessage(groupInfo, userObj));
-                    msgs.push(messageGroup.replyMessage);
+                    msgs.push(await messageGroup.getReplyMessage());
                     msgs.push(this.genTopicInfo(messageGroup.discourseId));
                     this.sendMultiMessage(client, userId, msgs)
                 }
@@ -62,8 +63,8 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
         msgs.push(msgsTexts.user.NEW_MSG.join('\n'))
     }
     else{
-        if (messageGroup.replyMessage){
-            msgs.push( messageGroup.replyMessage )
+        if (await messageGroup.getReplyMessage()){
+            msgs.push( await messageGroup.getReplyMessage() )
         }
         else {
             msgs.push(msgsTexts.user.UPROCESSED_MSG.join('\n'));
@@ -73,7 +74,7 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
 
     this.sendMultiMessage(client,senderInfo.senderId,msgs)
 
-    return Boolean(messageGroup.replyMessage)
+    return Boolean(await messageGroup.getReplyMessage())
 }
 
 
@@ -144,7 +145,6 @@ exports.genPrePublishMessage = (reportData, userName) => {
 }
 
 exports.publishReply = async ( messageGroup, client ) =>{
-
     let publishToUser = async (userId) => {
         let userObj = await sendersController.getSubscribedUser(userId);
         if (userObj){
@@ -152,17 +152,46 @@ exports.publishReply = async ( messageGroup, client ) =>{
                 userId,
                 this.genPrePublishMessage(allReportData[userId], userObj.name)
             );
-            await client.sendText( userId, messageGroup.replyMessage );
+            await client.sendText( userId, await messageGroup.getReplyMessage() );
             await this.sendTopicInfo(client, userId, messageGroup.discourseId);
         }
     }
     let publishVeracity = ['noContex','false','trueWithReservations','partially'];
-    let msgGroup = (publishVeracity.indexOf(messageGroup.veracity) >= 0) ? messageGroup.reportGroups : [] ;
-    let allReportData = organizeReportData(messageGroup.reportUsers, msgGroup);
+    let msgGroup = publishVeracity.includes(await messageGroup.getVeracity()) ? await messageGroup.getReportGroups() : [] ;
+    
+    let allReportData = organizeReportData(await messageGroup.getReportUsers(), msgGroup);
     for (let user of Object.keys(allReportData)){
         publishToUser(user)
     }
 
+}
+
+exports.getForwardingScoreTag = async (messageGroup) =>{
+    let docs = await Message.aggregate(
+        [
+            { $match: { _id: { $in: messageGroup.messages }  } },
+            { $project: { message_score_sum: { $sum: "$forwardingScores" }, } },
+            { $group: {_id: null,group_forwarding_score: {$sum: "$message_score_sum"} } }
+        ]
+    )
+
+    let scores = [
+        1  , 1e1, 5e1, 1e2, 5e2,
+        1e3, 5e3, 1e4, 5e4, 1e5, 5e5,
+        1e6, 5e6, 1e7, 5e7, 1e8, 5e8,
+        Infinity
+    ]
+
+    let tags   = [
+        '1' , '10', '50', '100', '500',
+        '1k', '5k', '10k', '50k', '100k', '500k',
+        '1M', '5M', '10M', '50M', '100M', '500M',
+    ]
+
+    
+    let tag = tags[scores.findIndex(x=>x>=docs[0].group_forwarding_score)-1] 
+
+    return `x${tag}`
 }
 
 exports.getMessagesTags = async (messageIds) => {
@@ -192,8 +221,35 @@ exports.getMessagesTags = async (messageIds) => {
 }
 
 
+exports.matchAllMessageGroups = async (messageIds) => {
+    // TODO atualmente se um grupo está contido no outro o mais externo é sempre o selecionado,
+    // seria interessante se o mais externo que tenha alguma resposta fosse o selecionado.
+    let msgGroups =  await MessageGroup.find({messages: {"$not": {"$elemMatch": {"$nin" : messageIds }}}})
+    let allIds = msgGroups.map( x => x._id);
+    msgGroups = msgGroups.filter( (msgGroup) =>{
+        return !msgGroup.isSubSetOf.some((el1) => allIds.some((el2) => (el1.equals(el2))))
+    })
+    return msgGroups
+}
+
+exports.setIsSubsetOf = async (msgGroup) =>{
+    let parentMsgGroups =  await MessageGroup.find({messages: {"$all": msgGroup.messages}});
+
+    msgGroup.isSubSetOf = parentMsgGroups.map(el => el._id).filter(el => !el.equals(msgGroup._id));
+    await msgGroup.save();
+    let subsetMsgGroups =  await MessageGroup.find({messages: {"$not": {"$elemMatch": {"$nin" : msgGroup.messages }}}});
+
+    subsetMsgGroups.forEach( async el => {
+        if (el._id.equals(msgGroup.id)) return;
+        el.isSubSetOf.push(msgGroup)
+        await el.save()
+    });
+}
+
 exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
-    let msgGroup = await MessageGroup.findOne({messages:{ $all:messageIds}});
+    messageIds.sort()
+
+    let msgGroup = await MessageGroup.findOne({messages: messageIds});
 
     if (msgGroup){
         return [msgGroup, false];
@@ -203,6 +259,7 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
             messages: messageIds,
             tags: await this.getMessagesTags(messageIds)
         } );
+        await this.setIsSubsetOf(msgGroup);
         return [msgGroup, true];
     }
     return [null, null];
@@ -263,11 +320,20 @@ exports.processCommands = async(message,client) => {
         postText += replyMessage;
         if (senderObj.lastTopicId){
             await discourseController.answerTopic(postText, senderObj.lastTopicId);
-            client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_SUCESS.join('\n'))
+            client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_SUCCESS.join('\n'))
         }
         else{
             await client.sendText(message.sender.id, msgsTexts.user.DISCOURSE_REPLY_FAIL.join('\n'))
 
+        }
+    }
+    else if (msgsTexts.commands.CANCEL_BUFFER_CMD.includes(command)){
+        let tmp = await messageBufferController.removeUserMessages(message.sender.id);
+        if (tmp.deletedCount > 0){
+            await client.sendText(message.sender.id, msgsTexts.user.CANCEL_BUFFER_SUCCESS.join('\n'))
+        }
+        else{
+            await client.sendText(message.sender.id, msgsTexts.user.CANCEL_BUFFER_FAIL.join('\n'))
         }
     }
     else if (process.env.NODE_ENV === 'test' && command === 'savedb'){

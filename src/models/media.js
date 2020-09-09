@@ -10,7 +10,7 @@ const mediaSchema = new Schema({
         required: true,
     },
 
-    mediaKeys:[{
+    fileHashes:[{
         type: String,
         index: { unique: true },
     }],

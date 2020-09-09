@@ -6,7 +6,7 @@ const discourseController = require('../src/controllers/discourse');
 
 const Sender = require('../src/models/sender');
 const MessageGroup = require('../src/models/messageGroup');
-
+const msgsTexts = require('../src/msgsTexts.json');
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -37,20 +37,42 @@ module.exports.removeFromSenders = async (senderId) =>{
 }
 
 module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
+    let topic_id = await this.addMessage2Discourse(testClient, msgIds);
+    await this.replyTopic(topic_id, reply, veracity);
+}
+
+module.exports.addMessage2Discourse = async (testClient, msgIds) =>{
     let messages = []
     this.storeMessage(testClient, messages);
-    msgIds.forEach( msgId =>{
-        testClient.forwardMessages(process.env.BOT_WA_ID, msgId);
-    })
+    for (let msgId  of msgIds){
+        await testClient.forwardMessages(process.env.BOT_WA_ID, msgId);
+        await sleep(200)
+    }
     await sleep(process.env.TESTING_DEFAULT_DELAY);
     this.stopStoreMessage(testClient);
 
     let re = new RegExp(`${process.env.DISCOURSE_API_URL}/t/([0-9]*)`);
-    let topic_id = messages[2].content.match(re)[1];
 
+    let topic_id;
+    if (msgIds.length > 1){
+        topic_id = messages[2].content.match(re)[1];
+    }
+    else{
+        topic_id = messages[1].content.match(re)[1];
+    }
+    return topic_id
+}
+
+module.exports.replyTopic = async (topic_id, reply, veracity) =>{
     await discourseController.voteVeracity(topic_id, veracity);
     let postInfo = await discourseController.answerTopic(reply, topic_id)
     await discourseController.acceptAnswer(postInfo.id)
+}
+
+module.exports.removeTopicReportUsers = async (topic_id) =>{
+    let messageGrp = await MessageGroup.findOne({discourseId:topic_id});
+    messageGrp.reportUsers = [];
+    await messageGrp.save()
 }
 
 module.exports.regexFromMessage = (message) =>{
@@ -65,4 +87,11 @@ module.exports.regexFromMessage = (message) =>{
         .format('[\\S\\s]+','[\\S\\s]+')
     );
     return re
+}
+
+module.exports.linkAccounts = async (client) =>{
+    client.sendText(process.env.BOT_WA_ID, msgsTexts.commands.LINK_DISCOURSE_CMD[0] + ' ' + process.env.TESTING_DISCOURSE_API_USERNAME);
+    await sleep(process.env.TESTING_DEFAULT_DELAY);
+    let confirmCode = (await Sender.findOne({senderId: process.env.TEST_WAID})).discourLinkRequest.confirmCode
+    client.sendText(process.env.BOT_WA_ID, msgsTexts.commands.LINK_DISCOURSE_CODE_CMD[0] +  ' ' + confirmCode);
 }

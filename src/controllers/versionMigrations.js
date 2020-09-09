@@ -1,77 +1,18 @@
 const DbInfo = require('../models/dbInfo');
 const MessageGroup = require('../models/messageGroup');
+const Media = require('../models/media');
+const Sender = require('../models/sender');
 
 const discourseController = require('./discourse');
 const messagesController = require('./messages');
+const sendersController = require('./senders');
 
 const logger = require('../helpers/logger');
-
-function isPositiveInteger(x) {
-    // http://stackoverflow.com/a/1019526/11236
-    return /^\d+$/.test(x);
-}
+const generalHelper = require('../helpers/general');
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
-
-
-/**
- * Compare two software version numbers (e.g. 1.7.1)
- * Returns:
- *
- *  0 if they're identical
- *  negative if v1 < v2
- *  positive if v1 > v2
- *  Nan if they in the wrong format
- *
- *  E.g.:
- *
- *  assert(version_number_compare("1.7.1", "1.6.10") > 0);
- *  assert(version_number_compare("1.7.1", "1.7.10") < 0);
- *
- *  "Unit tests": http://jsfiddle.net/ripper234/Xv9WL/28/
- *
- *  Taken from http://stackoverflow.com/a/6832721/11236
- */
-function compareVersionNumbers(v1, v2){
-    var v1parts = v1.split('.');
-    var v2parts = v2.split('.');
-
-    // First, validate both numbers are true version numbers
-    function validateParts(parts) {
-        for (var i = 0; i < parts.length; ++i) {
-            if (!isPositiveInteger(parts[i])) {
-                return false;
-            }
-        }
-        return true;
-    }
-    if (!validateParts(v1parts) || !validateParts(v2parts)) {
-        return NaN;
-    }
-
-    for (var i = 0; i < v1parts.length; ++i) {
-        if (v2parts.length === i) {
-            return 1;
-        }
-
-        if (v1parts[i] === v2parts[i]) {
-            continue;
-        }
-        if (v1parts[i] > v2parts[i]) {
-            return 1;
-        }
-        return -1;
-    }
-
-    if (v1parts.length != v2parts.length) {
-        return -1;
-    }
-
-    return 0;
-}
-
 
 const recreateTopics = async (client) => {
 
@@ -97,13 +38,59 @@ module.exports = async (client) => {
 
     logger.info(`Current Version ${latestDbInfo.releaseVersion}`);
 
-    if (compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.3.1') < 0){
+    if (generalHelper.compareVersionNumbers(latestDbInfo.releaseVersion, '0.1.3.1') < 0){
         logger.info('running db uptdate 0.1.3.1');
         console.log('running db uptdate 0.1.3.1');
         await recreateTopics(client);
 
         await DbInfo.create({
             releaseVersion: '0.1.3.1'
+        }
+        );
+    }
+
+    if (generalHelper.compareVersionNumbers(latestDbInfo.releaseVersion, '0.2.0') < 0){
+        logger.info('running db uptdate 0.2.0');
+        console.log('running db uptdate 0.2.0');
+
+        await Media.update({ fileHashes: { $exists: false } }, { fileHashes: [] }, { multi: true })
+        await Media.update({ children: { $exists: false } }, { children: [] }, { multi: true })
+        await Media.update({ isSubSetOf: { $exists: false } }, { isSubSetOf: [] }, { multi: true })
+        await MessageGroup.update({ discourseTopicVersion: { $exists: false } }, { discourseTopicVersion: '0.0.1' }, { multi: true })
+
+        // Reports
+        await Sender.update({ acceptedRepliesCount: { $exists: false } }, { acceptedRepliesCount: 0 }, { multi: true })
+        
+        let noDiscourseAuthorDocs = await MessageGroup.find({replyDiscourseAuthor:{ $exists: false } })
+        for (let doc of noDiscourseAuthorDocs){
+            if (doc.veracity){
+                try{
+                    let topicInfo = await discourseController.getTopic(doc.discourseId);
+
+                    let topicReply = await discourseController.fetchDiscordApi(
+                        `posts/${topicInfo.post_stream.stream[topicInfo.accepted_answer.post_number-1]}.json`,
+                        'get'
+                    );
+                    
+                    doc.replyDiscourseAuthor = topicReply.username;
+                    doc.replyDate = new Date(topicReply.updated_at)
+                    await sendersController.incrementRepyCount(topicReply.username)
+                    await doc.save()
+                    console.log(doc.discourseId)
+                    await sleep(2000)
+                }
+                catch(err){
+                    console.log(err)
+                    console.log(doc.discourseId)
+                }
+            }
+            else{
+                console.log(doc);
+            }
+        }
+
+        await DbInfo.create({
+            releaseVersion: '0.2.0'
         }
         );
     }

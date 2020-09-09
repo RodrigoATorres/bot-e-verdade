@@ -35,7 +35,7 @@ describe('Wpp-discourse-reply-via-wpp', function () {
 
 
         expect(messages).to.have.lengthOf(1);
-        expect(messages[0].content).to.equal(msgsTexts.user.DISCOURSE_REPLY_SUCESS.join('\n'));
+        expect(messages[0].content).to.equal(msgsTexts.user.DISCOURSE_REPLY_SUCCESS.join('\n'));
     });
 
 });

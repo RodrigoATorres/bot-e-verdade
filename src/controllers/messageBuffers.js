@@ -52,7 +52,7 @@ const saveImage = async( content, md5, mimetype ) =>{
 
 
 const getMd5 = async( message, downloadMedia = false, processMedia = false, isQueued = false) => {
-    let doc = await  Media.findOne({mediaKeys: message.mediaKey}).select('_id');
+    let doc = await  Media.findOne({fileHashes: message.filehash}).select('_id');
     if (doc){
         return doc._id;
     }
@@ -62,10 +62,9 @@ const getMd5 = async( message, downloadMedia = false, processMedia = false, isQu
         } else{
             let content = await wa.decryptMedia(message);
             let md5 = hash(content);
-
             doc = await Media.findOne({_id:md5});
             if (doc){
-                doc.mediaKeys.push(md5)
+                doc.fileHashes.push(message.filehash)
                 doc.save()
             }
             else{
@@ -78,7 +77,7 @@ const getMd5 = async( message, downloadMedia = false, processMedia = false, isQu
 
                 Media.create({
                     _id: md5,
-                    mediaKeys: [message.mediaKey],
+                    fileHashes: [message.filehash],
                     mediaMime: message.mimetype,
                     mediaLink: getMediaLink(md5, message.mimetype),
                     mediaText:text,
@@ -97,6 +96,61 @@ const setAsProcessing = async (docs) =>{
     }
 }
 
+const processPrivateGroup = async (docs, client) =>{
+
+    let msgIds = await messagesController.matchMessages(docs, true);
+    let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, true);
+
+    await messagesController.replyPrivateMessage(
+        grpObj,
+        client,
+        {senderId:docs[0].senderId ,msgId:docs[0].messageId},
+        isNew
+    );
+    
+    grpObj.reportUsers.push({senderId:docs[0].senderId ,msgId:docs[0].messageId});
+
+    if (isNew){
+        discourseController.addMessage(grpObj)
+        .then( (topic_id) =>{
+            messagesController.sendTopicInfo(client, docs[0].senderId, topic_id)
+            sendersController.addLastTopicId(docs[0].senderId, topic_id);
+        }
+        );
+    } 
+    else{
+        await discourseController.updateForwardingScoreTag(grpObj)
+    }
+
+    await grpObj.save()
+}
+
+const processGroupGroup = async (docs, client) =>{
+    let msgIds = await messagesController.matchMessages(docs, false);
+    let grpObjs = await messagesController.matchAllMessageGroups(msgIds)
+
+    grpObjs.forEach( async (grpObj) => {
+        await messagesController.replyGroupMessage(
+            grpObj,
+            client,
+            {
+                groupParticipants: docs[0].groupParticipants,
+                groupName: docs[0].groupName,
+                senderId: docs[0].senderId
+            }
+        );
+        await grpObj.reportGroups.push({
+            groupParticipants: docs[0].groupParticipants,
+            groupName: docs[0].groupName,
+            senderId: docs[0].senderId
+        });
+        await grpObj.save();
+        await discourseController.updateForwardingScoreTag(grpObj)
+
+    })
+
+}
+
 const processGroup = async (group, client) =>{
     logger.info(`Started processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
 
@@ -107,50 +161,19 @@ const processGroup = async (group, client) =>{
     });
 
     await setAsProcessing(docs);
-
-    let msgIds = await messagesController.matchMessages(docs, !group.isGroupMsg);
-    let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, !group.isGroupMsg);
-    if (!grpObj) return;
-
     if (group.isGroupMsg){
-        await messagesController.replyGroupMessage(
-            grpObj,
-            client,
-            {
-                groupParticipants: docs[0].groupParticipants,
-                groupName: docs[0].groupName,
-                senderId: docs[0].senderId
-            }
-        );
-        grpObj.reportGroups.push({
-            groupParticipants: docs[0].groupParticipants,
-            groupName: docs[0].groupName,
-            senderId: docs[0].senderId
-        });
+        await processGroupGroup(docs, client);
     }
     else{
-        await messagesController.replyPrivateMessage(
-            grpObj,
-            client,
-            {senderId:docs[0].senderId ,msgId:docs[0].messageId},
-            isNew
-        );
-        grpObj.reportUsers.push({senderId:docs[0].senderId ,msgId:docs[0].messageId});
-    }
-    await grpObj.save()
-
-    if (isNew){
-        discourseController.addMessage(grpObj)
-        .then( (topic_id) =>{
-            messagesController.sendTopicInfo(client, docs[0].senderId, topic_id)
-            sendersController.addLastTopicId(docs[0].senderId, topic_id);
-        }
-        );
+        await processPrivateGroup(docs, client);
     }
 
     docs.forEach(async (doc) => await doc.remove())
-
     logger.info(`Finished processing buffer group from ${group._id.senderId} at ${group._id.chatId}`);
+}
+
+exports.removeUserMessages = async (senderId) =>{
+    return await MessageBuffer.deleteMany({senderId, isGroupMsg:false});
 }
 
 exports.processBuffer = async (client) => {
