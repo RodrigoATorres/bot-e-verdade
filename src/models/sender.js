@@ -35,6 +35,12 @@ const sendersSchema = new Schema({
 
     discourseUserName:{
         type: String,
+        unique: true,
+    },
+
+    acceptedRepliesCount:{
+        type: Number,
+        default: 0
     },
 
     lastOnlyForwardedNorify:{

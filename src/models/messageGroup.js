@@ -34,6 +34,14 @@ const messageGroupSchema = new Schema({
         type: String
     },
 
+    replyDiscourseAuthor:{
+        type: String
+    },
+
+    replyDate:{
+        type:Date
+    },
+
     reportUsers:{
         type: [{senderId: String,
                 msgId: String}],

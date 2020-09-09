@@ -11,6 +11,8 @@ const messageBufferController =  require('./controllers/messageBuffers');
 const senderControler = require('./controllers/senders');
 const discourseController = require('./controllers/discourse');
 const messageControler = require('./controllers/messages')
+const reportController = require('./controllers/reports')
+
 const versionMigrations = require('./controllers/versionMigrations')
 // const curatorControler = require('./controllers/curators')
 
@@ -49,7 +51,13 @@ function start(done = function() { return; }) {
         wa.create({sessionDataPath: 'SessionData', disableSpins:true})
         .then(async client => {
 
+          reportController.setClient(client);
+          
           await versionMigrations(client);
+
+          if (process.env.NODE_ENV !== 'test'){
+            reportController.setPublishReportCron( '0 10 * * 6' ,()=> [new Date(new Date() - 7*24*60*60*1000), new Date()]);
+          }
 
           setInterval(function(){messageBufferController.processBuffer(client)}, 500);
           setInterval(function(){discourseController.processAllNewReplyTopics(client)}, 5000);

@@ -6,7 +6,7 @@ const discourseController = require('../src/controllers/discourse');
 
 const Sender = require('../src/models/sender');
 const MessageGroup = require('../src/models/messageGroup');
-
+const msgsTexts = require('../src/msgsTexts.json');
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -86,4 +86,11 @@ module.exports.regexFromMessage = (message) =>{
         .format('[\\S\\s]+','[\\S\\s]+')
     );
     return re
+}
+
+module.exports.linkAccounts = async (client) =>{
+    client.sendText(process.env.BOT_WA_ID, msgsTexts.commands.LINK_DISCOURSE_CMD[0] + ' ' + process.env.TESTING_DISCOURSE_API_USERNAME);
+    await sleep(process.env.TESTING_DEFAULT_DELAY);
+    let confirmCode = (await Sender.findOne({senderId: process.env.TEST_WAID})).discourLinkRequest.confirmCode
+    client.sendText(process.env.BOT_WA_ID, msgsTexts.commands.LINK_DISCOURSE_CODE_CMD[0] +  ' ' + confirmCode);
 }

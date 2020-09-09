@@ -144,7 +144,7 @@ const processGroupGroup = async (docs, client) =>{
             groupName: docs[0].groupName,
             senderId: docs[0].senderId
         });
-
+        await grpObj.save();
         await discourseController.updateForwardingScoreTag(grpObj)
 
     })
