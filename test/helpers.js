@@ -44,9 +44,10 @@ module.exports.addMessageReply = async (testClient, msgIds, reply, veracity) =>{
 module.exports.addMessage2Discourse = async (testClient, msgIds) =>{
     let messages = []
     this.storeMessage(testClient, messages);
-    msgIds.forEach( msgId =>{
-        testClient.forwardMessages(process.env.BOT_WA_ID, msgId);
-    })
+    for (let msgId  of msgIds){
+        await testClient.forwardMessages(process.env.BOT_WA_ID, msgId);
+        await sleep(200)
+    }
     await sleep(process.env.TESTING_DEFAULT_DELAY);
     this.stopStoreMessage(testClient);
 
