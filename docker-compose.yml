@@ -1,0 +1,35 @@
+version: '3.1'
+
+services:
+  node-everdade:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always  
+    env_file:
+      - .docker.env
+    volumes:
+      - /usr/share/nginx/html/media/:/usr/src/app/Media
+      - /usr/share/nginx/html/msgs/:/usr/src/app/Received_msgs
+      - /usr/share/nginx/html/logs/:/usr/src/app/Logs
+      - /usr/share/WPSessionData:/usr/src/app/SessionData
+      
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017   
+    env_file:
+      - .env
+    volumes:
+      - /root/everdade/data/:/data/db
+
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - .env
+    
