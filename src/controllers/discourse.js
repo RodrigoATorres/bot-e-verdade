@@ -248,7 +248,7 @@ const genTopicBody = (messageGroup, messages) =>{
                 case 'oga':
                     body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
                     break;
-                case 'ma4':
+                case 'm4a':
                     body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
                     break;
                 default:
