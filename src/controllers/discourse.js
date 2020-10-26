@@ -248,9 +248,13 @@ const genTopicBody = (messageGroup, messages) =>{
                 case 'oga':
                     body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
                     break;
+                case 'ma4':
+                    body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
+                    break;
                 default:
                     body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
             }
+            body.push(`<div align="center">\n\n[Media Link](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
             body.push(`<details><summary>Texto Extraído</summary><p>${message.mediaMd5s[0].mediaText}</p></details>`)
         }
     });

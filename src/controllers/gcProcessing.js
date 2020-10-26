@@ -134,7 +134,7 @@ exports.getAudioText = async (fileName) =>{
 
 }
 
-exports.extractVideoAudio = async (filein, fileout) => {
+exports.extractAudio = async (filein, fileout) => {
   await exec(`ffmpeg -i ${filein} -ss 00:00:00 -to 00:00:20 -c:a libopus -b:a 32K -ar 16k -ac 1 ${fileout} -y`, { shell: true })
 }
 
@@ -144,13 +144,12 @@ exports.trimAudio = async (filein, fileout) =>{
 
 exports.getMediaInfo = async (md5, mimetype, dirpath = './Media') =>{
   let text = null, tags =null;
-
   if (mimetype === 'image/jpeg'){
     text = await this.getImageText( `${dirpath}/${md5}.${mime.extension(mimetype)}` );
     tags = await this.getTextTags(text);
   }
-  else  if (mimetype === 'video/mp4'){
-    await this.extractVideoAudio(
+  else  if ((mimetype === 'video/mp4') || (mimetype === 'audio/mp4')){
+    await this.extractAudio(
       `${dirpath}/${md5}.${mime.extension(mimetype)}`,
       `${dirpath}/${md5}.oga`
     );
@@ -169,7 +168,7 @@ exports.getMediaInfo = async (md5, mimetype, dirpath = './Media') =>{
   }
   else{
     logger.error(`Could not extrat text and tags from "${md5}.${mime.extension(mimetype)}"`)
-    return [null, null];
+    return ['No text extracted: format not supported', {name:'unsuported_format', salience: 10, tagType:'OTHER'}];
   }
 
   logger.info(`Text and tags extracted from "${md5}.${mime.extension(mimetype)}"`)
