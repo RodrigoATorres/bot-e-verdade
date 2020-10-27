@@ -22,7 +22,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /root/everdade/data/:/data/db
+      - /root/bot-e-everdade/data/:/data/db
 
 
   mongo-express:
