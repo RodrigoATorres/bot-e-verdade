@@ -41,6 +41,12 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+fetchQueue.on('active', () => {
+    if (fetchQueue.pending>2){
+        logger.info(`Discourse api queue jobs pending: ${fetchQueue.pending}`)
+    }
+});
+
 exports.config = config;
 
 const fetchDiscordApiQueue = async (path, method, params, body , ntries, expect_json) =>{
@@ -61,7 +67,9 @@ const fetchDiscordApiQueue = async (path, method, params, body , ntries, expect_
         })
     }
 
-    logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
+    if ( (path !== 'search') || (res.status !==200 )){
+        logger.info(`Discourse api ${method} request to "${path}" ${res.status}:${res.statusText} Try number ${ntries+1}`)
+    }
 
     if (expect_json){
         let json = await res.json()
@@ -71,6 +79,11 @@ const fetchDiscordApiQueue = async (path, method, params, body , ntries, expect_
 }
 
 const fetchDiscordApi = async (path, method, params={}, body = {}, ntries = 0, expect_json = true) =>{
+    
+        if ( (path !== 'search')){
+            logger.info(`Discourse api ${method} request to "${path}" added to queue`)
+        }
+
         try{
             return await fetchQueue.add( async() => fetchDiscordApiQueue(path, method, params, body, ntries, expect_json)) 
         }
@@ -248,9 +261,13 @@ const genTopicBody = (messageGroup, messages) =>{
                 case 'oga':
                     body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
                     break;
+                case 'm4a':
+                    body.push(`<div align="center">\n\n![|audio](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
+                    break;
                 default:
                     body.push(`<div align="center">\n\n![](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
             }
+            body.push(`<div align="center">\n\n[Media Link](${process.env.MEDIA_FOLDER_URL}/${message.mediaMd5s[0]._id}.${message.mediaExtensions[0]})</div>`)
             body.push(`<details><summary>Texto Extraído</summary><p>${message.mediaMd5s[0].mediaText}</p></details>`)
         }
     });

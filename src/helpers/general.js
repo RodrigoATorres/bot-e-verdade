@@ -1,4 +1,4 @@
-exports.__version__ = '0.2.0';
+exports.__version__ = '0.3.0';
 
 String.prototype.format = function() {
     let a = this;
