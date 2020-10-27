@@ -12,14 +12,14 @@
   "license": "ISC",
   "config": {
     "mongodbMemoryServer": {
-      "version": "latest"
+      "version": "v4.4-latest"
     }
   },
   "dependencies": {
     "@google-cloud/language": "^4.1.0",
     "@google-cloud/speech": "^4.1.1",
     "@google-cloud/vision": "^2.1.1",
-    "@open-wa/wa-automate": "^1.9.103",
+    "@open-wa/wa-automate": "^*",
     "cron": "^1.8.2",
     "discourse-js": "^2.0.1",
     "dotenv": "^8.2.0",
