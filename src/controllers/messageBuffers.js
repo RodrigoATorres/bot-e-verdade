@@ -158,6 +158,7 @@ const processGroup = async (group, client) =>{
         chatId: group._id.chatId,
         senderId: group._id.senderId,
         warningSent: group._id.warningSent,
+        processing: false
     });
 
     await setAsProcessing(docs);
