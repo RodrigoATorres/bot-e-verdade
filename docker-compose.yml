@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     restart: always  
     env_file:
-      - .docker.env
+      - .env
     volumes:
       - /usr/share/nginx/html/media/:/usr/src/app/Media
       - /usr/share/nginx/html/msgs/:/usr/src/app/Received_msgs
@@ -22,7 +22,7 @@ services:
     env_file:
       - .env
     volumes:
-      - /root/bot-e-everdade/data/:/data/db
+      - /root/bot-e-verdade/data/:/data/db
 
 
   mongo-express:
