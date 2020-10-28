@@ -168,8 +168,7 @@ exports.getMediaInfo = async (md5, mimetype, dirpath = './Media') =>{
   }
   else{
     logger.error(`Could not extrat text and tags from "${md5}.${mime.extension(mimetype)}"`)
-    return [null, null];
-    // return ['No text extracted: format not supported', {name:'unsuported_format', salience: 10, tagType:'OTHER'}];
+    return ['No text extracted: format not supported', {name:'unsuported_format', salience: 10, tagType:'OTHER'}];
   }
 
   logger.info(`Text and tags extracted from "${md5}.${mime.extension(mimetype)}"`)
