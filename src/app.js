@@ -1,5 +1,6 @@
 // import { create, Whatsapp } from '@open-wa/wa-automate';
-require('dotenv').config()
+const path = require('path')
+require('dotenv').config({path: path.join(__dirname, "../.env")})
 require('./helpers/general')
 const wa = require('@open-wa/wa-automate');
 // var CronJob = require('cron').CronJob;

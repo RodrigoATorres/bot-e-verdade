@@ -320,6 +320,10 @@ exports.matchMessages = async(messageDocs, createIfNull) => {
 
 exports.processCommands = async(message,client) => {
     if (message.mimetype) return;
+    if (!message.content.includes('#')){
+        await sendersController.notifyOnlyForwarded(message.sender.id, client);
+        return;
+    }
     let command = message.content.match(/#{0,1}\w+/)[0].toLowerCase()
 
     if (msgsTexts.commands.UNSUBSCRIBE_CMD.includes(command)){
@@ -363,9 +367,6 @@ exports.processCommands = async(message,client) => {
     else if (process.env.NODE_ENV === 'test' && command === 'savedb'){
         const devController = require('./development');
         devController.saveDb()
-    }
-    else{
-        await sendersController.notifyOnlyForwarded(message.sender.id, client);
     }
 
 }
