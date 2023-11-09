@@ -97,7 +97,6 @@ const setAsProcessing = async (docs) =>{
 }
 
 const processPrivateGroup = async (docs, client) =>{
-    logger.info(`Started processing private buffer group from ${docs[0].senderId} at ${docs[0].chatId}`);
 
     let msgIds = await messagesController.matchMessages(docs, true);
     let [grpObj, isNew] = await messagesController.matchMessageGroup( msgIds, true);
@@ -124,12 +123,9 @@ const processPrivateGroup = async (docs, client) =>{
     }
 
     await grpObj.save()
-    logger.info(`Finished processing private buffer group from ${docs[0].senderId} at ${docs[0].chatId}`);
 }
 
 const processGroupGroup = async (docs, client) =>{
-    logger.info(`Started processing group buffer group from ${docs[0].senderId} at ${docs[0].chatId}`);
-
     let msgIds = await messagesController.matchMessages(docs, false);
     let grpObjs = await messagesController.matchAllMessageGroups(msgIds)
 
@@ -152,7 +148,7 @@ const processGroupGroup = async (docs, client) =>{
         await discourseController.updateForwardingScoreTag(grpObj)
 
     })
-    logger.info(`Finished processing group buffer group from ${docs[0].senderId} at ${docs[0].chatId}`);
+
 }
 
 const processGroup = async (group, client) =>{

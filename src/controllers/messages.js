@@ -8,20 +8,16 @@ const discourseController = require('./discourse');
 const messageBufferController = require('./messageBuffers');
 const msgsTexts = require('../msgsTexts.json');
 
-const logger = require('../helpers/logger')
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
 exports.sendMultiMessage = async (client, chatId, msgs, delay = 2000) => {
-    logger.info(`Started sending ${msgs.length} message(s) to ${chatId}`);
     for (let msg of msgs){
         await client.sendText(chatId, msg);
         await sleep(delay)
     }
-    logger.info(`Finished sending ${msgs.length} message(s) to ${chatId}`);
 }
 
 exports.genTopicInfo = (topic_id) =>{
@@ -42,8 +38,6 @@ exports.genPreGrpReplyMessage = (groupInfo, userObj) =>{
 }
 
 exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
-    logger.info(`Started replying group message: ${messageGroup._id}`);
-
     if (await messageGroup.getReplyMessage()){
         let publishVeracity = ['noContex','false','trueWithReservations','partially'];
         if (publishVeracity.indexOf(await messageGroup.getVeracity()) >= 0){
@@ -60,13 +54,10 @@ exports.replyGroupMessage = async (messageGroup, client, groupInfo) =>{
             return true;
         }
     }
-    logger.info(`Finished replying group message: ${messageGroup._id}`);
     return false;
 }
 
 exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>{
-    logger.info(`Started replying private message: ${messageGroup._id}`);
-
     let msgs = []
     if (isNew){
         msgs.push(msgsTexts.user.NEW_MSG.join('\n'))
@@ -83,7 +74,6 @@ exports.replyPrivateMessage = async (messageGroup, client, senderInfo, isNew) =>
 
     this.sendMultiMessage(client,senderInfo.senderId,msgs)
 
-    logger.info(`Finished replying private message: ${messageGroup._id}`);
     return Boolean(await messageGroup.getReplyMessage())
 }
 
@@ -177,8 +167,6 @@ exports.publishReply = async ( messageGroup, client ) =>{
 }
 
 exports.getForwardingScoreTag = async (messageGroup) =>{
-    logger.info(`Started getting forwarding score tag for ${messageGroup._id}`);
-
     let docs = await Message.aggregate(
         [
             { $match: { _id: { $in: messageGroup.messages }  } },
@@ -203,12 +191,10 @@ exports.getForwardingScoreTag = async (messageGroup) =>{
     
     let tag = tags[scores.findIndex(x=>x>=docs[0].group_forwarding_score)-1] 
 
-    logger.info(`Finished getting forwarding score tag for ${messageGroup._id} => x${tag}`);
     return `x${tag}`
 }
 
 exports.getMessagesTags = async (messageIds) => {
-    logger.info(`Started getting tags for ${messageIds}`);
     let docs = await Message.find(
         {
             '_id': { $in: 
@@ -230,13 +216,12 @@ exports.getMessagesTags = async (messageIds) => {
         },
         []
     )
-    logger.info(`Finished getting tags for ${messageIds}`);
+
     return gcController.mergeTagLists(tagList);
 }
 
 
 exports.matchAllMessageGroups = async (messageIds) => {
-    logger.info(`Started matching all message groups for ${messageIds}`);
     // TODO atualmente se um grupo está contido no outro o mais externo é sempre o selecionado,
     // seria interessante se o mais externo que tenha alguma resposta fosse o selecionado.
     let msgGroups =  await MessageGroup.find({messages: {"$not": {"$elemMatch": {"$nin" : messageIds }}}})
@@ -244,7 +229,6 @@ exports.matchAllMessageGroups = async (messageIds) => {
     msgGroups = msgGroups.filter( (msgGroup) =>{
         return !msgGroup.isSubSetOf.some((el1) => allIds.some((el2) => (el1.equals(el2))))
     })
-    logger.info(`Finished matching all message groups for ${messageIds}`);
     return msgGroups
 }
 
@@ -263,14 +247,11 @@ exports.setIsSubsetOf = async (msgGroup) =>{
 }
 
 exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
-    logger.info(`Started matching message groups for ${messageIds}`);
-
     messageIds.sort()
 
     let msgGroup = await MessageGroup.findOne({messages: messageIds});
 
     if (msgGroup){
-        logger.info(`Finished matching message groups for ${messageIds}: group found`);
         return [msgGroup, false];
     }
     else if (createIfNull){
@@ -279,16 +260,12 @@ exports.matchMessageGroup = async (messageIds, createIfNull = false ) => {
             tags: await this.getMessagesTags(messageIds)
         } );
         await this.setIsSubsetOf(msgGroup);
-        logger.info(`Finished matching message groups for ${messageIds}: group created`);
         return [msgGroup, true];
     }
-    logger.info(`Finished matching message groups for ${messageIds}: no group found`);
     return [null, null];
 }
 
 exports.matchMessages = async(messageDocs, createIfNull) => {
-    logger.info(`Started matching messages ${messageDocs.map(el =>el.messageId)}`);
-
     let msgIds = [];
 
     for (let doc of messageDocs){
@@ -313,7 +290,6 @@ exports.matchMessages = async(messageDocs, createIfNull) => {
             msgIds.push(null);
         }
     }
-    logger.info(`Finished matching messages ${messageDocs.map(el =>el.messageId)} => ${msgIds}`);
     return msgIds;
 }
 
